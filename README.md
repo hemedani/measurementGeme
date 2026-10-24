@@ -87,6 +87,41 @@ The server is safe in cluster mode (it keeps only an in-memory compression cache
 WEB_INSTANCES=max pm2 start ecosystem.config.js   # one worker per CPU core
 ```
 
+### 5. Sharing the VPS with other PM2 apps
+
+If the server already runs other apps under PM2, keep **one** root config that lists all of them
+instead of a separate `ecosystem.config.js` per project — otherwise `pm2 save` fights over which
+list is authoritative.
+
+`deploy/ecosystem.root.config.js` is that file: copy it over the existing root config and reload.
+
+```bash
+cp deploy/ecosystem.root.config.js /root/work/ecosystem.config.js
+cd /root/work
+pm2 startOrReload ecosystem.config.js --update-env
+pm2 save
+```
+
+`startOrReload` is idempotent — apps already running get a graceful reload, missing ones get
+started, and re-running it never creates duplicates. It reads the config fresh, so it is the
+right command after any edit (plain `pm2 start` on an existing app just errors out).
+
+> **If you already started this project from its own folder**, run `pm2 delete sareh-games`
+> before the first `startOrReload`. Two processes on port 8080 means one of them
+> crash-loops on `EADDRINUSE`.
+
+The root config keeps the app name `sareh-games`, which is the name the project's own
+`ecosystem.config.js` uses — so either file can manage the same process without orphaning it.
+It also pins the interpreter to the fnm-managed node, because `server.js` uses `node:`-prefixed
+requires that need Node 14.18+ and must not depend on whatever node PM2 itself was launched with.
+
+Verify the toolchain path exists before the first start:
+
+```bash
+ls -l /root/.local/share/fnm/aliases/default/bin/node
+ss -ltnp | grep -E ':(8080)\b'      # should print nothing while it is stopped
+```
+
 ---
 
 ## Configuration
