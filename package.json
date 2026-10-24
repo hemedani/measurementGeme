@@ -1,0 +1,18 @@
+{
+  "name": "sareh-measurement-games",
+  "version": "1.0.0",
+  "private": true,
+  "description": "مجموعهٔ بازی‌های آموزشی اندازه‌گیری — سیده ساره حسینی",
+  "license": "UNLICENSED",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "health": "node -e \"fetch('http://localhost:'+(process.env.PORT||8080)+'/healthz').then(r=>r.text()).then(console.log)\""
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>شهر اندازه‌گیری — سه بازی برای پایهٔ سوم</title>
+<meta name="description" content="سه بازی آموزشی فارسی دربارهٔ ترازو، اندازه‌گیری، واحدها و مقیاس نقشه، ساخته‌شده برای ارائهٔ کلاسی پایهٔ سوم دبستان.">
+<meta name="theme-color" content="#FFF8EE">
+<meta property="og:title" content="شهر اندازه‌گیری — سه بازی برای پایهٔ سوم">
+<meta property="og:description" content="ترازو، واحدها و مقیاس نقشه در سه بازی فارسی و کودکانه.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%E2%9A%96%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --cream:#FFF8EE;
+  --ink:#2F2B45;
+  --muted:#6D6786;
+  --soft:#918BA6;
+  --line:rgba(47,43,69,.10);
+  --card:#FFFFFF;
+  --ff:'Vazirmatn','IRANSansX','IRANSans','Geeza Pro','Tahoma','Segoe UI',system-ui,-apple-system,sans-serif;
+  --sh:0 2px 4px rgba(90,64,36,.04), 0 12px 30px rgba(90,64,36,.07);
+  --sh-lg:0 4px 8px rgba(90,64,36,.06), 0 26px 50px rgba(90,64,36,.14);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--ff);
+  color:var(--ink);
+  background:var(--cream);
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 82% -12%, #FFF0C8 0%, rgba(255,240,200,0) 62%),
+    radial-gradient(760px 460px at 6% -6%, #E6F5FF 0%, rgba(230,245,255,0) 60%),
+    radial-gradient(700px 500px at 50% 112%, #FFE9E2 0%, rgba(255,233,226,0) 62%),
+    linear-gradient(180deg,#FFFCF6,#FFF7EC 60%,#FDF1E5);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(120,95,60,.10) 1px, transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(ellipse 70% 55% at 50% 0%, #000 0%, transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 0%, #000 0%, transparent 75%);
+}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid #7C5CE6;outline-offset:4px;border-radius:14px}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 64px}
+
+/* ---------- header ---------- */
+.hero{text-align:center;padding:clamp(38px,7vw,76px) 0 clamp(26px,4vw,40px)}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:1.5px solid #FFD98A;color:#8A5B00;
+  font-size:.78rem;font-weight:800;letter-spacing:.2px;
+  padding:6px 16px;border-radius:999px;
+  box-shadow:0 3px 0 rgba(233,162,27,.18);
+}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:#F0A400;box-shadow:0 0 0 4px rgba(240,164,0,.16)}
+h1{
+  font-size:clamp(2rem,6.4vw,3.5rem);
+  line-height:1.28;margin:18px 0 10px;font-weight:900;letter-spacing:-.8px;
+}
+h1 .hl{
+  position:relative;white-space:nowrap;
+}
+h1 .hl::after{
+  content:"";position:absolute;inset-inline:-6px;bottom:.06em;height:.34em;
+  background:linear-gradient(90deg,#FFD35E,#FFB74D);border-radius:6px;z-index:-1;opacity:.75;
+}
+.lede{
+  color:var(--muted);font-size:clamp(.95rem,2.3vw,1.08rem);font-weight:600;
+  max-width:46ch;margin:0 auto;
+}
+.byline{
+  display:inline-flex;align-items:center;gap:8px;margin-top:22px;
+  font-size:.82rem;color:var(--soft);font-weight:700;
+}
+.byline b{color:var(--ink);font-weight:800}
+
+/* ---------- cards ---------- */
+.grid{
+  display:grid;gap:22px;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));
+  align-items:stretch;
+}
+.card{
+  --a:#FF7A6B;--a2:#FFC93C;--tint:#FFF1EC;
+  position:relative;display:flex;flex-direction:column;
+  background:var(--card);border:1px solid rgba(255,255,255,.9);
+  border-radius:28px;overflow:hidden;
+  box-shadow:var(--sh);
+  transition:transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s cubic-bezier(.2,.8,.3,1);
+  animation:rise .6s cubic-bezier(.2,.8,.3,1) both;
+}
+.card:nth-child(2){animation-delay:.08s}
+.card:nth-child(3){animation-delay:.16s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-6px);box-shadow:var(--sh-lg)}
+.card:focus-visible{transform:translateY(-6px)}
+.card::after{
+  content:"";position:absolute;inset:0;border-radius:28px;pointer-events:none;
+  box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .28s;
+}
+.card:hover::after{box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--a) 35%, transparent)}
+
+.art{
+  position:relative;height:172px;display:grid;place-items:center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #fff 0%, rgba(255,255,255,0) 62%),
+    var(--tint);
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+.art::before{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+  background:var(--a);opacity:.10;top:-70px;inset-inline-start:-40px;
+}
+.art svg{width:min(86%,270px);height:auto;position:relative;transition:transform .4s cubic-bezier(.2,.8,.3,1)}
+.card:hover .art svg{transform:scale(1.04) translateY(-3px)}
+.pin{
+  position:absolute;top:12px;inset-inline-end:12px;
+  background:#fff;color:var(--a);font-size:.68rem;font-weight:900;
+  padding:4px 11px;border-radius:999px;border:1.5px solid color-mix(in srgb, var(--a) 30%, #fff);
+  box-shadow:0 4px 10px rgba(90,64,36,.10);
+}
+
+.body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.meta{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  font-size:.7rem;font-weight:800;color:var(--soft);margin-bottom:6px;
+}
+.meta span{display:inline-flex;align-items:center;gap:4px}
+.meta i{width:4px;height:4px;border-radius:50%;background:#D8D0C2;font-style:normal}
+.card h2{font-size:1.18rem;font-weight:900;line-height:1.5;margin:0 0 6px}
+.card h2 a::after{content:"";position:absolute;inset:0}
+.desc{font-size:.85rem;color:var(--muted);font-weight:600;line-height:1.85;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0 0 18px}
+.chips li{
+  font-size:.68rem;font-weight:800;color:var(--ink);
+  background:color-mix(in srgb, var(--a) 10%, #fff);
+  border:1px solid color-mix(in srgb, var(--a) 22%, #fff);
+  padding:3px 10px;border-radius:999px;
+}
+.cta{
+  margin-top:auto;display:inline-flex;align-items:center;justify-content:space-between;gap:10px;
+  font-weight:900;font-size:.9rem;color:var(--a);
+  padding-top:14px;border-top:1px dashed var(--line);
+}
+.cta .arrow{
+  display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:var(--a);color:#fff;transition:transform .28s;
+}
+.card:hover .cta .arrow{transform:translateX(-5px)}
+.cta .arrow svg{width:16px;height:16px}
+
+/* ---------- footer ---------- */
+.foot{
+  margin-top:clamp(36px,6vw,60px);padding-top:22px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;
+  font-size:.78rem;color:var(--soft);font-weight:600;
+}
+.foot .who{display:flex;align-items:center;gap:8px}
+.foot .who b{color:var(--ink);font-weight:800}
+.foot .tag{
+  display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
+  padding:4px 12px;border-radius:999px;
+}
+
+@media (max-width:560px){
+  .art{height:150px}
+  .body{padding:18px 18px 20px}
+  .foot{justify-content:center;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker"><span class="dot"></span> پژوهش کلاسی · پایهٔ سوم دبستان</span>
+    <h1>شهر <span class="hl">اندازه‌گیری</span></h1>
+    <p class="lede">
+      سه بازی برای یادگیری ترازو، گرم و کیلوگرم، سانتی‌متر و متر، لیتر و میلی‌لیتر،
+      و مقیاس نقشه. یکی را انتخاب کن و بازی کن.
+    </p>
+    <p class="byline">ارائه‌دهنده: <b>سیده ساره حسینی</b></p>
+  </header>
+
+  <main class="grid" aria-label="بازی‌ها">
+
+    <!-- deepseek -->
+    <article class="card" style="--a:#FF6B57;--a2:#FFC93C;--tint:#FFF0EA">
+      <div class="art">
+        <span class="pin">کامل‌ترین</span>
+        <svg viewBox="0 0 260 150" aria-hidden="true">
+          <ellipse cx="130" cy="134" rx="56" ry="7" fill="rgba(120,70,40,.10)"/>
+          <rect x="124" y="52" width="12" height="74" rx="6" fill="#E9A23B"/>
+          <rect x="102" y="122" width="56" height="12" rx="6" fill="#F3B562"/>
+          <rect x="40" y="46" width="180" height="9" rx="4.5" fill="#F2A65A"/>
+          <g stroke="#D8B48C" stroke-width="2" stroke-linecap="round">
+            <line x1="54" y1="55" x2="42" y2="74"/><line x1="54" y1="55" x2="66" y2="74"/>
+            <line x1="206" y1="55" x2="194" y2="74"/><line x1="206" y1="55" x2="218" y2="74"/>
+          </g>
+          <path d="M36 74 q18 20 36 0 z" fill="#FFD3A0" stroke="#E7B98A" stroke-width="1.5"/>
+          <path d="M188 74 q18 20 36 0 z" fill="#FFD3A0" stroke="#E7B98A" stroke-width="1.5"/>
+          <circle cx="54" cy="60" r="9" fill="#FF6B57"/>
+          <path d="M54 51 q3 -6 8 -6" stroke="#4F8A3B" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <rect x="186" y="55" width="22" height="12" rx="3" fill="#DCE3F2" stroke="#B9C3DC" stroke-width="1.2"/>
+          <rect x="199" y="43" width="20" height="11" rx="3" fill="#DCE3F2" stroke="#B9C3DC" stroke-width="1.2"/>
+          <path d="M130 16 l4.6 9.8 10.4 1.2 -7.8 7.4 2.2 10.6 -9.4 -5.3 -9.4 5.3 2.2 -10.6 -7.8 -7.4 10.4 -1.2z" fill="#FFC93C"/>
+        </svg>
+      </div>
+      <div class="body">
+        <p class="meta"><span>۶ ایستگاه</span><i></i><span>صدا و جایزه</span><i></i><span>مدرک چاپی</span></p>
+        <h2><a href="./deepseek/index.html">ترازو، اندازه‌گیری و مقیاس‌ها</a></h2>
+        <p class="desc">
+          بازار ترازو، کارگاه خط‌کش، آزمایشگاه گنجایش، جزیرهٔ نقشه، سالن پرسش‌ها و جورچین ابزارها.
+          با ترازکِ راهنما، ستاره، نشان و مدرک قهرمانی.
+        </p>
+        <ul class="chips"><li>ترازوی دوکفه‌ای</li><li>خط‌کش کشیدنی</li><li>ریختن مایع</li><li>مقیاس نقشه</li></ul>
+        <span class="cta">بازی کن
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></span>
+        </span>
+      </div>
+    </article>
+
+    <!-- qwen -->
+    <article class="card" style="--a:#2E93C6;--a2:#4FD2A4;--tint:#EAF6FD">
+      <div class="art">
+        <span class="pin">شش ایستگاه</span>
+        <svg viewBox="0 0 260 150" aria-hidden="true">
+          <rect x="18" y="14" width="224" height="122" rx="18" fill="#D9F0FC"/>
+          <rect x="34" y="26" width="76" height="14" rx="7" fill="#FFFFFF" opacity=".85"/>
+          <g stroke="#9ACBE4" stroke-width="1.2">
+            <line x1="42" y1="26" x2="42" y2="40"/><line x1="54" y1="26" x2="54" y2="40"/>
+            <line x1="66" y1="26" x2="66" y2="40"/><line x1="78" y1="26" x2="78" y2="40"/>
+            <line x1="90" y1="26" x2="90" y2="40"/><line x1="102" y1="26" x2="102" y2="40"/>
+          </g>
+          <rect x="42" y="88" width="44" height="34" rx="7" fill="#BFE3F7"/>
+          <rect x="58" y="68" width="28" height="20" rx="5" fill="#A6D7F1"/>
+          <rect x="174" y="94" width="46" height="28" rx="7" fill="#BFE3F7"/>
+          <rect x="150" y="72" width="26" height="22" rx="5" fill="#A6D7F1"/>
+          <path d="M52 110 C 96 110, 104 64, 152 64 S 196 90, 206 104" fill="none" stroke="#2E93C6" stroke-width="4" stroke-dasharray="8 8" stroke-linecap="round" opacity=".75"/>
+          <path d="M206 74 a10 10 0 0 1 10 10 c0 8 -10 17 -10 17 s-10 -9 -10 -17 a10 10 0 0 1 10 -10z" fill="#FF6B57"/>
+          <circle cx="206" cy="85" r="3.8" fill="#fff"/>
+          <circle cx="118" cy="46" r="7" fill="#FFC93C" opacity=".9"/>
+        </svg>
+      </div>
+      <div class="body">
+        <p class="meta"><span>۶ ایستگاه</span><i></i><span>کارخانهٔ تبدیل واحد</span><i></i><span>گواهی</span></p>
+        <h2><a href="./qwen/index.html">شهر اندازه‌گیری</a></h2>
+        <p class="desc">
+          از بازار ترازو تا نقشهٔ گنج: تخمین بزن، واحدها را در کارخانهٔ تبدیل عوض کن،
+          ابزار درست را پیدا کن و در آزمون قهرمانی شرکت کن.
+        </p>
+        <ul class="chips"><li>تخمین</li><li>تبدیل واحد</li><li>نقشهٔ گنج</li><li>آزمون پایانی</li></ul>
+        <span class="cta">بازی کن
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></span>
+        </span>
+      </div>
+    </article>
+
+    <!-- cluade -->
+    <article class="card" style="--a:#E0553F;--a2:#FFB703;--tint:#FFF3E4">
+      <div class="art">
+        <span class="pin">مرحله‌ای</span>
+        <svg viewBox="0 0 260 150" aria-hidden="true">
+          <rect x="46" y="28" width="168" height="22" rx="4" fill="#E0553F"/>
+          <g fill="#FFF6EC">
+            <rect x="66" y="28" width="18" height="22"/><rect x="102" y="28" width="18" height="22"/>
+            <rect x="138" y="28" width="18" height="22"/><rect x="174" y="28" width="18" height="22"/>
+          </g>
+          <g fill="#E0553F">
+            <circle cx="56" cy="50" r="10"/><circle cx="76" cy="50" r="10"/><circle cx="96" cy="50" r="10"/>
+            <circle cx="116" cy="50" r="10"/><circle cx="136" cy="50" r="10"/><circle cx="156" cy="50" r="10"/>
+            <circle cx="176" cy="50" r="10"/><circle cx="196" cy="50" r="10"/>
+          </g>
+          <rect x="52" y="98" width="156" height="30" rx="8" fill="#FFE0A3" stroke="#E9C089" stroke-width="1.5"/>
+          <circle cx="76" cy="92" r="9" fill="#FF6B57"/>
+          <circle cx="96" cy="94" r="7" fill="#FFC93C"/>
+          <circle cx="112" cy="92" r="8" fill="#8FD16A"/>
+          <rect x="146" y="76" width="42" height="20" rx="4" fill="#fff" stroke="#E2D5C0"/>
+          <text x="167" y="90" text-anchor="middle" font-size="9" font-weight="bold" fill="#B4452F">۱ کیلو</text>
+          <path d="M167 76 v-8" stroke="#B9A88E" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <div class="body">
+        <p class="meta"><span>مرحله‌های پیاپی</span><i></i><span>حالت شب</span><i></i><span>گواهی افتخار</span></p>
+        <h2><a href="./cluade/index.html">بازارچهٔ اندازه‌گیری</a></h2>
+        <p class="desc">
+          یک بازارچهٔ شلوغ با مرحله‌های کوتاه و رنگارنگ. مرحله‌ها را یکی‌یکی باز کن،
+          ستاره جمع کن و در پایان گواهی افتخار بگیر.
+        </p>
+        <ul class="chips"><li>مرحله‌های کوتاه</li><li>ستاره</li><li>حالت شب</li><li>گواهی</li></ul>
+        <span class="cta">بازی کن
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></span>
+        </span>
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="foot">
+    <div class="who">
+      <span aria-hidden="true">⚖️</span>
+      <span>ساخته‌شده برای ارائهٔ کلاسی پایهٔ سوم دبستان · <b>سیده ساره حسینی</b></span>
+    </div>
+    <span class="tag">سه نسخهٔ متفاوت از یک بازی · برای مقایسه و انتخاب</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شهر اندازه‌گیری | پژوهش سیده ساره حسینی</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============ BASE ============ */
+:root{
+  --coral:#ff7b54; --coral-d:#e85d34; --blue:#4cc9f0; --yellow:#ffd166;
+  --green:#06d6a0; --green-d:#0a9b76; --purple:#9b5de5; --ink:#22333b;
+  --card:#ffffff; --soft:#fff8ec;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Vazirmatn', Tahoma, sans-serif; color:var(--ink);
+  background:linear-gradient(#8ed8ff 0%, #c9efff 45%, #eafbe7 100%);
+  min-height:100vh; overflow-x:hidden; user-select:none;
+}
+button{font-family:inherit; touch-action:manipulation; cursor:pointer; border:none}
+#fx{position:fixed; inset:0; pointer-events:none; z-index:999}
+
+/* ============ SKY DECOR ============ */
+.sky{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.sun{position:absolute; top:30px; left:40px; width:110px; height:110px; border-radius:50%;
+  background:radial-gradient(circle at 40% 40%, #fff7c0, #ffd93b 60%, #ffb703);
+  box-shadow:0 0 60px 20px rgba(255,214,64,.55); animation:sunPulse 4s ease-in-out infinite}
+.sun::before{content:''; position:absolute; inset:-38px; border-radius:50%;
+  background:repeating-conic-gradient(rgba(255,214,64,.45) 0 7deg, transparent 7deg 20deg);
+  animation:spin 24s linear infinite; z-index:-1}
+@keyframes sunPulse{50%{transform:scale(1.06)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cloud{position:absolute; background:#fff; border-radius:60px; opacity:.9; filter:drop-shadow(0 6px 8px rgba(80,120,160,.15))}
+.cloud::before,.cloud::after{content:''; position:absolute; background:#fff; border-radius:50%}
+.c1{width:130px; height:44px; top:70px; animation:drift 55s linear infinite}
+.c1::before{width:55px;height:55px;top:-26px;left:22px}.c1::after{width:40px;height:40px;top:-18px;right:20px}
+.c2{width:90px; height:32px; top:150px; animation:drift 75s linear infinite; animation-delay:-30s; opacity:.75}
+.c2::before{width:40px;height:40px;top:-19px;left:16px}.c2::after{width:28px;height:28px;top:-12px;right:14px}
+.c3{width:160px; height:50px; top:30px; animation:drift 95s linear infinite; animation-delay:-60s; opacity:.6}
+.c3::before{width:65px;height:65px;top:-30px;left:28px}.c3::after{width:46px;height:46px;top:-20px;right:26px}
+@keyframes drift{from{transform:translateX(-220px)}to{transform:translateX(calc(100vw + 220px))}}
+.hill{position:absolute; bottom:-60px; border-radius:50%}
+.h1{width:70vw; height:220px; right:-15vw; background:#b6e6a5}
+.h2{width:75vw; height:200px; left:-18vw; background:#a3dd8f}
+
+/* ============ LAYOUT ============ */
+#app{position:relative; z-index:1; max-width:860px; margin:0 auto; padding:16px 14px 60px}
+.screen{display:none}
+.screen.active{display:block; animation:screenIn .45s cubic-bezier(.34,1.4,.64,1)}
+@keyframes screenIn{from{opacity:0; transform:translateY(24px) scale(.98)}to{opacity:1; transform:none}}
+
+.topbar{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+.topbar h2{flex:1; font-size:1.25rem; text-align:center; background:#ffffffcc; padding:8px 14px;
+  border-radius:16px; box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.chip{background:#ffffffdd; border-radius:999px; padding:6px 14px; font-weight:700; box-shadow:0 3px 0 rgba(0,0,0,.08); white-space:nowrap}
+
+.btn{background:#fff; color:var(--ink); border-radius:16px; padding:12px 20px; font-size:1.05rem; font-weight:700;
+  box-shadow:0 5px 0 rgba(0,0,0,.14); transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.14)}
+.btn.primary{background:linear-gradient(#ff9a6c,#ff7b54); color:#fff}
+.btn.green{background:linear-gradient(#2fe6ae,#06d6a0); color:#fff}
+.btn.icon{padding:10px 14px; font-size:1.2rem; border-radius:14px}
+.btn.warn{background:#ffe8d6}
+.btn.big{font-size:1.3rem; padding:16px 30px}
+
+.card{background:var(--card); border-radius:24px; padding:20px; box-shadow:0 10px 24px rgba(60,90,120,.14); margin-bottom:16px}
+.center{text-align:center}
+.row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px}
+
+/* speech bubble */
+.bub{position:relative; background:#fff; border:3px solid var(--yellow); border-radius:18px; padding:12px 16px;
+  font-weight:700; line-height:1.9; box-shadow:0 6px 14px rgba(60,90,120,.12)}
+.bub.warn{border-color:#ffb4a2; background:#fff3ef}
+.bub.good{border-color:#95e6c8; background:#effcf6}
+.bub::after{content:''; position:absolute; bottom:-14px; right:34px; border:8px solid transparent; border-top-color:inherit;
+  border-top-width:12px}
+.bub.good::after{border-top-color:#95e6c8}.bub.warn::after{border-top-color:#ffb4a2}.bub:not(.warn):not(.good)::after{border-top-color:var(--yellow)}
+
+/* ============ HUB ============ */
+.hero{text-align:center; padding:8px 0 4px}
+.hero-badge{display:inline-block; background:#ffffffcc; border-radius:999px; padding:6px 18px; font-size:.85rem; font-weight:700; color:#5a6b74}
+.game-title{font-size:clamp(2rem,6vw,3.2rem); font-weight:900; margin:8px 0 2px;
+  color:#fff; text-shadow:0 3px 0 #ffb703, 0 7px 0 rgba(0,0,0,.12); letter-spacing:1px}
+.subtitle{font-weight:900; font-size:1.1rem; color:#1d5d7a}
+.byline{margin-top:6px; font-size:.95rem}
+.byline b{color:var(--coral-d)}
+
+.mascot-row{display:flex; align-items:flex-end; gap:8px; justify-content:center; margin:10px 0 18px}
+.mascot{width:130px; flex:none; animation:bob 3s ease-in-out infinite; filter:drop-shadow(0 8px 6px rgba(0,0,0,.15))}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.m-beam{transform-origin:100px 46px; animation:sway 3.4s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-4deg)}}
+.eye{animation:blink 4s infinite; transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.mascot-row .bub{max-width:420px}
+
+.progress{background:#ffffffcc; border-radius:20px; padding:12px 18px; margin-bottom:18px; box-shadow:0 6px 14px rgba(60,90,120,.12)}
+.progress .bar{height:16px; background:#e6eef3; border-radius:999px; overflow:hidden; margin-top:6px}
+.progress .fill{height:100%; width:0%; border-radius:999px; transition:width .8s cubic-bezier(.34,1.3,.64,1);
+  background:repeating-linear-gradient(45deg,#ffd166 0 12px,#ffbf3f 12px 24px)}
+.progress .lbl{display:flex; justify-content:space-between; font-weight:800; font-size:.95rem}
+
+.stations{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px}
+.station{background:var(--card); border-radius:22px; padding:18px 16px; text-align:center; cursor:pointer;
+  border:3px solid transparent; box-shadow:0 8px 18px rgba(60,90,120,.14); transition:.18s; position:relative; overflow:hidden}
+.station:hover{transform:translateY(-5px) rotate(-.5deg); border-color:var(--yellow)}
+.station .emo{font-size:2.8rem; display:block; animation:bob 2.6s ease-in-out infinite}
+.station h3{margin:6px 0 2px; font-size:1.15rem}
+.station p{font-size:.85rem; color:#5a6b74; margin-bottom:8px}
+.station .st-stars{font-size:1.1rem; letter-spacing:2px}
+.station .play{display:inline-block; margin-top:8px; background:var(--green); color:#fff; font-weight:800;
+  padding:7px 22px; border-radius:999px; box-shadow:0 4px 0 var(--green-d)}
+.hub-bottom{margin-top:22px; display:flex; flex-direction:column; gap:12px; align-items:center}
+.hub-bottom .row .btn{font-size:.95rem}
+
+/* ============ BALANCE GAME ============ */
+.bal-stage{background:linear-gradient(#e8fbff,#fdf6e3); border-radius:24px; padding:10px; box-shadow:inset 0 0 0 3px #ffffffaa, 0 10px 24px rgba(60,90,120,.14)}
+#bal-svg{width:100%; height:auto; display:block}
+.bal-info{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:12px 0}
+.chip.big{font-size:1.05rem; padding:10px 18px}
+.weights-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+.w-btn{background:linear-gradient(#ffe9b3,#ffd166); border-radius:16px; padding:12px 18px; font-size:1.05rem; font-weight:800;
+  box-shadow:0 5px 0 #d9a520; transition:.12s}
+.w-btn:active{transform:translateY(3px); box-shadow:0 1px 0 #d9a520}
+.w-btn:disabled{opacity:.45; cursor:default}
+
+/* ============ ESTIMATE ============ */
+.est-grid{display:flex; gap:14px; justify-content:center; align-items:stretch; flex-wrap:wrap}
+.est-card{flex:1; min-width:150px; max-width:230px; background:#fff; border-radius:22px; padding:16px 10px; text-align:center;
+  border:4px solid #e3edf2; box-shadow:0 8px 16px rgba(60,90,120,.12); transition:.15s; font-weight:800}
+.est-card:hover{transform:scale(1.04); border-color:var(--blue)}
+.est-card .emo{display:block; line-height:1.15; margin-bottom:6px}
+.est-card .mass{display:none; margin-top:8px; background:#effcf6; border:2px dashed var(--green); border-radius:12px; padding:4px; font-size:.9rem}
+.est-card.revealed .mass{display:block; animation:screenIn .4s}
+.est-card.win{border-color:var(--green); background:#effcf6}
+.est-card.lose{opacity:.75}
+.est-eq{margin-top:12px}
+.mscale{position:relative; width:210px; height:78px; margin:18px auto 4px}
+.mscale .base{position:absolute; bottom:0; left:50%; transform:translateX(-50%); border-left:16px solid transparent; border-right:16px solid transparent; border-bottom:26px solid #8d6e63}
+.mscale .beam{position:absolute; top:26px; left:15px; width:180px; height:9px; border-radius:5px; background:#8d6e63;
+  transform-origin:center; transition:transform .9s cubic-bezier(.34,1.56,.64,1)}
+.mscale .pan{position:absolute; top:-7px; width:34px; height:34px; border-radius:50% 50% 46% 46%; background:#c9a227; box-shadow:inset 0 -6px 0 #a5831a}
+.mscale .pan.pl{left:-8px}.mscale .pan.pr{right:-8px}
+.mscale.tilt-l .beam{transform:rotate(-13deg)}
+.mscale.tilt-r .beam{transform:rotate(13deg)}
+
+/* ============ CONVERT ============ */
+.machine{background:linear-gradient(#cfd8dc,#eceff1); border-radius:24px; padding:16px; box-shadow:0 10px 24px rgba(60,90,120,.16); position:relative; overflow:hidden}
+.gears{position:absolute; top:8px; left:12px; font-size:1.6rem}
+.gears span{display:inline-block; animation:spin 4s linear infinite}
+.gears span:last-child{animation-direction:reverse; margin-left:-8px}
+.machine-label{text-align:center; font-weight:900; color:#546e7a; margin-bottom:10px}
+.belt-zone{background:#37474f; border-radius:16px; padding:22px 12px; min-height:150px; display:flex; justify-content:center; align-items:center; position:relative; overflow:hidden}
+.belt{height:16px; border-radius:8px; margin-top:10px;
+  background:repeating-linear-gradient(90deg,#263238 0 26px,#455a64 26px 52px); background-size:52px 100%; animation:beltMove 1.2s linear infinite}
+@keyframes beltMove{to{background-position:-52px 0}}
+.crate{background:linear-gradient(#e0b06b,#c98f45); border:4px solid #8a5a26; border-radius:14px; padding:18px 26px;
+  color:#3e2a10; font-size:1.5rem; font-weight:900; text-align:center; position:relative; transition:.45s; box-shadow:0 8px 0 #6f4517}
+.crate::before{content:'🏭'; position:absolute; top:-16px; right:-14px; font-size:1.6rem}
+.crate.in{animation:crateIn .5s cubic-bezier(.34,1.4,.64,1)}
+.crate.out{transform:translateX(-130%) rotate(-8deg); opacity:0}
+@keyframes crateIn{from{transform:translateX(130%) rotate(8deg); opacity:0}}
+.crate.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.stamp{position:absolute; inset:auto; top:-18px; left:-16px; background:var(--green); color:#fff; padding:5px 12px;
+  border-radius:12px; transform:rotate(-14deg); font-size:1rem; display:none; box-shadow:0 4px 0 var(--green-d)}
+.crate.solved .stamp{display:block; animation:screenIn .35s}
+.opts-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-top:16px}
+.opt-btn{background:#fff; border:3px solid #dbe7ee; border-radius:18px; padding:16px 8px; font-size:1.25rem; font-weight:900; transition:.13s}
+.opt-btn:hover{border-color:var(--blue); transform:translateY(-3px)}
+.opt-btn.correct{background:#d9fbe9; border-color:var(--green); animation:popOk .4s}
+.opt-btn.wrong{background:#ffe3e3; border-color:#ff8fa3; animation:shake .4s; opacity:.6; pointer-events:none}
+.opt-btn:disabled{cursor:default}
+@keyframes popOk{40%{transform:scale(1.12)}}
+.dots{display:flex; gap:6px; justify-content:center; margin-top:14px}
+.dots i{width:12px; height:12px; border-radius:50%; background:#c6d4dc}
+.dots i.done{background:var(--green)}.dots i.cur{background:var(--yellow); transform:scale(1.3)}
+.streak{position:fixed; top:14px; left:14px; z-index:50; background:#fff; border-radius:999px; padding:8px 16px;
+  font-weight:900; box-shadow:0 6px 14px rgba(0,0,0,.15); display:none; animation:popOk .3s}
+.streak.on{display:block}
+
+/* ============ MAP ============ */
+.map-legend{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:12px}
+#map-svg{width:100%; height:auto; display:block; border-radius:20px; box-shadow:0 10px 24px rgba(60,90,120,.15)}
+.map-q{font-size:1.15rem; font-weight:800; text-align:center; margin:14px 0 4px; line-height:2}
+
+/* ============ TOOLS ============ */
+.task-card{background:linear-gradient(#fff,#fff4e0); border:3px dashed var(--coral); border-radius:22px; padding:18px; text-align:center; margin-bottom:16px}
+.task-card .big-emo{font-size:3.4rem; display:block; animation:bob 2.4s ease-in-out infinite}
+.task-card h3{margin-top:6px; font-size:1.2rem}
+.tools-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px}
+.tool-card{background:#fff; border:3px solid #dbe7ee; border-radius:20px; padding:18px 10px; text-align:center; font-weight:800; transition:.14s}
+.tool-card .emo{font-size:2.4rem; display:block; margin-bottom:6px}
+.tool-card:hover{transform:translateY(-4px); border-color:var(--purple)}
+.tool-card.correct{background:#d9fbe9; border-color:var(--green); animation:popOk .45s}
+.tool-card.wrong{animation:shake .4s; opacity:.6}
+
+/* ============ QUIZ ============ */
+.qbox{background:#fff; border-radius:24px; padding:22px; box-shadow:0 10px 24px rgba(60,90,120,.14)}
+.qbox h3{font-size:1.25rem; margin-bottom:16px; line-height:2}
+.q-prog{font-weight:800; color:#5a6b74; margin-bottom:8px}
+
+/* ============ END PANEL & CERT ============ */
+.end-panel{text-align:center; padding:26px 18px}
+.end-panel .big-stars{font-size:2.6rem; letter-spacing:6px; margin:8px 0}
+.end-panel .big-stars span{display:inline-block; animation:starPop .5s backwards}
+.end-panel .big-stars span:nth-child(2){animation-delay:.18s}
+.end-panel .big-stars span:nth-child(3){animation-delay:.36s}
+@keyframes starPop{from{transform:scale(0) rotate(-90deg)}70%{transform:scale(1.35)}}
+.cert{background:linear-gradient(#fffdf5,#fff6df); border:6px double #d4a017; border-radius:26px; padding:30px 22px; text-align:center;
+  box-shadow:0 14px 30px rgba(120,90,20,.25); position:relative}
+.cert::before{content:'❁'; position:absolute; top:10px; right:16px; font-size:1.6rem; color:#d4a017}
+.cert::after{content:'❁'; position:absolute; bottom:10px; left:16px; font-size:1.6rem; color:#d4a017}
+.cert h2{color:#b07d0a; font-size:1.6rem; margin-bottom:12px}
+.cert input{font-family:inherit; font-size:1.2rem; font-weight:800; text-align:center; border:3px dashed #d4a017; background:#fff;
+  border-radius:14px; padding:10px; width:min(320px,90%); color:var(--ink); outline:none}
+.cert .body{margin:16px auto; max-width:480px; line-height:2.3; font-size:1.05rem}
+.cert .stars-line{font-size:1.5rem; font-weight:900; color:#b07d0a}
+.cert .date{margin-top:8px; font-size:.9rem; color:#7a6a45}
+.cert .sign{margin-top:18px; font-weight:900; color:var(--coral-d)}
+.badge-emo{font-size:3.4rem; animation:bob 2.4s ease-in-out infinite; display:inline-block}
+
+footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c6170; font-weight:700}
+@media print{
+  body{background:#fff}
+  .sky,#fx,.topbar,.no-print,footer.credit{display:none!important}
+  .cert{box-shadow:none}
+}
+@media (max-width:520px){
+  .crate{font-size:1.15rem; padding:14px}
+  .opt-btn{font-size:1.05rem}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fx"></canvas>
+<div class="sky">
+  <div class="sun"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+  <div class="hill h1"></div><div class="hill h2"></div>
+</div>
+
+<main id="app">
+
+<!-- ================= HOME ================= -->
+<section id="scr-home" class="screen active">
+  <div class="hero">
+    <div class="hero-badge">🎓 پژوهش کلاسی • پایهٔ سوم دبستان</div>
+    <h1 class="game-title">شهر اندازه‌گیری</h1>
+    <p class="subtitle">ترازو ⚖️ &nbsp;•&nbsp; اندازه‌گیری 📏 &nbsp;•&nbsp; مقیاس‌ها 🗺️</p>
+    <p class="byline">به کوشش: <b>سیده ساره حسینی</b></p>
+  </div>
+
+  <div class="mascot-row">
+    <svg class="mascot" viewBox="0 0 200 200">
+      <ellipse cx="100" cy="186" rx="62" ry="10" fill="rgba(0,0,0,.12)"/>
+      <rect x="90" y="102" width="20" height="74" rx="9" fill="#8d6e63"/>
+      <rect x="72" y="168" width="56" height="16" rx="8" fill="#7a5c48"/>
+      <g class="m-beam">
+        <rect x="22" y="42" width="156" height="9" rx="5" fill="#06d6a0" stroke="#0a9b76" stroke-width="2"/>
+        <line x1="30" y1="51" x2="30" y2="72" stroke="#8d6e63" stroke-width="3"/>
+        <line x1="170" y1="51" x2="170" y2="72" stroke="#8d6e63" stroke-width="3"/>
+        <path d="M12 72 a18 18 0 0 0 36 0 z" fill="#c9a227"/>
+        <path d="M152 72 a18 18 0 0 0 36 0 z" fill="#c9a227"/>
+      </g>
+      <circle cx="100" cy="76" r="36" fill="#ffd166" stroke="#e0a800" stroke-width="4"/>
+      <circle class="eye" cx="88" cy="70" r="5" fill="#22333b"/>
+      <circle class="eye" cx="112" cy="70" r="5" fill="#22333b"/>
+      <circle cx="80" cy="82" r="4.5" fill="#ffb4a2" opacity=".8"/>
+      <circle cx="120" cy="82" r="4.5" fill="#ffb4a2" opacity=".8"/>
+      <path d="M86 86 Q100 98 114 86" stroke="#22333b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="bub">سلام! من <b>ترازولو</b> هستم! 🎉 در شهر اندازه‌گیری ۶ ایستگاه داریم؛ بازی کن، ستاره جمع کن و قهرمان اندازه‌گیری شو!</div>
+  </div>
+
+  <div class="progress">
+    <div class="lbl"><span>⭐ ستاره‌های تو: <b id="hub-total">۰</b> از ۱۸</span><span id="hub-rank">تازه‌کار شاد 🙂</span></div>
+    <div class="bar"><div class="fill" id="hub-fill"></div></div>
+  </div>
+
+  <div class="stations" id="stations"></div>
+
+  <div class="hub-bottom">
+    <div class="bub" id="hub-tip" style="max-width:560px">💡</div>
+    <div class="row no-print">
+      <button class="btn" id="snd-home" onclick="toggleSound()">🔊 صدا</button>
+      <button class="btn" onclick="goCert()">🎓 گواهی قهرمانی</button>
+      <button class="btn warn" onclick="resetAll()">🧺 شروع دوباره از اول</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BALANCE ================= -->
+<section id="scr-balance" class="screen">
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🍎 ایستگاه بازار ترازو</h2><div class="chip">⭐ <span id="st-balance">۰</span></div></div>
+  <div class="bub center" id="bal-msg">وزنه‌ها را روی کفهٔ راست بگذار تا دو کفه برابر شوند! ⚖️</div>
+  <div class="bal-stage" style="margin-top:14px">
+    <svg id="bal-svg" viewBox="0 0 440 330">
+      <path d="M150 312 h140 a8 8 0 0 0 8-8 l-18-14 h-120 l-18 14 a8 8 0 0 0 8 8z" fill="#7a5c48"/>
+      <rect x="210" y="122" width="20" height="176" rx="9" fill="#8d6e63"/>
+      <g id="needle"><line x1="220" y1="119" x2="220" y2="62" stroke="#e63946" stroke-width="5" stroke-linecap="round"/><circle cx="220" cy="60" r="7" fill="#e63946"/></g>
+      <path d="M180 58 a52 52 0 0 1 80 0" fill="none" stroke="#c9a227" stroke-width="4" stroke-linecap="round"/>
+      <g id="beam">
+        <rect x="70" y="112" width="300" height="14" rx="7" fill="#06d6a0" stroke="#0a9b76" stroke-width="3"/>
+      </g>
+      <circle cx="220" cy="119" r="11" fill="#ffb703" stroke="#c98a00" stroke-width="3"/>
+      <g id="panL">
+        <line x1="0" y1="0" x2="-36" y2="44" stroke="#8d6e63" stroke-width="3"/>
+        <line x1="0" y1="0" x2="36" y2="44" stroke="#8d6e63" stroke-width="3"/>
+        <text id="bal-item" font-size="46" text-anchor="middle" y="40">🍎</text>
+        <path d="M-48 46 a48 20 0 0 0 96 0 z" fill="#c9a227" stroke="#a5831a" stroke-width="3"/>
+      </g>
+      <g id="panR">
+        <line x1="0" y1="0" x2="-36" y2="44" stroke="#8d6e63" stroke-width="3"/>
+        <line x1="0" y1="0" x2="36" y2="44" stroke="#8d6e63" stroke-width="3"/>
+        <g id="bal-w"></g>
+        <path d="M-48 46 a48 20 0 0 0 96 0 z" fill="#c9a227" stroke="#a5831a" stroke-width="3"/>
+      </g>
+    </svg>
+  </div>
+  <div class="bal-info">
+    <div class="chip big" id="bal-target">🍎 سیب: جرمش را پیدا کن!</div>
+    <div class="chip big">⚖️ وزنه‌ها: <b id="bal-sum">۰ گرم</b></div>
+  </div>
+  <div class="weights-row" id="bal-btns"></div>
+  <div class="row">
+    <button class="btn warn" onclick="balUndo()">↩️ یک وزنه بردار</button>
+    <button class="btn" onclick="balReset()">🧹 کفه را خالی کن</button>
+  </div>
+</section>
+
+<!-- ================= ESTIMATE ================= -->
+<section id="scr-estimate" class="screen">
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🤔 ایستگاه تخمین</h2><div class="chip">⭐ <span id="st-estimate">۰</span></div></div>
+  <div class="card center">
+    <h3 id="est-q" style="font-size:1.3rem; margin-bottom:14px">کدام سنگین‌تر است؟</h3>
+    <div class="est-grid" id="est-cards"></div>
+    <button class="btn big est-eq" id="est-eq" style="display:none" onclick="estPick('eq')">🟰 هر دو برابرند!</button>
+    <div class="mscale" id="est-scale"><div class="base"></div><div class="beam"><div class="pan pl"></div><div class="pan pr"></div></div></div>
+    <div class="bub" id="est-fact" style="display:none"></div>
+    <div class="row"><button class="btn primary big" id="est-next" style="display:none" onclick="estNext()">ادامه ⬅️</button></div>
+  </div>
+</section>
+
+<!-- ================= CONVERT ================= -->
+<section id="scr-convert" class="screen">
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🏭 کارخانهٔ تبدیل واحدها</h2><div class="chip">⭐ <span id="st-convert">۰</span></div></div>
+  <div class="machine">
+    <div class="gears"><span>⚙️</span><span>⚙️</span></div>
+    <div class="machine-label">جعبه‌ها را با جواب درست از کارخانه بیرون بفرست!</div>
+    <div class="belt-zone"><div class="crate in" id="cv-crate"><span id="cv-q"></span><div class="stamp">✅ آفرین!</div></div></div>
+    <div class="belt"></div>
+  </div>
+  <div class="opts-grid" id="cv-opts"></div>
+  <div class="dots" id="cv-dots"></div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section id="scr-map" class="screen">
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🗺️ ایستگاه نقشهٔ گنج</h2><div class="chip">⭐ <span id="st-map">۰</span></div></div>
+  <div class="map-legend"><div class="chip big" id="map-scale">📐 مقیاس نقشه</div></div>
+  <svg id="map-svg" viewBox="0 0 360 250"></svg>
+  <p class="map-q" id="map-q"></p>
+  <div class="opts-grid" id="map-opts"></div>
+  <div class="dots" id="map-dots"></div>
+</section>
+
+<!-- ================= TOOLS ================= -->
+<section id="scr-tools" class="screen">
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🧰 ایستگاه ابزار درست</h2><div class="chip">⭐ <span id="st-tools">۰</span></div></div>
+  <div class="task-card"><span class="big-emo" id="tl-icon">🍉</span><h3 id="tl-task"></h3></div>
+  <div class="tools-grid" id="tl-grid"></div>
+  <div class="dots" id="tl-dots" style="margin-top:18px"></div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="scr-quiz" class="screen">
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🏆 آزمون قهرمانی</h2><div class="chip">⭐ <span id="st-quiz">۰</span></div></div>
+  <div class="qbox" id="qz-box"></div>
+</section>
+
+<!-- ================= CERT ================= -->
+<section id="scr-cert" class="screen">
+  <div class="topbar no-print"><button class="btn icon" onclick="leave()">🏠</button><h2>🎓 گواهی قهرمانی</h2><div class="chip">⭐ <span id="st-cert">۰</span></div></div>
+  <div class="cert">
+    <span class="badge-emo">🏅</span>
+    <h2>گواهی قهرمان اندازه‌گیری</h2>
+    <input id="cert-name" placeholder="✏️ نام خود را اینجا بنویس" oninput="certName(this.value)">
+    <p class="body">این گواهی به <b id="cert-show">دانش‌آموز کوشا</b> داده می‌شود که ایستگاه‌های پژوهشِ
+      «ترازو، اندازه‌گیری و مقیاس‌ها» را با موفقیت گذراند و نشان داد که اندازه‌گیری با ابزار و واحد مناسب، دنیا را دقیق‌تر می‌کند! 🌟</p>
+    <div class="stars-line">⭐ <span id="cert-stars">۰</span> ستاره از ۱۸ ستاره</div>
+    <div id="cert-rank" style="font-weight:900; margin-top:4px"></div>
+    <div class="date" id="cert-date"></div>
+    <div class="sign">به کوشش: سیده ساره حسینی — پایهٔ سوم دبستان 🌸</div>
+  </div>
+  <div class="row no-print">
+    <button class="btn primary big" onclick="window.print()">🖨️ چاپ گواهی</button>
+    <button class="btn big" onclick="leave()">🏠 بازگشت</button>
+  </div>
+</section>
+
+<footer class="credit">ساخته‌شده برای ارائهٔ کلاسیِ «سیده ساره حسینی» • موضوع: ترازو، اندازه‌گیری و مقیاس‌ها ⚖️</footer>
+</main>
+
+<div class="streak" id="streak">🔥 <b id="streak-n"></b> پشت‌سرهم!</div>
+
+<script>
+/* ================= HELPERS ================= */
+const $ = id => document.getElementById(id);
+const fa = n => Number(n).toLocaleString('fa-IR');
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const rnd = a => a[Math.floor(Math.random()*a.length)];
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ---- sound ---- */
+let AC=null;
+function beep(f,d,type,v,t){ if(!S.sound) return; try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  const o=AC.createOscillator(), g=AC.createGain(), T=AC.currentTime+(t||0);
+  o.type=type||'sine'; o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,T); g.gain.exponentialRampToValueAtTime(v||0.18,T+0.01); g.gain.exponentialRampToValueAtTime(0.0001,T+d);
+  o.connect(g); g.connect(AC.destination); o.start(T); o.stop(T+d+0.05);}catch(e){} }
+const sfx = {
+  click:()=>beep(520,.06,'triangle',.15),
+  pop:()=>beep(760,.06,'square',.1),
+  good:()=>{beep(523,.1);beep(659,.1,'sine',.18,.1);beep(784,.16,'sine',.18,.2)},
+  bad:()=>{beep(220,.16,'sawtooth',.1);beep(150,.22,'sawtooth',.08,.13)},
+  win:()=>{[523,659,784,1047,1319].forEach((f,i)=>beep(f,.13,'triangle',.2,i*.11))},
+  star:()=>{beep(880,.09,'triangle',.2);beep(1318,.14,'triangle',.2,.09)}
+};
+function toggleSound(){ S.sound=!S.sound; if(S.sound) sfx.click(); save();
+  const b=$('snd-home'); if(b) b.textContent = S.sound?'🔊 صدا':'🔇 بی‌صدا'; }
+
+/* ---- confetti ---- */
+const fx=$('fx'), fctx=fx.getContext('2d'); let parts=[], fxOn=false;
+function fxSize(){ fx.width=innerWidth; fx.height=innerHeight; } fxSize(); addEventListener('resize',fxSize);
+function confetti(n){ n=n||130; const cols=['#ff7b54','#ffd166','#06d6a0','#4cc9f0','#9b5de5','#ff8fa3'];
+  for(let i=0;i<n;i++) parts.push({x:Math.random()*fx.width, y:-20-Math.random()*120, vx:(Math.random()-.5)*2.4,
+    vy:1.5+Math.random()*3, s:6+Math.random()*7, r:Math.random()*6.3, vr:(Math.random()-.5)*.3, c:rnd(cols)});
+  if(!fxOn){fxOn=true; requestAnimationFrame(fxTick);} }
+function fxTick(){ fctx.clearRect(0,0,fx.width,fx.height);
+  parts.forEach(p=>{p.x+=p.vx; p.y+=p.vy; p.vy+=0.045; p.r+=p.vr;
+    fctx.save(); fctx.translate(p.x,p.y); fctx.rotate(p.r); fctx.fillStyle=p.c; fctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.62); fctx.restore();});
+  parts=parts.filter(p=>p.y<fx.height+30);
+  if(parts.length) requestAnimationFrame(fxTick); else {fxOn=false; fctx.clearRect(0,0,fx.width,fx.height);} }
+
+/* ---- state ---- */
+const S={sound:true, player:'', stars:{balance:0,estimate:0,convert:0,map:0,tools:0,quiz:0}};
+function save(){ try{localStorage.setItem('mcity',JSON.stringify(S));}catch(e){} }
+function load(){ try{ const d=JSON.parse(localStorage.getItem('mcity'));
+  if(d){ if(d.stars) Object.assign(S.stars,d.stars); if(d.player) S.player=d.player; if(d.sound===false) S.sound=false; } }catch(e){} }
+const totalStars = () => Object.values(S.stars).reduce((a,b)=>a+b,0);
+function setStars(k,n){ if(n>S.stars[k]){ S.stars[k]=n; save(); sfx.star(); }
+  const el=$('st-'+k); if(el) el.textContent=fa(S.stars[k]); updateHub(); }
+
+/* ---- screens ---- */
+let balAnim=false;
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active'); scrollTo({top:0});
+  if(id!=='scr-balance') balAnim=false; }
+function leave(){ sfx.click(); show('scr-home'); updateHub(); }
+
+/* ---- hub ---- */
+const STATIONS=[
+ {k:'balance', e:'🍎', t:'بازار ترازو', d:'با وزنه‌ها تعادل بساز'},
+ {k:'estimate',e:'🤔', t:'تخمین کن!', d:'کدام سنگین‌تر است؟'},
+ {k:'convert', e:'🏭', t:'کارخانهٔ تبدیل', d:'کیلوگرم ↔ گرم و…'},
+ {k:'map',     e:'🗺️', t:'نقشهٔ گنج', d:'راز مقیاس نقشه'},
+ {k:'tools',   e:'🧰', t:'ابزار درست', d:'هر کار یک ابزار دارد'},
+ {k:'quiz',    e:'🏆', t:'آزمون قهرمانی', d:'۸ سؤال نهایی'}];
+const OPENERS={balance:'openBalance',estimate:'openEstimate',convert:'openConvert',map:'openMap',tools:'openTools',quiz:'openQuiz'};
+function buildHub(){ $('stations').innerHTML = STATIONS.map(s=>`
+  <div class="station" onclick="sfx.click();${OPENERS[s.k]}()">
+    <span class="emo">${s.e}</span><h3>${s.t}</h3><p>${s.d}</p>
+    <div class="st-stars" id="hub-star-${s.k}"></div><br><span class="play">بازی کن!</span>
+  </div>`).join(''); }
+function updateHub(){
+  STATIONS.forEach(s=>{ const n=S.stars[s.k]; $('hub-star-'+s.k).textContent='⭐'.repeat(n)+'☆'.repeat(3-n);
+    const el=$('st-'+s.k); if(el) el.textContent=fa(n); });
+  const t=totalStars(); $('hub-total').textContent=fa(t);
+  $('hub-fill').style.width=(t/18*100)+'%';
+  $('hub-rank').textContent = t>=16?'قهرمان افسانه‌ای 🏆': t>=12?'ستارهٔ درخشان 🌟': t>=8?'کاوشگر دقیق 🔍': t>=3?'تلاشگر شاد 💪':'تازه‌کار شاد 🙂';
+  const c=$('st-cert'); if(c) c.textContent=fa(t); }
+const TIPS=['هر کیلوگرم ۱۰۰۰ گرم است و هر لیتر ۱۰۰۰ میلی‌لیتر! ⚖️','جرم جسم در ماه عوض نمی‌شود، ولی وزنش کمتر می‌شود! 🌙',
+ 'ترازو را همیشه روی سطح صاف بگذار. 📐','بزرگی ظاهری همیشه یعنی سنگین‌تر بودن نیست؛ جنس جسم هم مهم است! 🎈',
+ 'مقیاس نقشه می‌گوید فاصلهٔ روی نقشه با واقعیت چه رابطه‌ای دارد. 🗺️','پیش از اندازه‌گیری تخمین بزن؛ بعد با ابزار بررسی کن! 🤔',
+ 'اگر عدد را بدون واحد بنویسیم، کسی نمی‌فهمد منظورمان چیست! ✏️'];
+let tipI=0; function rotateTips(){ const el=$('hub-tip'); el.style.opacity=0;
+  setTimeout(()=>{ el.innerHTML='💡 '+TIPS[tipI++ % TIPS.length]; el.style.opacity=1; },350);
+  el.style.transition='opacity .35s'; }
+function resetAll(){ if(confirm('همهٔ ستاره‌ها پاک شوند و بازی از اول شروع شود؟')){
+  S.stars={balance:0,estimate:0,convert:0,map:0,tools:0,quiz:0}; save(); updateHub(); sfx.click(); } }
+
+/* ---- end panel ---- */
+function endPanel(title,earned,againFn,max){ const stars='⭐'.repeat(earned)+'☆'.repeat(max-earned);
+  const msg = earned===max?'فوق‌العاده بود! همهٔ ستاره‌ها را گرفتی! 🎉': earned>=Math.ceil(max/2)?'خیلی خوب بود! 👏':'تمرین کن، دفعهٔ بعد بهتر می‌شوی! 💪';
+  return `<div class="end-panel card"><h2>${title}</h2>
+   <div class="big-stars">${[...stars].map(c=>`<span>${c}</span>`).join('')}</div>
+   <p style="font-weight:800">${msg}</p>
+   <div class="row"><button class="btn primary big" onclick="${againFn}">🔁 دوباره بازی کن</button>
+   <button class="btn big" onclick="leave()">🏠 ایستگاه‌ها</button></div></div>`; }
+
+/* ================= GAME 1 : BALANCE ================= */
+const BR=[
+ {e:'🍎',n:'سیب',mass:300,btns:[100,200]},
+ {e:'🍉',n:'هندوانه',mass:2000,btns:[500,1000]},
+ {e:'🎒',n:'کوله‌پشتی',mass:3500,btns:[100,500,1000]}];
+let B=null;
+function openBalance(){ show('scr-balance'); B={r:0,sum:0,placed:[],overshot:false,solved:false,earned:[],ang:0};
+  balRound(); balAnim=true; requestAnimationFrame(balTick); }
+function wName(g){ return g>=1000 ? fa(g/1000)+' کیلوگرم' : fa(g)+' گرم'; }
+function balRound(){ const r=BR[B.r]; B.sum=0; B.placed=[]; B.overshot=false; B.solved=false;
+  $('bal-item').textContent=r.e;
+  $('bal-target').innerHTML=`${r.e} <b>${r.n}</b>: جرمش را با وزنه‌ها پیدا کن!`;
+  $('bal-msg').className='bub center';
+  $('bal-msg').innerHTML=`وزنه‌ها را روی کفهٔ راست بگذار تا دو کفه برابر شوند! ⚖️`;
+  $('bal-btns').innerHTML = r.btns.map(w=>`<button class="w-btn" onclick="balAdd(${w})">➕ ${wName(w)}</button>`).join('');
+  drawWeights(); updSum(); }
+function balAdd(w){ if(!B||B.solved) return; sfx.pop(); B.sum+=w; B.placed.push(w);
+  drawWeights(); updSum();
+  const m=BR[B.r].mass;
+  if(B.sum===m) balWin();
+  else if(B.sum>m){ B.overshot=true; $('bal-msg').className='bub center warn';
+    $('bal-msg').innerHTML='اوه! کفهٔ وزنه‌ها پایین رفت 😅 چند تا وزنه بردار!'; sfx.bad(); }
+  else { $('bal-msg').className='bub center'; $('bal-msg').innerHTML='هنوز کفهٔ '+BR[B.r].n+' پایین‌تر است؛ وزنهٔ بیشتری بگذار! ⬇️'; } }
+function balUndo(){ if(!B||B.solved||!B.placed.length) return; sfx.click();
+  B.sum-=B.placed.pop(); drawWeights(); updSum();
+  $('bal-msg').className='bub center'; $('bal-msg').innerHTML='ادامه بده! 💪'; }
+function balReset(){ if(!B||B.solved) return; sfx.click(); B.sum=0; B.placed=[]; drawWeights(); updSum(); }
+function updSum(){ let t=fa(B.sum)+' گرم'; if(B.sum>=1000&&B.sum%1000===0) t+=' ( = '+fa(B.sum/1000)+' کیلوگرم )';
+  $('bal-sum').textContent=t; }
+function drawWeights(){ const g=$('bal-w'); let h='';
+  const cols={100:'#4cc9f0',200:'#ffd166',500:'#ff9a6c',1000:'#b98cf0'};
+  B.placed.slice(0,9).forEach((w,i)=>{ const row=Math.floor(i/3), col=i%3;
+    h+=`<rect x="${-46+col*32}" y="${18-row*16}" width="28" height="13" rx="4" fill="${cols[w]||'#ccc'}" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/>`; });
+  g.innerHTML=h; }
+function balWin(){ B.solved=true; sfx.win(); confetti(110);
+  const perfect=!B.overshot; B.earned.push(perfect?1:0);
+  $('bal-msg').className='bub center good';
+  $('bal-msg').innerHTML=`🎉 ترازو شد! جرم ${BR[B.r].n} <b>${wName(BR[B.r].mass)}</b> است.`+(perfect?' بدون هیچ اضافه‌ای، عالی! 🌟':'');
+  $('bal-btns').innerHTML=`<button class="btn primary big" onclick="balNext()">${B.r<BR.length-1?'مرحلهٔ بعد ⬅️':'دیدن نتیجه 🏁'}</button>`; }
+function balNext(){ sfx.click(); B.r++; if(B.r<BR.length) balRound();
+  else { const got=B.earned.reduce((a,b)=>a+b,0); setStars('balance',got);
+    document.querySelector('#scr-balance .bal-stage').parentElement; 
+    $('scr-balance').querySelector('.card')?.remove();
+    const div=document.createElement('div'); div.className='card'; div.style.marginTop='14px';
+    div.innerHTML=endPanel('🍎 پایان بازار ترازو',got,'openBalance()',3);
+    document.querySelectorAll('#scr-balance .bal-stage, #scr-balance .bal-info, #scr-balance .weights-row')[0].style.display='none';
+    $('scr-balance').appendChild(div); balAnim=false;
+    document.querySelectorAll('#scr-balance .bal-stage, #scr-balance .bal-info, #scr-balance .weights-row, #scr-balance .row, #scr-balance .bub').forEach(e=>e.style.display='none');
+  } }
+function balTick(){ if(!balAnim||!B){ return; }
+  const m=BR[B.r].mass; let t;
+  if(B.solved) t=Math.sin(Date.now()/280)*1.3;
+  else t=clamp((B.sum-m)/m*24,-16,16);
+  B.ang+=(t-B.ang)*0.075;
+  const a=B.ang*Math.PI/180, cx=220, cy=119, L=140;
+  $('beam').setAttribute('transform',`rotate(${B.ang} ${cx} ${cy})`);
+  $('needle').setAttribute('transform',`rotate(${-B.ang*1.3} ${cx} ${cy})`);
+  $('panL').setAttribute('transform',`translate(${cx-L*Math.cos(a)},${cy-L*Math.sin(a)})`);
+  $('panR').setAttribute('transform',`translate(${cx+L*Math.cos(a)},${cy+L*Math.sin(a)})`);
+  requestAnimationFrame(balTick); }
+
+/* ================= GAME 2 : ESTIMATE ================= */
+const ER=[
+ {a:{e:'🎈',n:'بادکنک بزرگ',m:'۱۰ گرم',sz:104}, b:{e:'🔩',n:'پیچ فلزی کوچک',m:'۳۰ گرم',sz:52}, ans:'b',
+  fact:'جنس جسم مهم است! فلزِ یک پیچِ کوچک از هوای داخل بادکنک سنگین‌تر است.'},
+ {a:{e:'☁️',n:'یک ابر پنبه‌ای',m:'۵۰۰٬۰۰۰ کیلوگرم',sz:118}, b:{e:'🐘',n:'فیل',m:'۴٬۰۰۰ کیلوگرم',sz:96}, ans:'a',
+  fact:'باورت می‌شود؟ یک ابر حدود صد فیلِ بزرگ جرم دارد!'},
+ {a:{e:'🐘',n:'فیل',m:'۴٬۰۰۰ کیلوگرم',sz:104}, b:{e:'🚗',n:'ماشین سواری',m:'۱٬۲۰۰ کیلوگرم',sz:96}, ans:'a',
+  fact:'فیل از بیشترِ ماشین‌های سواری سنگین‌تر است!'},
+ {a:{e:'🧺',n:'یک کیلو پنبه',m:'۱ کیلوگرم',sz:96}, b:{e:'🔧',n:'یک کیلو آهن',m:'۱ کیلوگرم',sz:88}, ans:'eq', eq:true,
+  fact:'هر دو دقیقاً ۱ کیلوگرم هستند! جنس فرق دارد، ولی جرم‌ها برابرند. چه سوال گول‌زننده‌ای! 😄'},
+ {a:{e:'🍉',n:'هندوانهٔ بزرگ',m:'۵ کیلوگرم',sz:104}, b:{e:'📚',n:'ده تا کتاب',m:'۷ کیلوگرم',sz:96}, ans:'b',
+  fact:'تعدادِ زیادِ چیزهای سبک می‌تواند از یک چیز بزرگ سنگین‌تر باشد!'}];
+let E=null;
+function openEstimate(){ show('scr-estimate'); E={i:0,ok:0}; estRender(); }
+function estRender(){ const r=ER[E.i]; E.answered=false;
+  $('est-q').innerHTML=`سؤال ${fa(E.i+1)} از ${fa(ER.length)} — کدام سنگین‌تر است؟ 🤔`;
+  $('est-cards').innerHTML=['a','b'].map(k=>{const o=r[k]; return `
+   <button class="est-card" id="est-${k}" onclick="estPick('${k}')">
+     <span class="emo" style="font-size:${o.sz}px">${o.e}</span>
+     <div>${o.n}</div><div class="mass">جرم: <b>${o.m}</b></div></button>`;}).join('');
+  $('est-eq').style.display = r.eq ? '' : 'none';
+  $('est-scale').className='mscale'; $('est-fact').style.display='none'; $('est-next').style.display='none'; }
+function estPick(k){ if(!E||E.answered) return; E.answered=true; const r=ER[E.i];
+  const ok = k===r.ans; if(ok){E.ok++; sfx.good(); confetti(60);} else sfx.bad();
+  document.querySelectorAll('.est-card').forEach(c=>c.classList.add('revealed'));
+  if(r.ans==='eq'){ $('est-a').classList.add('win'); $('est-b').classList.add('win'); }
+  else { $('est-'+r.ans).classList.add('win'); if(!ok) $('est-'+k).classList.add('lose'); }
+  $('est-scale').className='mscale '+(r.ans==='a'?'tilt-l':r.ans==='b'?'tilt-r':'');
+  $('est-eq').style.display='none';
+  const f=$('est-fact'); f.style.display='block';
+  f.className='bub '+(ok?'good':'warn');
+  f.innerHTML=(ok?'✅ آفرین! ':'🙈 جواب درست را ببین! ')+r.fact;
+  $('est-next').style.display=''; $('est-next').textContent = E.i<ER.length-1?'ادامه ⬅️':'دیدن نتیجه 🏁'; }
+function estNext(){ sfx.click(); E.i++; if(E.i<ER.length) estRender();
+  else { const got=E.ok>=5?3:E.ok>=4?2:E.ok>=3?1:0; setStars('estimate',got);
+    $('scr-estimate').querySelector('.card').outerHTML=endPanel('🤔 پایان ایستگاه تخمین — '+fa(E.ok)+' جواب درست از '+fa(ER.length),got,'openEstimate()',3); } }
+
+/* ================= GAME 3 : CONVERT ================= */
+const CV=[
+ {q:'۲ کیلوگرم = ⬜ گرم', correct:'۲۰۰۰', opts:['۲۰','۲۰۰','۲۰۰۰','۲۰۰۰۰']},
+ {q:'۵۰۰۰ گرم = ⬜ کیلوگرم', correct:'۵', opts:['۵','۵۰','۵۰۰','۱۵']},
+ {q:'۳ لیتر = ⬜ میلی‌لیتر', correct:'۳۰۰۰', opts:['۳۰','۳۰۰','۳۰۰۰','۳۰۰۰۰']},
+ {q:'۱۰۰ سانتی‌متر = ⬜ متر', correct:'۱', opts:['۱','۱۰','۱۰۰','۱۰۰۰']},
+ {q:'۱ کیلوگرم و ۳۰۰ گرم = ⬜ گرم', correct:'۱۳۰۰', opts:['۱۰۳۰','۱۳۰۰','۱۳۰','۴۰۰']},
+ {q:'۲ لیتر و ۵۰۰ میلی‌لیتر = ⬜ میلی‌لیتر', correct:'۲۵۰۰', opts:['۲۰۵۰','۷۰۰','۲۵۰','۲۵۰۰']},
+ {q:'۴۰۰۰ گرم = ⬜ کیلوگرم', correct:'۴', opts:['۴','۴۰','۴۰۰','۱۴']}];
+let C=null;
+function openConvert(){ show('scr-convert'); C={i:0,first:0,streak:0,answered:false,qs:CV.map(q=>{const o=shuffle([...q.opts]);return{q:q.q,opts:o,a:o.indexOf(q.correct)}})};
+  cvRender(true); }
+function cvRender(first){ const q=C.qs[C.i]; C.answered=false;
+  const crate=$('cv-crate'); crate.classList.remove('out','solved'); crate.classList.remove('in'); void crate.offsetWidth; crate.classList.add('in');
+  $('cv-q').textContent=q.q;
+  $('cv-opts').innerHTML=q.opts.map((o,i)=>`<button class="opt-btn" onclick="cvPick(${i},this)">${o}</button>`).join('');
+  $('cv-dots').innerHTML=C.qs.map((_,i)=>`<i class="${i<C.i?'done':i===C.i?'cur':''}"></i>`).join(''); }
+function cvPick(i,btn){ if(!C||C.answered) return; const q=C.qs[C.i];
+  if(i===q.a){ C.answered=true; btn.classList.add('correct'); C.streak++;
+    if(C.streak>=3){ $('streak').classList.add('on'); $('streak-n').textContent=fa(C.streak); }
+    sfx.good(); $('cv-crate').classList.add('solved');
+    const wasFirst = !btn.dataset.retry; if(wasFirst) C.first++;
+    setTimeout(()=>{ $('cv-crate').classList.add('out'); $('streak').classList.remove('on');
+      setTimeout(()=>{ C.i++; if(C.i<C.qs.length) cvRender();
+        else { const got=C.first>=7?3:C.first>=5?2:C.first>=3?1:0; setStars('convert',got);
+          document.querySelector('#scr-convert .machine').outerHTML=endPanel('🏭 پایان کارخانهٔ تبدیل — '+fa(C.first)+' جواب درست در تلاش اول',got,'openConvert()',3);
+          $('cv-opts').innerHTML=''; $('cv-dots').innerHTML=''; } },450); },700);
+  } else { btn.classList.add('wrong'); btn.dataset.retry=1; C.streak=0; $('streak').classList.remove('on');
+    sfx.bad(); const cr=$('cv-crate'); cr.classList.add('shake'); setTimeout(()=>cr.classList.remove('shake'),420); } }
+
+/* ================= GAME 4 : MAP ================= */
+const MSCALE1='هر ۱ سانتی‌متر روی نقشه = ۱ کیلومتر در واقعیت';
+const MR=[
+ {scale:MSCALE1, from:{e:'🏠',n:'خانه',x:60,y:175}, cm:4, ang:-0.35, mode:'a', ans:'۴ کیلومتر',
+  opts:['۲ کیلومتر','۳ کیلومتر','۴ کیلومتر','۸ کیلومتر'],
+  q:'فاصلهٔ خانه تا پارک روی نقشه <b>۴ سانتی‌متر</b> است. در واقعیت چند کیلومتر است؟', to:{e:'🌳',n:'پارک'}},
+ {scale:MSCALE1, from:{e:'🏫',n:'مدرسه',x:55,y:185}, cm:7, ang:-0.16, mode:'a', ans:'۷ کیلومتر',
+  opts:['۷ کیلومتر','۱۷ کیلومتر','۳ کیلومتر','۵ کیلومتر'],
+  q:'فاصلهٔ مدرسه تا فروشگاه روی نقشه <b>۷ سانتی‌متر</b> است. در واقعیت چند کیلومتر است؟', to:{e:'🛒',n:'فروشگاه'}},
+ {scale:MSCALE1, from:{e:'🏠',n:'خانه',x:70,y:150}, cm:3, ang:0.25, mode:'b', ans:'۳ سانتی‌متر',
+  opts:['۱ سانتی‌متر','۳ سانتی‌متر','۳۰ سانتی‌متر','۶ سانتی‌متر'],
+  q:'فاصلهٔ واقعی خانه تا مدرسه <b>۳ کیلومتر</b> است. روی نقشه چند سانتی‌متر می‌شود؟', to:{e:'🏫',n:'مدرسه'}},
+ {scale:'🌟 این‌بار مقیاس عوض شد: هر ۱ سانتی‌متر روی نقشه = ۲ کیلومتر در واقعیت', from:{e:'🏠',n:'خانه',x:70,y:180}, cm:3, ang:-0.55, mode:'a', ans:'۶ کیلومتر',
+  opts:['۳ کیلومتر','۶ کیلومتر','۵ کیلومتر','۹ کیلومتر'],
+  q:'هر ۱ سانتی‌متر حالا یعنی ۲ کیلومتر! فاصلهٔ <b>۳ سانتی‌متری</b> روی نقشه یعنی چند کیلومتر؟', to:{e:'⚽',n:'ورزشگاه'}}];
+let MP=null;
+function openMap(){ show('scr-map'); MP={i:0,first:0,answered:false}; mapRender(); }
+function mapRender(){ const r=MR[MP.i]; MP.answered=false;
+  const dx=Math.cos(r.ang)*r.cm*40, dy=Math.sin(r.ang)*r.cm*40;
+  const tx=r.from.x+dx, ty=r.from.y+dy, mx=(r.from.x+tx)/2, my=(r.from.y+ty)/2;
+  const label = r.mode==='b' ? fa(3)+' کیلومتر در واقعیت' : fa(r.cm)+' سانتی‌متر روی نقشه';
+  $('map-scale').textContent='📐 '+r.scale;
+  let grid=''; for(let x=30;x<360;x+=30) grid+=`<line x1="${x}" y1="10" x2="${x}" y2="215" stroke="#bfe3bf" stroke-width="1"/>`;
+  for(let y=30;y<220;y+=30) grid+=`<line x1="10" y1="${y}" x2="350" y2="${y}" stroke="#bfe3bf" stroke-width="1"/>`;
+  let ruler=''; for(let i=0;i<=4;i++) ruler+=`<line x1="${24+i*40}" y1="228" x2="${24+i*40}" y2="240" stroke="#8a5a26" stroke-width="2"/>`;
+  ruler+=`<line x1="24" y1="234" x2="184" y2="234" stroke="#8a5a26" stroke-width="3"/><text x="196" y="239" font-size="11" fill="#7a5c48">هر خانه = ۱ سانتی‌متر</text>`;
+  $('map-svg').innerHTML=`
+   <rect x="0" y="0" width="360" height="250" rx="20" fill="#dcf2d0"/>
+   ${grid}
+   <text x="30" y="40" font-size="20">🌼</text><text x="310" y="200" font-size="20">🌷</text><text x="290" y="36" font-size="22">🦋</text>
+   <line x1="${r.from.x}" y1="${r.from.y}" x2="${tx}" y2="${ty}" stroke="#e63946" stroke-width="4" stroke-dasharray="9 7" stroke-linecap="round"/>
+   <text x="${r.from.x}" y="${r.from.y-14}" font-size="34" text-anchor="middle">${r.from.e}</text>
+   <text x="${r.from.x}" y="${r.from.y+26}" font-size="12" text-anchor="middle" font-weight="bold" fill="#33475b">${r.from.n}</text>
+   <text x="${tx}" y="${ty-14}" font-size="34" text-anchor="middle">${r.to.e}</text>
+   <text x="${tx}" y="${ty+26}" font-size="12" text-anchor="middle" font-weight="bold" fill="#33475b">${r.to.n}</text>
+   <rect x="${mx-72}" y="${my-38}" width="144" height="24" rx="12" fill="#fff" stroke="#e63946" stroke-width="2"/>
+   <text x="${mx}" y="${my-21}" font-size="12.5" text-anchor="middle" font-weight="bold" fill="#e63946">${label}</text>
+   ${ruler}`;
+  $('map-q').innerHTML=r.q;
+  $('map-opts').innerHTML=shuffle([...r.opts]).map(o=>`<button class="opt-btn" onclick="mapPick('${o}',this)">${o}</button>`).join('');
+  $('map-dots').innerHTML=MR.map((_,i)=>`<i class="${i<MP.i?'done':i===MP.i?'cur':''}"></i>`).join(''); }
+function mapPick(o,btn){ if(!MP||MP.answered) return; const r=MR[MP.i];
+  if(o===r.ans){ MP.answered=true; btn.classList.add('correct'); MP.first++; sfx.good();
+    const tx=r.from.x+Math.cos(r.ang)*r.cm*40, ty=r.from.y+Math.sin(r.ang)*r.cm*40;
+    mapWalk(r.from.x,r.from.y,tx,ty,()=>{ confetti(70);
+      setTimeout(()=>{ MP.i++; if(MP.i<MR.length) mapRender();
+        else { const got=MP.first>=4?3:MP.first>=3?2:MP.first>=2?1:0; setStars('map',got);
+          $('scr-map').querySelector('.card')?.remove();
+          const d=document.createElement('div'); d.className='card';
+          d.innerHTML=endPanel('🗺️ پایان ایستگاه نقشهٔ گنج',got,'openMap()',3);
+          $('map-svg').after(d); $('map-opts').innerHTML=''; $('map-q').innerHTML=''; $('map-dots').innerHTML=''; } },350); });
+  } else { btn.classList.add('wrong'); sfx.bad(); } }
+function mapWalk(x1,y1,x2,y2,cb){ const svg=$('map-svg'); const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('font-size','26'); t.setAttribute('text-anchor','middle'); t.textContent='🚴'; svg.appendChild(t);
+  const t0=performance.now(), dur=1400;
+  (function step(now){ const p=clamp((now-t0)/dur,0,1), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    t.setAttribute('x',x1+(x2-x1)*e); t.setAttribute('y',y1+(y2-y1)*e-Math.sin(Math.PI*p)*18);
+    if(p<1) requestAnimationFrame(step); else { t.remove(); cb(); } })(t0); }
+
+/* ================= GAME 5 : TOOLS ================= */
+const TOOL_E={'ترازو':'⚖️','خط‌کش':'📏','پیمانهٔ درجه‌بندی‌شده':'🥛','دماسنج':'🌡️','متر نواری':'📐','ساعت':'⏰'};
+const TR=[
+ {t:'می‌خواهیم جرم یک هندوانه را بسنجیم', i:'🍉', ans:'ترازو', opts:['ترازو','خط‌کش','دماسنج','ساعت']},
+ {t:'می‌خواهیم طول مداد را اندازه بگیریم', i:'✏️', ans:'خط‌کش', opts:['خط‌کش','ترازو','پیمانهٔ درجه‌بندی‌شده','ساعت']},
+ {t:'می‌خواهیم گنجایش آب داخل بطری را بفهمیم', i:'🧃', ans:'پیمانهٔ درجه‌بندی‌شده', opts:['پیمانهٔ درجه‌بندی‌شده','خط‌کش','ترازو','دماسنج']},
+ {t:'می‌خواهیم دمای بدن را ببینیم', i:'🤒', ans:'دماسنج', opts:['دماسنج','ساعت','ترازو','خط‌کش']},
+ {t:'می‌خواهیم طول اتاق را اندازه بگیریم', i:'🛋️', ans:'متر نواری', opts:['متر نواری','خط‌کش','پیمانهٔ درجه‌بندی‌شده','ترازو']},
+ {t:'می‌خواهیم زمان پخت کیک را بفهمیم', i:'🎂', ans:'ساعت', opts:['ساعت','دماسنج','متر نواری','خط‌کش']}];
+let T=null;
+function openTools(){ show('scr-tools'); T={i:0,first:0,answered:false}; tlRender(); }
+function tlRender(){ const r=TR[T.i]; T.answered=false;
+  $('tl-icon').textContent=r.i; $('tl-task').textContent=r.t+' ؟';
+  $('tl-grid').innerHTML=shuffle([...r.opts]).map(o=>`
+   <button class="tool-card" onclick="tlPick('${o}',this)"><span class="emo">${TOOL_E[o]||'🧰'}</span>${o}</button>`).join('');
+  $('tl-dots').innerHTML=TR.map((_,i)=>`<i class="${i<T.i?'done':i===T.i?'cur':''}"></i>`).join(''); }
+function tlPick(o,btn){ if(!T||T.answered) return; const r=TR[T.i];
+  if(o===r.ans){ T.answered=true; T.first++; btn.classList.add('correct'); sfx.good(); confetti(50);
+    setTimeout(()=>{ T.i++; if(T.i<TR.length) tlRender();
+      else { const got=T.first>=6?3:T.first>=4?2:T.first>=3?1:0; setStars('tools',got);
+        $('scr-tools').querySelector('.task-card').outerHTML='';
+        $('tl-grid').innerHTML=endPanel('🧰 پایان ایستگاه ابزار درست',got,'openTools()',3);
+        $('tl-dots').innerHTML=''; } },900);
+  } else { btn.classList.add('wrong'); sfx.bad(); } }
+
+/* ================= GAME 6 : QUIZ ================= */
+const QR=[
+ {q:'برای سنجیدن جرم یک سیب از چه ابزاری استفاده می‌کنیم؟', o:['ترازو','خط‌کش','پیمانه','ساعت'], a:0, w:'ترازو ابزار سنجیدن جرم است و گرم یا کیلوگرم نشان می‌دهد.'},
+ {q:'هر کیلوگرم چند گرم است؟', o:['۱۰ گرم','۱۰۰ گرم','۱۰۰۰ گرم','۱۰۰۰۰ گرم'], a:2, w:'۱ کیلوگرم = ۱۰۰۰ گرم'},
+ {q:'۲ کیلوگرم چند گرم است؟', o:['۲۰۰ گرم','۲۰۰۰ گرم','۲۰ گرم','۲۰۰۰۰ گرم'], a:1, w:'۲ × ۱۰۰۰ = ۲۰۰۰ گرم'},
+ {q:'برای اندازه‌گیری طول مداد کدام مناسب‌تر است؟', o:['ترازو','خط‌کش','دماسنج','پیمانه'], a:1, w:'طول‌های کوچک را با خط‌کش و سانتی‌متر می‌سنجیم.'},
+ {q:'هر لیتر چند میلی‌لیتر است؟', o:['۱۰۰','۱۰۰۰','۱۰','۱۰۰۰۰'], a:1, w:'۱ لیتر = ۱۰۰۰ میلی‌لیتر'},
+ {q:'اگر ۱ سانتی‌متر روی نقشه برابر ۱ کیلومتر باشد، ۴ سانتی‌متر چه فاصله‌ای است؟', o:['۴ کیلومتر','۴۰ کیلومتر','۱ کیلومتر','۸ کیلومتر'], a:0, w:'۴ × ۱ کیلومتر = ۴ کیلومتر'},
+ {q:'آیا جسم بزرگ‌تر همیشه جرم بیشتری دارد؟', o:['بله، همیشه','خیر؛ جنس جسم هم مهم است','فقط اگر گرد باشد','هیچ‌وقت نه'], a:1, w:'یک جسم کوچکِ فلزی ممکن است از یک جسم بزرگ و سبک، سنگین‌تر باشد.'},
+ {q:'چرا عدد اندازه‌گیری را همراه واحد می‌نویسیم؟', o:['برای زیبایی','تا معلوم شود عدد مربوط به چه واحدی است','لازم نیست','فقط در مدرسه'], a:1, w:'بدون واحد، کسی نمی‌فهمد منظورمان سانتی‌متر است یا کیلومتر!'}];
+let QZ=null;
+function openQuiz(){ show('scr-quiz');
+  QZ={i:0,ok:0,answered:false, qs:QR.map(q=>{ const idx=shuffle(q.o.map((_,i)=>i));
+    return {q:q.q, o:idx.map(i=>q.o[i]), a:idx.indexOf(q.a), w:q.w}; })};
+  qzRender(); }
+function qzRender(){ const q=QZ.qs[QZ.i]; QZ.answered=false;
+  $('qz-box').innerHTML=`<div class="q-prog">سؤال ${fa(QZ.i+1)} از ${fa(QZ.qs.length)} 🏁</div>
+   <h3>${q.q}</h3><div class="opts-grid">${q.o.map((o,i)=>`<button class="opt-btn" onclick="qzPick(${i},this)">${o}</button>`).join('')}</div>
+   <div class="bub" id="qz-why" style="display:none; margin-top:14px"></div>
+   <div class="row"><button class="btn primary big" id="qz-next" style="display:none" onclick="qzNext()">ادامه ⬅️</button></div>`; }
+function qzPick(i,btn){ if(!QZ||QZ.answered) return; QZ.answered=true; const q=QZ.qs[QZ.i];
+  const btns=$('qz-box').querySelectorAll('.opt-btn'); btns.forEach(b=>b.disabled=true);
+  if(i===q.a){ btn.classList.add('correct'); QZ.ok++; sfx.good(); confetti(45); }
+  else { btn.classList.add('wrong'); btns[q.a].classList.add('correct'); sfx.bad(); }
+  const why=$('qz-why'); why.style.display='block';
+  why.className='bub '+(i===q.a?'good':'warn'); why.innerHTML='💡 '+q.w;
+  const nx=$('qz-next'); nx.style.display=''; nx.textContent=QZ.i<QZ.qs.length-1?'سؤال بعد ⬅️':'دیدن نتیجه 🏁'; }
+function qzNext(){ sfx.click(); QZ.i++; if(QZ.i<QZ.qs.length) qzRender();
+  else { const got=QZ.ok>=8?3:QZ.ok>=6?2:QZ.ok>=4?1:0; setStars('quiz',got); sfx.win();
+    $('qz-box').innerHTML=endPanel('🏆 پایان آزمون قهرمانی — '+fa(QZ.ok)+' پاسخ درست از '+fa(QZ.qs.length),got,'openQuiz()',3)+
+    `<div class="row" style="margin-top:-6px"><button class="btn green big" onclick="goCert()">🎓 دریافت گواهی قهرمانی</button></div>`; } }
+
+/* ================= CERT ================= */
+function goCert(){ show('scr-cert'); const t=totalStars();
+  $('cert-stars').textContent=fa(t);
+  $('cert-rank').textContent = t>=16?'🏆 قهرمان افسانه‌ای اندازه‌گیری!': t>=12?'🌟 ستارهٔ درخشان!': t>=8?'🔍 کاوشگر دقیق!':'💪 قهرمانِ تلاشگر!';
+  try{ $('cert-date').textContent='📅 '+new Intl.DateTimeFormat('fa-IR',{dateStyle:'long'}).format(new Date()); }catch(e){}
+  if(S.player){ $('cert-name').value=S.player; certName(S.player); }
+  confetti(180); sfx.win(); }
+function certName(v){ S.player=v; save(); $('cert-show').textContent=v.trim()||'دانش‌آموز کوشا'; }
+
+/* ---- boot ---- */
+load(); buildHub(); updateHub(); rotateTips(); setInterval(rotateTips,5500);
+$('snd-home').textContent = S.sound?'🔊 صدا':'🔇 بی‌صدا';
+</script>
+</body>
+</html>

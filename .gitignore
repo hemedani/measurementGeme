@@ -1,0 +1,29 @@
+# ── Source material that must never be published ──────────────────────────
+ignoreAssets/
+
+# ── OS / editor noise ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ── Dependencies (this project has none, but keep it safe) ────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── PM2 runtime output ────────────────────────────────────────────────────
+logs/
+*.log
+pm2-*.log
+.pm2/
+
+# ── Local agent workspace ─────────────────────────────────────────────────
+.workbuddy-ai/
+
+# ── Local environment overrides ───────────────────────────────────────────
+.env
+.env.*
+!.env.example

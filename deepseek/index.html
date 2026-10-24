@@ -1,0 +1,3522 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF8EE">
+<title>ترازو، اندازه‌گیری و مقیاس‌ها | بازی آموزشی پایهٔ سوم</title>
+<meta name="description" content="بازی آموزشی فارسی برای پایهٔ سوم دبستان: ترازو، اندازه‌گیری، واحدها و مقیاس نقشه.">
+<style>
+/* ============================================================
+   ترازو، اندازه‌گیری و مقیاس‌ها  —  بازی آموزشی پایهٔ سوم
+   طراحی و کد: تک‌فایل، بدون کتابخانهٔ بیرونی
+   ============================================================ */
+
+:root{
+  --cream:#FFF8EE;
+  --cream-2:#FFF3E2;
+  --ink:#33304A;
+  --ink-2:#6D6786;
+  --ink-3:#918BA6;
+  --sky:#4FB6E8;
+  --sky-d:#2B93C6;
+  --sky-l:#E3F4FD;
+  --sun:#FFC93C;
+  --sun-d:#E9A21B;
+  --sun-l:#FFF4D2;
+  --coral:#FF7A6B;
+  --coral-d:#E4553F;
+  --coral-l:#FFE7E2;
+  --mint:#4FD2A4;
+  --mint-d:#2AAE84;
+  --mint-l:#DFF8EF;
+  --grape:#A78BFA;
+  --grape-d:#7C5CE6;
+  --grape-l:#EEE8FF;
+  --pink:#FFB3C7;
+  --card:#FFFFFF;
+  --line:rgba(51,48,74,.10);
+  --sh:0 8px 24px rgba(120,90,50,.10), 0 2px 6px rgba(120,90,50,.06);
+  --sh-lg:0 20px 44px rgba(120,90,50,.16), 0 4px 12px rgba(120,90,50,.08);
+  --sh-in:inset 0 -4px 0 rgba(0,0,0,.07);
+  --r-lg:28px;
+  --r:20px;
+  --r-sm:14px;
+  --tap:52px;
+  --ff:'Vazirmatn','IRANSansX','IRANSans','IRANYekan','Geeza Pro','Tahoma','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  font-family:var(--ff);
+  font-size:clamp(15px,1.55vw,17px);
+  line-height:1.8;
+  color:var(--ink);
+  background:var(--cream);
+  min-height:100vh;
+  min-height:100dvh;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3,h4,p,ul,ol,figure{margin:0}
+button{font-family:inherit;font-size:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:disabled{cursor:default}
+img,svg{display:block;max-width:100%}
+ul{padding-inline-start:1.2em}
+:focus-visible{outline:3px solid var(--grape);outline-offset:3px;border-radius:12px}
+::selection{background:var(--sun);color:var(--ink)}
+
+/* ---------- background decor ---------- */
+.bg{
+  position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:
+    radial-gradient(1100px 620px at 85% -12%, #FFF1CE 0%, rgba(255,241,206,0) 62%),
+    radial-gradient(900px 520px at 8% -4%, #E4F5FF 0%, rgba(228,245,255,0) 58%),
+    linear-gradient(180deg,#FFFCF6 0%,#FFF7EC 52%,#FDEFE2 100%);
+}
+.blob{position:absolute;border-radius:50%;filter:blur(46px);opacity:.55}
+.blob.b1{width:340px;height:340px;background:#FFE0A8;top:-90px;inset-inline-end:-80px}
+.blob.b2{width:300px;height:300px;background:#CDEEFF;bottom:6%;inset-inline-start:-110px}
+.blob.b3{width:260px;height:260px;background:#D9F6EA;top:38%;inset-inline-end:-120px;opacity:.45}
+.cloud{
+  position:absolute;height:38px;width:110px;background:#fff;border-radius:999px;
+  opacity:.85;filter:drop-shadow(0 6px 10px rgba(120,150,180,.10));
+  animation:drift 60s linear infinite;
+}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:52px;height:52px;top:-24px;inset-inline-start:18px}
+.cloud::after{width:38px;height:38px;top:-16px;inset-inline-start:58px}
+.cloud.c1{top:8%;inset-inline-start:-140px;transform:scale(.85);animation-duration:78s}
+.cloud.c2{top:30%;inset-inline-start:-180px;transform:scale(1.25);animation-duration:104s;animation-delay:-30s;opacity:.7}
+.cloud.c3{top:62%;inset-inline-start:-160px;transform:scale(.65);animation-duration:90s;animation-delay:-62s;opacity:.6}
+@keyframes drift{from{translate:-20vw 0}to{translate:130vw 0}}
+.twinkle{position:absolute;font-size:14px;color:var(--sun);opacity:.7;animation:tw 4.5s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.9;transform:scale(1.15)}}
+
+#fx{position:fixed;inset:0;z-index:60;pointer-events:none;width:100%;height:100%}
+
+/* ---------- app shell ---------- */
+.app{position:relative;z-index:2;max-width:1060px;margin:0 auto;padding:0 14px calc(30px + env(safe-area-inset-bottom))}
+
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:8px;
+  padding:9px 2px;margin-bottom:6px;
+  background:linear-gradient(180deg,rgba(255,248,238,.96) 55%,rgba(255,248,238,0));
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.topbar[hidden]{display:none}
+.topbar .brand{
+  display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem;
+  color:var(--ink);padding-inline-end:4px;
+}
+.topbar .brand .dot{
+  width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:15px;
+  background:linear-gradient(150deg,var(--sun),var(--coral));color:#fff;
+  box-shadow:0 4px 10px rgba(255,122,107,.35);
+}
+.spacer{flex:1 1 auto}
+
+.icon-btn{
+  width:44px;height:44px;min-width:44px;border-radius:14px;display:grid;place-items:center;
+  background:#fff;border:1.5px solid var(--line);box-shadow:0 3px 0 rgba(120,90,50,.07);
+  font-size:19px;line-height:1;transition:transform .14s ease,box-shadow .14s ease,background .14s;
+}
+.icon-btn:hover{background:#FFFDF8}
+.icon-btn:active{transform:translateY(2px);box-shadow:none}
+.icon-btn[aria-pressed="false"]{opacity:.55}
+
+.star-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(160deg,#FFE9A8,#FFD35E);
+  border:1.5px solid #F2C24A;border-radius:999px;
+  padding:5px 12px;font-weight:800;font-size:.95rem;color:#7A5200;
+  box-shadow:0 3px 0 rgba(200,150,20,.25);
+}
+.star-pill .n{font-variant-numeric:tabular-nums}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.is-active{display:block;animation:screenIn .42s cubic-bezier(.2,.7,.3,1) both}
+@keyframes screenIn{from{opacity:0;transform:translateY(14px) scale(.995)}to{opacity:1;transform:none}}
+
+.page-head{text-align:center;padding:6px 0 14px}
+.page-head h2{font-size:clamp(1.35rem,4.4vw,1.8rem);font-weight:900;letter-spacing:-.2px}
+.page-head p{color:var(--ink-2);font-size:.95rem}
+
+.card{
+  background:var(--card);border-radius:var(--r-lg);
+  box-shadow:var(--sh);border:1.5px solid rgba(255,255,255,.9);
+  padding:18px;
+}
+.card + .card{margin-top:14px}
+
+/* ---------- buttons ---------- */
+.btn{
+  --b1:var(--sky);--b2:var(--sky-d);--bt:#fff;--bsh:rgba(43,147,198,.4);
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:var(--tap);padding:12px 22px;border-radius:18px;
+  font-weight:800;font-size:1rem;color:var(--bt);
+  background:linear-gradient(180deg,var(--b1),var(--b2));
+  box-shadow:0 5px 0 var(--bsh),0 10px 20px -8px var(--bsh);
+  transition:transform .12s ease,box-shadow .12s ease,filter .18s;
+  text-align:center;line-height:1.4;
+}
+.btn:hover{filter:brightness(1.04)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--bsh)}
+.btn:disabled{opacity:.45;filter:saturate(.4);box-shadow:0 5px 0 var(--bsh)}
+.btn--primary{--b1:#FF8E7C;--b2:#F2604B;--bsh:rgba(226,85,63,.45)}
+.btn--sun{--b1:#FFD75E;--b2:#F0AE22;--bt:#6B4700;--bsh:rgba(214,150,20,.45)}
+.btn--mint{--b1:#63DCB2;--b2:#2FB98C;--bsh:rgba(42,174,132,.42)}
+.btn--grape{--b1:#B49CFB;--b2:#8767F2;--bsh:rgba(124,92,230,.42)}
+.btn--ghost{
+  background:#fff;color:var(--ink);border:2px solid var(--line);
+  box-shadow:0 4px 0 rgba(120,90,50,.08);
+}
+.btn--big{min-height:62px;font-size:1.15rem;padding:14px 34px;border-radius:22px}
+.btn--sm{min-height:44px;font-size:.9rem;padding:8px 16px;border-radius:14px}
+.btn--block{display:flex;width:100%}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+.actions .btn{flex:1 1 auto;min-width:140px}
+
+/* ---------- splash ---------- */
+.splash{
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:26px 18px 34px;position:relative;
+}
+.kicker{
+  display:inline-block;background:#fff;border:2px solid var(--sun);
+  color:#8A5B00;font-weight:800;font-size:.8rem;border-radius:999px;
+  padding:4px 16px;box-shadow:0 4px 0 rgba(233,162,27,.22);
+}
+.game-title{
+  font-size:clamp(1.9rem,7.2vw,3.1rem);font-weight:900;line-height:1.35;
+  margin:14px 0 4px;letter-spacing:-.5px;
+  color:#2F2B45;
+  text-shadow:0 2px 0 #fff,0 6px 18px rgba(120,90,50,.12);
+}
+.game-title .hl{
+  background:linear-gradient(180deg,transparent 62%,#FFE07A 62%,#FFE07A 92%,transparent 92%);
+  padding:0 4px;border-radius:6px;
+}
+.splash-sub{color:var(--ink-2);font-weight:600;max-width:34ch;margin:6px auto 0}
+.mascot-hero{width:min(210px,46vw);margin:6px auto 2px;filter:drop-shadow(0 14px 18px rgba(120,90,50,.16))}
+.splash-actions{display:flex;flex-direction:column;gap:10px;width:min(340px,88vw);margin-top:18px}
+.splash-tools{display:flex;gap:10px;margin-top:16px;align-items:center;justify-content:center}
+.presenter{
+  margin-top:20px;font-size:.82rem;color:var(--ink-3);font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.7);border:1px dashed var(--line);
+  padding:4px 14px;border-radius:999px;
+}
+.presenter[hidden]{display:none}
+
+/* ---------- menu ---------- */
+.menu-head{text-align:center;padding:10px 0 16px}
+.menu-head h2{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:900}
+.menu-head p{color:var(--ink-2)}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:16px 14px 14px;border-radius:24px;background:#fff;
+  border:1.5px solid rgba(255,255,255,.9);box-shadow:var(--sh);
+  transition:transform .16s ease,box-shadow .16s ease;overflow:hidden;text-align:start;
+}
+.tile::after{
+  content:"";position:absolute;inset-inline-end:-24px;top:-24px;width:76px;height:76px;border-radius:50%;
+  background:currentColor;opacity:.10;
+}
+.tile:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}
+.tile:active{transform:scale(.975)}
+.tile .ic{font-size:30px;line-height:1.2;margin-bottom:4px}
+.tile .tt{font-weight:900;font-size:1.02rem;color:var(--ink)}
+.tile .ds{font-size:.76rem;color:var(--ink-2);font-weight:600;line-height:1.5}
+.tile--sky{color:var(--sky-d)}
+.tile--sun{color:var(--sun-d)}
+.tile--mint{color:var(--mint-d)}
+.tile--grape{color:var(--grape-d)}
+.tile--sky .ic{background:var(--sky-l);border-radius:14px;padding:6px 10px}
+.tile--sun .ic{background:var(--sun-l);border-radius:14px;padding:6px 10px}
+.tile--mint .ic{background:var(--mint-l);border-radius:14px;padding:6px 10px}
+.tile--grape .ic{background:var(--grape-l);border-radius:14px;padding:6px 10px}
+
+.name-card{display:flex;align-items:center;gap:10px;margin-top:14px;padding:14px 16px}
+.name-card label{font-size:.85rem;font-weight:800;color:var(--ink-2);white-space:nowrap}
+.name-card input{
+  flex:1;min-width:0;height:46px;line-height:1.4;font-family:inherit;font-size:1rem;font-weight:700;
+  border:2px solid var(--line);border-radius:14px;padding:6px 14px;background:#FFFDF8;color:var(--ink);
+}
+.name-card input:focus{outline:none;border-color:var(--grape);background:#fff}
+
+/* ---------- world map ---------- */
+.stations{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.station{
+  position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:16px 10px 12px;border-radius:26px;
+  background:
+    radial-gradient(120% 80% at 50% 0%,#fff 0%,rgba(255,255,255,0) 70%),
+    linear-gradient(165deg,#FFFFFF 0%,#FFF6E6 100%);
+  border:2px solid #FFF0D8;box-shadow:var(--sh);
+  transition:transform .18s cubic-bezier(.2,.8,.3,1),box-shadow .18s;
+  overflow:hidden;
+}
+.station::before{
+  content:"";position:absolute;inset-inline:0;bottom:0;height:38%;
+  background:linear-gradient(180deg,rgba(79,182,232,.10),rgba(79,182,232,.22));
+  border-radius:50% 50% 0 0/60% 60% 0 0;
+}
+.station:hover{transform:translateY(-4px) rotate(-.6deg);box-shadow:var(--sh-lg)}
+.station:active{transform:scale(.97)}
+.station .orb{
+  position:relative;width:66px;height:66px;border-radius:22px;display:grid;place-items:center;
+  font-size:32px;background:#fff;box-shadow:0 6px 16px rgba(120,90,50,.14),inset 0 -4px 0 rgba(0,0,0,.04);
+  border:2px solid #fff;
+}
+.station .nm{position:relative;font-weight:900;font-size:.92rem;text-align:center;line-height:1.4}
+.station .mini-stars{position:relative;display:flex;gap:2px;font-size:12px;color:#D9D2C4;letter-spacing:1px}
+.station .mini-stars .on{color:var(--sun)}
+.station .tag{
+  position:absolute;top:8px;inset-inline-start:8px;font-size:.62rem;font-weight:800;
+  background:var(--mint);color:#fff;padding:2px 8px;border-radius:999px;
+  box-shadow:0 2px 6px rgba(42,174,132,.35);
+}
+.station .tag--bonus{background:var(--grape)}
+.station.is-locked{filter:grayscale(.55);opacity:.72}
+.station.is-locked .orb::after{
+  content:"🔒";position:absolute;inset:0;display:grid;place-items:center;
+  background:rgba(255,255,255,.78);border-radius:20px;font-size:24px;
+}
+.station .lock-note{position:relative;font-size:.66rem;color:var(--ink-3);font-weight:700;text-align:center;line-height:1.4}
+.station.is-done{border-color:#BFF0DC}
+.station.is-done::after{
+  content:"✓";position:absolute;top:6px;inset-inline-end:8px;
+  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  background:var(--mint);color:#fff;font-weight:900;font-size:14px;
+  box-shadow:0 3px 8px rgba(42,174,132,.4);
+}
+
+.map-foot{
+  display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px 16px;
+  background:linear-gradient(120deg,#FFF8E8,#FFFFFF);
+}
+.map-foot .txt{flex:1;font-size:.86rem;color:var(--ink-2);font-weight:600;line-height:1.6}
+.map-foot .txt b{color:var(--ink)}
+
+/* ---------- game shell ---------- */
+.ghead{display:flex;align-items:center;gap:10px;padding:2px 0 12px}
+.ghead .ttl{flex:1;min-width:0}
+.ghead h3{font-size:1.1rem;font-weight:900;line-height:1.4}
+.ghead .sub{font-size:.75rem;color:var(--ink-2);font-weight:700}
+.dots{display:flex;gap:5px;margin-top:3px}
+.dots i{
+  width:22px;height:6px;border-radius:99px;background:#E8E1D4;transition:background .3s,width .3s;
+}
+.dots i.on{background:var(--mint);width:30px}
+.dots i.cur{background:var(--sun);width:30px}
+
+.game-card{padding:16px 16px 18px;min-height:min(58vh,470px);display:flex;flex-direction:column}
+.game-card .stage{flex:1 1 auto}
+.task{
+  font-weight:800;font-size:clamp(1rem,3.4vw,1.12rem);line-height:1.75;
+  text-align:center;margin-bottom:6px;text-wrap:balance;
+}
+.task .em{color:var(--coral-d)}
+.subtask{text-align:center;font-size:.82rem;color:var(--ink-2);font-weight:700;margin-bottom:8px}
+.stage{margin:8px 0 4px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+
+.fb{
+  margin-top:12px;border-radius:18px;padding:12px 14px;font-weight:800;text-align:center;
+  display:none;font-size:.95rem;line-height:1.6;
+}
+.fb.show{display:block;animation:popIn .32s cubic-bezier(.2,.9,.3,1.2) both}
+.fb.ok{background:var(--mint-l);color:#137A59;border:2px solid #A8EBD5}
+.fb.no{background:#FFF6E0;color:#8A6100;border:2px solid #FFE1A8}
+.fb.info{background:var(--sky-l);color:#15688F;border:2px solid #BFE7F8}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+
+/* ---------- choice buttons ---------- */
+.choices{display:grid;gap:10px;grid-template-columns:1fr}
+.choice{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  min-height:60px;padding:12px 16px;border-radius:18px;
+  background:#FFFDF8;border:2px solid #EFE7D8;
+  font-weight:800;font-size:1rem;line-height:1.7;
+  box-shadow:0 4px 0 rgba(120,90,50,.07);
+  transition:transform .14s,border-color .2s,background .2s,box-shadow .14s;
+}
+.choice:hover{border-color:var(--sun);background:#FFFBF0;transform:translateY(-2px)}
+.choice:active{transform:translateY(2px);box-shadow:none}
+.choice .badge{
+  width:36px;height:36px;min-width:36px;border-radius:12px;display:grid;place-items:center;
+  background:var(--sun-l);font-size:18px;
+}
+.choice.is-right{background:#E8FBF3;border-color:var(--mint);box-shadow:0 4px 0 rgba(42,174,132,.3)}
+.choice.is-right::after{content:"✓";margin-inline-start:auto;color:var(--mint-d);font-weight:900;font-size:1.3rem}
+.choice.is-wrong{background:#FFF6E4;border-color:#FFD98A;animation:shake .45s}
+.choice.is-off{opacity:.45;filter:grayscale(.4)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+
+/* ---------- balance game ---------- */
+.bal-wrap{position:relative;max-width:560px;margin:0 auto}
+.bal-svg{width:100%;height:auto;overflow:visible}
+.bal-shelf{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:flex-end;
+  padding:12px;border-radius:20px;background:linear-gradient(180deg,#FFF6E6,#FFEFD8);
+  border:2px dashed #F3DDB6;margin-top:6px;min-height:86px;
+}
+.obj-card{
+  display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px 4px;
+  border-radius:16px;background:#fff;border:2px solid #F0E5D2;
+  box-shadow:0 3px 0 rgba(120,90,50,.08);font-size:11px;font-weight:800;color:var(--ink-2);
+  touch-action:none;transition:transform .16s,box-shadow .16s;
+}
+.obj-card:hover{transform:translateY(-3px) rotate(-1.5deg);box-shadow:0 8px 16px rgba(120,90,50,.16)}
+.obj-card .em{font-size:34px;line-height:1.15}
+.obj-card.dragging{position:fixed;z-index:80;pointer-events:none;transform:scale(1.12) rotate(3deg);box-shadow:0 18px 30px rgba(0,0,0,.2)}
+
+.weight{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
+  width:70px;min-height:60px;padding:6px 4px;border-radius:14px;
+  background:linear-gradient(170deg,#E8ECF7,#CBD3E8);
+  border:2px solid #B9C3DC;color:#3A4260;font-weight:900;font-size:.74rem;
+  box-shadow:0 4px 0 rgba(90,105,140,.28),inset 0 2px 0 rgba(255,255,255,.7);
+  transition:transform .13s,box-shadow .13s;touch-action:none;line-height:1.3;
+}
+.weight:hover{transform:translateY(-3px)}
+.weight:active{transform:translateY(3px);box-shadow:none}
+.weight .knob{width:14px;height:6px;border-radius:6px 6px 2px 2px;background:#9AA6C2;margin-bottom:2px}
+.weight.w500{background:linear-gradient(170deg,#FFE3C4,#F7C88C);border-color:#E7B274;color:#6B4415;box-shadow:0 4px 0 rgba(180,120,50,.3),inset 0 2px 0 rgba(255,255,255,.7)}
+.weight.w1000{background:linear-gradient(170deg,#FFD9D3,#F8A79B);border-color:#E88E80;color:#7A2F22;box-shadow:0 4px 0 rgba(180,80,60,.3),inset 0 2px 0 rgba(255,255,255,.7)}
+
+.hint-line{
+  display:flex;align-items:center;gap:8px;justify-content:center;
+  font-size:.8rem;font-weight:700;color:var(--ink-2);margin-top:8px;
+}
+.zero-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;
+  background:#fff;border:2px solid #D9E3F0;font-weight:800;font-size:.8rem;color:#3B6C8C;
+  box-shadow:0 3px 0 rgba(60,110,140,.15);
+}
+.zero-btn:active{transform:translateY(2px);box-shadow:none}
+.zero-btn.done{background:var(--mint-l);border-color:#A8EBD5;color:#137A59}
+
+/* ---------- ruler game ---------- */
+.ruler-stage{
+  position:relative;direction:ltr;width:100%;max-width:640px;margin:0 auto;
+  height:190px;border-radius:20px;overflow:hidden;
+  background:linear-gradient(180deg,#FFFDF6 0%,#FFF6E6 100%);
+  border:2px solid #F0E3CC;
+  touch-action:pan-y;
+}
+.ruler-svg{position:absolute;left:0;bottom:0;width:100%;height:96px}
+.measure-obj{
+  position:absolute;bottom:74px;height:auto;cursor:grab;touch-action:none;
+  filter:drop-shadow(0 5px 6px rgba(120,90,50,.22));
+  transition:filter .2s;
+}
+.measure-obj.grabbing{cursor:grabbing;filter:drop-shadow(0 12px 12px rgba(120,90,50,.3))}
+.measure-obj.aligned{animation:objPop .4s}
+@keyframes objPop{0%{transform:scale(1)}45%{transform:scale(1.06) translateY(-6px)}100%{transform:scale(1)}}
+.zero-glow{animation:glowPulse 1.8s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.25}50%{opacity:.85}}
+.obj-tip{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  background:#fff;border:2px solid #FFE1A8;border-radius:999px;padding:3px 14px;
+  font-size:.72rem;font-weight:800;color:#8A6100;white-space:nowrap;direction:rtl;
+}
+
+/* ---------- capacity game ---------- */
+.lab-wrap{display:flex;gap:12px;align-items:flex-end;justify-content:center;max-width:520px;margin:0 auto}
+.beaker-box{position:relative;flex:0 1 auto}
+.beaker-svg{width:min(268px,56vw);height:auto}
+.eye-line{
+  position:absolute;inset-inline:0;border-top:2px dashed var(--sky);opacity:.55;
+  display:flex;align-items:center;
+}
+.eye-line span{
+  position:absolute;inset-inline-end:-6px;transform:translateY(-50%);
+  background:var(--sky);color:#fff;font-size:.6rem;font-weight:800;
+  padding:1px 7px;border-radius:99px;white-space:nowrap;
+}
+.pour-panel{display:flex;flex-direction:column;gap:8px;min-width:130px}
+.pour-btn{
+  --b1:#63D8FF;--b2:#2AA6D6;--bsh:rgba(42,166,214,.42);
+  min-height:74px;border-radius:20px;font-size:.95rem;
+  background:linear-gradient(180deg,var(--b1),var(--b2));color:#fff;font-weight:900;
+  box-shadow:0 5px 0 var(--bsh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+}
+.pour-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--bsh)}
+.pour-btn .ic{font-size:22px}
+.target-chip{
+  display:inline-flex;align-items:center;gap:6px;justify-content:center;
+  background:#fff;border:2px solid #CDEAF8;border-radius:999px;padding:6px 14px;
+  font-weight:900;color:#15688F;font-size:.92rem;
+}
+.readout{
+  text-align:center;font-weight:900;font-size:1.5rem;color:var(--sky-d);
+  font-variant-numeric:tabular-nums;letter-spacing:.5px;
+}
+.readout small{font-size:.62rem;display:block;color:var(--ink-3);font-weight:700;letter-spacing:0}
+
+/* ---------- map game ---------- */
+.map-stage{
+  position:relative;border-radius:22px;overflow:hidden;border:2px solid #CDEAF8;
+  box-shadow:inset 0 0 30px rgba(79,182,232,.18);background:#DFF3FD;
+}
+.map-svg{width:100%;height:auto}
+.legend{
+  display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;
+  background:#FFFDF3;border:2px solid #F0E3C8;border-radius:14px;
+  padding:8px 12px;margin:10px auto 0;max-width:420px;font-weight:800;font-size:.82rem;
+}
+.legend .box{width:14px;height:14px;border-radius:4px;background:var(--coral)}
+
+/* ---------- quiz ---------- */
+.q-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.q-count{font-size:.78rem;font-weight:800;color:var(--ink-2)}
+.q-bar{height:10px;border-radius:99px;background:#EFE8DA;overflow:hidden;margin-bottom:14px}
+.q-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--sky));transition:width .45s ease}
+
+/* ---------- matching ---------- */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-col h4{font-size:.78rem;font-weight:800;color:var(--ink-2);text-align:center;margin-bottom:6px}
+.match-item{
+  display:flex;align-items:center;gap:8px;width:100%;min-height:56px;
+  padding:8px 10px;border-radius:16px;background:#FFFDF8;border:2px solid #EFE7D8;
+  font-weight:800;font-size:.86rem;text-align:start;margin-bottom:8px;
+  box-shadow:0 3px 0 rgba(120,90,50,.07);transition:transform .14s,border-color .2s,background .2s;
+}
+.match-item .ic{font-size:22px;line-height:1}
+.match-item.sel{border-color:var(--grape);background:var(--grape-l);transform:scale(1.02)}
+.match-item.done{border-color:var(--mint);background:var(--mint-l);opacity:.85;box-shadow:none}
+.match-item.done::after{content:"✓";margin-inline-start:auto;color:var(--mint-d);font-weight:900}
+.match-item.wrong{animation:shake .45s;border-color:#FFC24D}
+
+/* ---------- rewards ---------- */
+.reward-hero{
+  text-align:center;background:
+    radial-gradient(120% 90% at 50% -10%,#FFF3CD 0%,rgba(255,243,205,0) 60%),
+    linear-gradient(170deg,#FFFFFF,#FFF8E8);
+  padding:22px 18px;
+}
+.big-star{font-size:52px;line-height:1;filter:drop-shadow(0 8px 12px rgba(233,162,27,.35))}
+.star-count{font-size:2.2rem;font-weight:900;color:#7A5200;line-height:1.25;letter-spacing:1.5px}
+.star-count small{font-size:.8rem;color:var(--ink-2);font-weight:700;display:block}
+.pbar{height:16px;border-radius:99px;background:#EFE8DA;overflow:hidden;margin:14px auto 6px;max-width:420px;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+.pbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#FFD35E,#FF9E7A);width:0;transition:width .7s cubic-bezier(.2,.8,.3,1)}
+.pbar-lbl{font-size:.8rem;font-weight:800;color:var(--ink-2)}
+
+.sec-title{display:flex;align-items:center;gap:8px;font-weight:900;font-size:1rem;margin:20px 0 10px}
+.sec-title::before{content:"";width:6px;height:22px;border-radius:99px;background:var(--sun)}
+.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.badge{
+  display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;
+  padding:12px 6px;border-radius:20px;background:#FFFDF8;border:2px dashed #EFE7D8;
+  font-size:.66rem;font-weight:800;color:var(--ink-3);line-height:1.4;
+}
+.badge .bi{font-size:28px;filter:grayscale(1);opacity:.35}
+.badge.on{background:linear-gradient(170deg,#FFF8E0,#FFFFFF);border:2px solid var(--sun);color:#7A5200;box-shadow:0 6px 14px rgba(233,162,27,.18)}
+.badge.on .bi{filter:none;opacity:1;animation:popIn .5s}
+.sticker-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sticker{
+  aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:24px;
+  background:#F5F1E8;border:2px dashed #E3DAC8;filter:grayscale(1);opacity:.45;
+}
+.sticker.on{
+  filter:none;opacity:1;border:3px solid #fff;background:linear-gradient(160deg,#FFF4D0,#FFE6C0);
+  box-shadow:0 6px 14px rgba(233,162,27,.25);animation:popIn .5s;
+}
+
+.chest{
+  margin-top:18px;display:flex;align-items:center;gap:14px;padding:16px;
+  border-radius:24px;background:linear-gradient(120deg,#FFF1D8,#FFFFFF);
+  border:2px dashed #F0D6A8;
+}
+.chest .ch-ic{font-size:40px;line-height:1}
+.chest .ch-tx{flex:1;font-size:.82rem;font-weight:700;color:var(--ink-2);line-height:1.6}
+.chest .ch-tx b{display:block;color:var(--ink);font-size:.95rem}
+
+/* ---------- certificate ---------- */
+.cert{
+  position:relative;background:#FFFDF7;border-radius:22px;padding:clamp(18px,4vw,40px);
+  border:8px double #E8B45A;box-shadow:var(--sh-lg);overflow:hidden;
+  background-image:
+    radial-gradient(circle at 12% 18%,rgba(255,201,60,.16) 0 40px,transparent 41px),
+    radial-gradient(circle at 88% 82%,rgba(79,182,232,.14) 0 52px,transparent 53px),
+    linear-gradient(180deg,#FFFDF7,#FFF7E8);
+}
+.cert::before,.cert::after{
+  content:"✦";position:absolute;color:#E8B45A;font-size:22px;opacity:.6;
+}
+.cert::before{top:14px;inset-inline-start:18px}
+.cert::after{bottom:14px;inset-inline-end:18px}
+.cert-in{text-align:center;position:relative;z-index:1}
+.cert .c-kicker{font-size:.75rem;font-weight:800;letter-spacing:1px;color:#A97B22}
+.cert h2{
+  font-size:clamp(1.3rem,4.6vw,2rem);font-weight:900;color:#3A2E1A;margin:4px 0 2px;
+}
+.cert .c-line{width:120px;height:3px;border-radius:99px;background:linear-gradient(90deg,transparent,#E8B45A,transparent);margin:10px auto}
+.cert .c-name{
+  font-size:clamp(1.3rem,5vw,1.9rem);font-weight:900;color:var(--coral-d);
+  margin:6px 0;min-height:1.4em;
+}
+.cert .c-body{font-size:.92rem;color:#5C5140;font-weight:600;max-width:44ch;margin:0 auto;line-height:1.9}
+.cert .c-stars{font-size:22px;letter-spacing:4px;color:var(--sun);margin:10px 0 2px}
+.cert .c-meta{
+  display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;align-items:center;
+  margin-top:18px;font-size:.78rem;font-weight:700;color:#7A6A50;
+}
+.cert .c-seal{
+  width:86px;height:86px;margin:14px auto 0;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#FFE08A,#E9A21B);
+  display:grid;place-items:center;font-size:34px;
+  box-shadow:0 8px 18px rgba(233,162,27,.35),inset 0 -4px 0 rgba(0,0,0,.12);
+  border:3px solid #fff;
+}
+.cert-actions{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+
+/* ---------- glossary ---------- */
+.gloss{display:grid;gap:10px}
+.gterm{
+  background:#fff;border-radius:18px;padding:12px 16px;box-shadow:var(--sh);
+  border-inline-start:6px solid var(--sun);
+}
+.gterm:nth-child(3n+2){border-inline-start-color:var(--sky)}
+.gterm:nth-child(3n+3){border-inline-start-color:var(--mint)}
+.gterm b{display:block;font-size:.98rem;font-weight:900;margin-bottom:2px}
+.gterm span{font-size:.85rem;color:var(--ink-2);font-weight:600;line-height:1.8}
+.gloss-note{font-size:.78rem;color:var(--ink-3);text-align:center;margin-top:14px;font-weight:600}
+
+/* ---------- modal ---------- */
+.modal{
+  position:fixed;inset:0;z-index:90;display:none;
+  align-items:center;justify-content:center;padding:16px;
+  background:rgba(51,48,74,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+}
+.modal.open{display:flex;animation:fadeIn .22s both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:#FFFDF8;border-radius:26px;max-width:560px;width:100%;
+  max-height:86vh;overflow:auto;padding:22px;box-shadow:0 30px 60px rgba(0,0,0,.28);
+  animation:popIn .3s cubic-bezier(.2,.9,.3,1.15) both;
+}
+.modal-box h3{font-size:1.15rem;font-weight:900;margin-bottom:2px}
+.modal-box h4{font-size:.92rem;font-weight:900;margin:16px 0 4px;color:var(--ink)}
+.modal-box p,.modal-box li{font-size:.85rem;color:var(--ink-2);font-weight:600;line-height:1.9}
+.modal-box ul{padding-inline-start:1.1em}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.modal-actions .btn{flex:1 1 auto;min-width:130px}
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--line);font-size:.85rem;font-weight:800;
+}
+.switch{
+  position:relative;width:56px;height:32px;border-radius:99px;background:#E3DCCB;
+  transition:background .2s;flex:0 0 auto;
+}
+.switch::after{
+  content:"";position:absolute;top:3px;inset-inline-start:3px;width:26px;height:26px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.2);transition:inset-inline-start .2s;
+}
+.switch[aria-checked="true"]{background:var(--mint)}
+.switch[aria-checked="true"]::after{inset-inline-start:27px}
+
+/* ---------- mascot helper ---------- */
+.helper{
+  position:fixed;z-index:70;bottom:calc(14px + env(safe-area-inset-bottom));inset-inline-start:12px;
+  display:flex;align-items:flex-end;gap:8px;max-width:min(420px,86vw);
+  pointer-events:none;opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s;
+}
+.helper.show{opacity:1;transform:none}
+.helper .h-mascot{width:58px;flex:0 0 auto;filter:drop-shadow(0 6px 8px rgba(120,90,50,.22))}
+.helper .h-bubble{
+  background:#fff;border:2px solid #FFE1A8;border-radius:18px 18px 18px 4px;
+  padding:9px 14px;font-size:.82rem;font-weight:800;line-height:1.65;color:var(--ink);
+  box-shadow:0 10px 24px rgba(120,90,50,.18);position:relative;
+}
+.helper .h-bubble::after{
+  content:"";position:absolute;bottom:-9px;inset-inline-start:12px;
+  border:9px solid transparent;border-top-color:#FFE1A8;border-bottom:0;
+}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;z-index:95;left:50%;top:14px;transform:translate(-50%,-160%);
+  background:#33304A;color:#fff;font-weight:800;font-size:.85rem;
+  padding:10px 20px;border-radius:999px;box-shadow:0 12px 26px rgba(0,0,0,.25);
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.2),opacity .25s;
+  pointer-events:none;max-width:90vw;text-align:center;opacity:0;
+}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ---------- mascot animation ---------- */
+.mascot-svg{width:100%;height:auto;overflow:visible}
+.m-body{transform-origin:100px 180px;animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(-1.2deg)}}
+.m-eye{transform-origin:center;animation:blink 5.2s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%,98%{transform:scaleY(.12)}}
+.m-wave{transform-origin:70px 150px;animation:wave 3.6s ease-in-out infinite}
+@keyframes wave{0%,80%,100%{transform:rotate(0)}86%{transform:rotate(-16deg)}92%{transform:rotate(8deg)}}
+.mascot--happy .m-body{animation:jump .7s cubic-bezier(.2,.9,.3,1.3) 2}
+@keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-16px) scale(1.03)}}
+
+/* ---------- compare cards ---------- */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;margin:0 auto}
+.cmp-card{
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 8px 14px;
+  border-radius:24px;background:#fff;border:3px solid #F2E7D4;
+  box-shadow:0 6px 0 rgba(120,90,50,.08);transition:transform .16s,border-color .2s;
+}
+.cmp-card:hover{transform:translateY(-4px);border-color:var(--sun)}
+.cmp-card:active{transform:scale(.97)}
+.cmp-card .em{font-size:56px;line-height:1.1;filter:drop-shadow(0 6px 8px rgba(120,90,50,.18))}
+.cmp-card .nm{font-weight:900;font-size:.92rem}
+.cmp-card .ms{font-size:.78rem;font-weight:800;color:var(--ink-3)}
+.cmp-card.right{border-color:var(--mint);background:#EAFBF4}
+.cmp-card.right .ms{color:var(--mint-d)}
+.cmp-card.wrong{animation:shake .45s;border-color:#FFD98A}
+
+/* ---------- balance gauge ---------- */
+.gauge{margin:6px auto 0;max-width:300px;direction:ltr}
+.gauge .trk{
+  position:relative;height:12px;border-radius:99px;border:1px solid #EDE3D2;
+  background:linear-gradient(90deg,#FFE0DC 0%,#EAF7F1 40%,#EAF7F1 60%,#FFE0DC 100%);
+}
+.gauge .zone{position:absolute;left:38%;width:24%;top:-3px;bottom:-3px;border-radius:99px;border:2px dashed var(--mint)}
+.gauge .dot{
+  position:absolute;top:50%;left:50%;width:18px;height:18px;border-radius:50%;
+  background:var(--coral);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.22);
+  transform:translate(-50%,-50%);transition:left .35s cubic-bezier(.2,.8,.3,1);
+}
+
+/* ---------- done box ---------- */
+.done-box{text-align:center;padding:18px 8px}
+.done-box .di{font-size:56px;line-height:1}
+.done-box h4{font-size:1.2rem;font-weight:900;margin:6px 0}
+.done-box p{color:var(--ink-2);font-size:.9rem;font-weight:700}
+.done-box .small{font-size:.8rem;color:var(--ink-3)}
+
+/* ---------- conversion visual ---------- */
+.conv-big{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px auto 16px}
+.conv-big .cb{
+  background:var(--sky-l);color:#15688F;font-weight:900;padding:10px 18px;border-radius:16px;
+  font-size:1.05rem;border:2px solid #BFE7F8;
+}
+.conv-big .cb--sun{background:var(--sun-l);color:#8A6100;border-color:#FFE1A8}
+.conv-big .ceq{font-size:1.4rem;font-weight:900;color:var(--ink-3)}
+
+/* ---------- tool question ---------- */
+.tool-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 14px}
+.tool-chip{
+  width:74px;height:74px;border-radius:22px;display:grid;place-items:center;
+  font-size:34px;background:#fff;box-shadow:var(--sh);border:2px solid #F2E7D4;
+}
+.tool-q{font-size:1.6rem;font-weight:900;color:var(--ink-3)}
+
+/* ---------- estimate ---------- */
+.est-box{margin-top:10px;background:#FFFBF0;border:2px dashed #F0DDB8;border-radius:18px;padding:10px 12px}
+.est-q{font-size:.82rem;font-weight:800;color:#8A6100;text-align:center;margin-bottom:8px}
+.est-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.est-btn{
+  min-height:44px;padding:6px 16px;border-radius:14px;background:#fff;border:2px solid #EFE3CB;
+  font-weight:900;font-size:.88rem;box-shadow:0 3px 0 rgba(120,90,50,.08);transition:opacity .2s,border-color .2s;
+}
+.est-btn.picked{border-color:var(--grape);background:var(--grape-l);color:var(--grape-d)}
+.est-btn.is-off{opacity:.4}
+
+/* ---------- unit rows ---------- */
+.unit-rows{display:grid;gap:10px}
+.unit-row{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;
+  border-radius:16px;background:#FFFDF8;border:2px solid #EFE7D8;
+}
+.unit-row.ok{background:#EAFBF4;border-color:var(--mint)}
+.ur-q{flex:1 1 100%;font-weight:900;font-size:.9rem}
+.ur-btns{display:flex;gap:6px;flex-wrap:wrap}
+.ub{
+  min-height:40px;padding:4px 12px;border-radius:12px;background:#fff;
+  border:2px solid #E9DFCC;font-weight:800;font-size:.78rem;
+}
+.ub.is-right{background:var(--mint);color:#fff;border-color:var(--mint-d)}
+.ub:disabled{opacity:.55}
+@media (min-width:560px){.ur-q{flex:0 0 auto;min-width:120px}}
+
+/* ---------- millimetre demo ---------- */
+.mm-demo{text-align:center;margin:8px 0 14px}
+.mm-seg{
+  display:flex;justify-content:space-between;align-items:flex-end;height:34px;
+  max-width:260px;margin:0 auto;border-bottom:3px solid #B08A4E;
+}
+.mm-seg i{width:2px;height:16px;background:#C9A87C;display:block}
+.mm-lbl{font-size:.82rem;font-weight:800;color:#8A6100;margin-top:6px}
+
+/* ---------- subtraction demo ---------- */
+.sub-demo{display:grid;gap:8px;max-width:420px;margin:6px auto 14px}
+.sd-row{display:flex;align-items:center;gap:8px}
+.sd-lbl{width:46px;font-size:.72rem;font-weight:800;color:var(--ink-2);text-align:end}
+.sd-bar{flex:1;height:18px;border-radius:99px;background:#F0EADC;overflow:hidden}
+.sd-bar i{display:block;height:100%;background:var(--sky)}
+.sd-bar i.used{background:var(--coral)}
+.sd-bar i.left{background:var(--mint)}
+.sd-v{width:46px;font-size:.78rem;font-weight:900;color:var(--ink-2)}
+
+/* ---------- eye level demo ---------- */
+.eye-demo{display:flex;gap:10px;justify-content:center;margin:6px 0 14px}
+.eye-demo .ed{
+  display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 12px;
+  border-radius:16px;background:#fff;border:2px solid #EFE7D8;min-width:78px;
+}
+.eye-demo .ed span{font-size:26px}
+.eye-demo .ed small{font-size:.68rem;font-weight:800;color:var(--ink-3)}
+.eye-demo .ed.good{border-color:var(--mint);background:var(--mint-l)}
+
+/* ---------- bubbles in beaker ---------- */
+.bub{animation:bubUp 3.2s ease-in-out infinite}
+.bub.b2{animation-duration:4.1s;animation-delay:-1.2s}
+.bub.b3{animation-duration:5s;animation-delay:-2.4s}
+@keyframes bubUp{0%{transform:translateY(0);opacity:0}30%{opacity:.7}100%{transform:translateY(-90px);opacity:0}}
+
+/* ---------- responsive ---------- */
+@media (min-width:620px){
+  .choices{grid-template-columns:1fr 1fr}
+  .choices.one-col{grid-template-columns:1fr}
+  .splash-actions{flex-direction:row;width:auto}
+  .splash-actions .btn{min-width:190px}
+  .badge-grid{grid-template-columns:repeat(6,1fr)}
+  .gloss{grid-template-columns:1fr 1fr}
+  .ruler-stage{height:210px}
+  .ruler-svg{height:106px}
+}
+@media (min-width:820px){
+  .stations{grid-template-columns:repeat(3,1fr);gap:14px}
+  .menu-grid{grid-template-columns:repeat(4,1fr);max-width:880px;margin-inline:auto}
+  #s-menu .menu-head{max-width:760px;margin-inline:auto}
+  #s-menu .card{max-width:880px;margin-inline:auto}
+  .tile{padding:20px 16px 18px}
+  .game-card{padding:22px 24px 24px}
+  .ghead,.game-card{max-width:840px;margin-inline:auto;width:100%}
+  .game-card{min-height:min(66vh,560px)}
+  .bal-wrap{max-width:620px}
+  .beaker-svg{width:300px}
+  .ruler-stage{height:230px}
+  .ruler-svg{height:116px}
+  .splash-sub{font-size:1.02rem}
+}
+@media (max-width:560px){
+  .topbar .brand{font-size:.82rem}
+  .topbar .brand .dot{width:26px;height:26px;border-radius:9px;font-size:13px}
+}
+@media (max-width:400px){
+  .weight{width:62px;min-height:56px;font-size:.68rem}
+}
+@media (max-width:380px){
+  .topbar .brand span:last-child{display:none}
+  .station .orb{width:56px;height:56px;font-size:26px;border-radius:18px}
+  .station .nm{font-size:.82rem}
+  .match-item{font-size:.78rem;min-height:50px}
+  .sticker-grid{grid-template-columns:repeat(5,1fr);gap:6px}
+}
+
+/* ---------- reduced motion ---------- */
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after{
+  animation-duration:.001ms !important;animation-iteration-count:1 !important;
+  transition-duration:.001ms !important;scroll-behavior:auto !important;
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .screen.is-active{animation:none}
+}
+
+/* ---------- print ---------- */
+@media print{
+  @page{size:A4 landscape;margin:8mm}
+  html,body{background:#fff !important}
+  .bg,.topbar,.cert-actions,.no-print,#fx,.helper,.toast,.modal{display:none !important}
+  .app{max-width:none;padding:0}
+  .screen{display:none !important}
+  #s-cert{display:block !important}
+  #s-cert .page-head{display:none}
+  .cert{
+    box-shadow:none;border:6px double #C99A3E;page-break-inside:avoid;
+    width:100%;max-width:270mm;margin:0 auto;padding:16mm;
+  }
+  .cert .c-name{color:#B4452F}
+}
+</style>
+</head>
+<body>
+<noscript>
+  <div style="padding:24px;text-align:center;font-family:Tahoma,sans-serif;background:#FFF8EE;color:#33304A">
+    <h1 style="font-size:20px">برای بازی کردن، جاوااسکریپت را روشن کن.</h1>
+    <p style="font-size:14px;line-height:2">این بازی برای اجرا به جاوااسکریپت نیاز دارد. لطفاً از تنظیمات مرورگر، جاوااسکریپت را فعال کن و صفحه را دوباره باز کن.</p>
+  </div>
+</noscript>
+
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <span class="twinkle" style="top:14%;left:18%">✦</span>
+  <span class="twinkle" style="top:26%;right:12%;animation-delay:1.2s">✧</span>
+  <span class="twinkle" style="top:58%;left:8%;animation-delay:2.4s">✦</span>
+  <span class="twinkle" style="top:74%;right:16%;animation-delay:.6s">✧</span>
+</div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<div class="app">
+  <header class="topbar" id="topbar" hidden>
+    <button class="icon-btn" id="btnHome" aria-label="بازگشت به منو" title="منو">🏠</button>
+    <div class="brand"><span class="dot">⚖</span><span id="brandName">شهر اندازه‌گیری</span></div>
+    <div class="spacer"></div>
+    <div class="star-pill" aria-label="ستاره‌های تو"><span aria-hidden="true">⭐</span><span class="n" id="starCount">۰</span></div>
+    <button class="icon-btn" id="btnSound" aria-label="صدا" aria-pressed="true" title="صدا">🔊</button>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= SPLASH ================= -->
+    <section class="screen is-active" id="s-splash" aria-label="صفحهٔ شروع">
+      <div class="splash">
+        <span class="kicker">ماجراجویی اندازه‌گیری</span>
+        <h1 class="game-title">ترازو، اندازه‌گیری<br><span class="hl">و مقیاس‌ها</span></h1>
+        <div class="mascot-hero" id="splashMascot" aria-hidden="true"></div>
+        <p class="splash-sub">سلام! من <b>ترازک</b> هستم. با هم اندازه‌گیری را یاد می‌گیریم!</p>
+        <div class="splash-actions">
+          <button class="btn btn--primary btn--big" id="btnStart">شروع ماجرا</button>
+          <button class="btn btn--ghost btn--big" id="btnHelp">راهنما</button>
+        </div>
+        <div class="splash-tools">
+          <button class="icon-btn" id="btnSoundSplash" aria-label="روشن و خاموش کردن صدا" aria-pressed="true">🔊</button>
+          <button class="icon-btn" id="btnParentSplash" aria-label="بخش بزرگ‌ترها">👩‍🏫</button>
+        </div>
+        <p class="presenter" id="presenterLine"></p>
+      </div>
+    </section>
+
+    <!-- ================= MENU ================= -->
+    <section class="screen" id="s-menu" aria-label="منوی اصلی">
+      <div class="menu-head">
+        <h2>سلام <span id="menuName">دوست خوبم</span>!</h2>
+        <p>امروز کجا برویم؟</p>
+      </div>
+      <div class="menu-grid">
+        <button class="tile tile--sky" data-go="map">
+          <span class="ic">🗺️</span><span class="tt">شروع ماجرا</span><span class="ds">شش ایستگاه بازی</span>
+        </button>
+        <button class="tile tile--sun" data-go="rewards">
+          <span class="ic">🏆</span><span class="tt">جایزه‌ها</span><span class="ds">ستاره و نشان</span>
+        </button>
+        <button class="tile tile--mint" data-go="glossary">
+          <span class="ic">📖</span><span class="tt">واژه‌نامه</span><span class="ds">معنی واژه‌ها</span>
+        </button>
+        <button class="tile tile--grape" id="btnParentMenu">
+          <span class="ic">👩‍🏫</span><span class="tt">بزرگ‌ترها</span><span class="ds">پدر، مادر و معلم</span>
+        </button>
+      </div>
+      <div class="card name-card">
+        <label for="playerName">اسم من:</label>
+        <input id="playerName" type="text" maxlength="18" placeholder="مثلاً ساره" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="card" style="margin-top:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:26px" aria-hidden="true">⭐</span>
+        <div style="flex:1;font-size:.84rem;font-weight:700;color:var(--ink-2)">
+          ستاره‌های تو: <b id="menuStars" style="color:#7A5200">۰</b>
+          <div style="font-size:.76rem">ایستگاه‌های تمام‌شده: <b id="menuStations">۰</b> از ۶</div>
+        </div>
+        <button class="btn btn--sun btn--sm" data-go="rewards">جایزه‌ها</button>
+      </div>
+    </section>
+
+    <!-- ================= WORLD MAP ================= -->
+    <section class="screen" id="s-map" aria-label="نقشهٔ شهر اندازه‌گیری">
+      <div class="page-head">
+        <h2>شهر اندازه‌گیری</h2>
+        <p>روی هر جزیره بزن و بازی کن.</p>
+      </div>
+      <div class="stations" id="stationList"></div>
+      <div class="map-foot card">
+        <span style="font-size:30px" aria-hidden="true">🌟</span>
+        <div class="txt" id="mapHint">هر ایستگاه چند ستاره دارد. هرچه دقیق‌تر باشی، ستارهٔ بیشتر می‌گیری!</div>
+      </div>
+    </section>
+
+    <!-- ================= BALANCE ================= -->
+    <section class="screen" id="s-balance" aria-label="بازار ترازو">
+      <div class="ghead">
+        <button class="icon-btn" data-back aria-label="بازگشت به نقشه">↩</button>
+        <div class="ttl"><h3>بازار ترازو</h3><div class="sub">جرم، گرم و کیلوگرم</div><div class="dots" id="balDots"></div></div>
+        <div class="star-pill"><span aria-hidden="true">⭐</span><span class="n" id="balStars">۰</span></div>
+      </div>
+      <div class="card game-card">
+        <p class="task" id="balTask"></p>
+        <p class="subtask" id="balSub"></p>
+        <div class="stage" id="balStage"></div>
+        <div class="tools" id="balTools"></div>
+        <div class="fb" id="balFb" role="status" aria-live="polite"></div>
+        <div class="actions" id="balActions"></div>
+      </div>
+    </section>
+
+    <!-- ================= RULER ================= -->
+    <section class="screen" id="s-ruler" aria-label="کارگاه خط‌کش">
+      <div class="ghead">
+        <button class="icon-btn" data-back aria-label="بازگشت به نقشه">↩</button>
+        <div class="ttl"><h3>کارگاه خط‌کش</h3><div class="sub">طول، سانتی‌متر و متر</div><div class="dots" id="rulDots"></div></div>
+        <div class="star-pill"><span aria-hidden="true">⭐</span><span class="n" id="rulStars">۰</span></div>
+      </div>
+      <div class="card game-card">
+        <p class="task" id="rulTask"></p>
+        <p class="subtask" id="rulSub"></p>
+        <div class="stage" id="rulStage"></div>
+        <div class="tools" id="rulTools"></div>
+        <div class="fb" id="rulFb" role="status" aria-live="polite"></div>
+        <div class="actions" id="rulActions"></div>
+      </div>
+    </section>
+
+    <!-- ================= CAPACITY ================= -->
+    <section class="screen" id="s-capacity" aria-label="آزمایشگاه گنجایش">
+      <div class="ghead">
+        <button class="icon-btn" data-back aria-label="بازگشت به نقشه">↩</button>
+        <div class="ttl"><h3>آزمایشگاه گنجایش</h3><div class="sub">میلی‌لیتر و لیتر</div><div class="dots" id="capDots"></div></div>
+        <div class="star-pill"><span aria-hidden="true">⭐</span><span class="n" id="capStars">۰</span></div>
+      </div>
+      <div class="card game-card">
+        <p class="task" id="capTask"></p>
+        <p class="subtask" id="capSub"></p>
+        <div class="stage" id="capStage"></div>
+        <div class="tools" id="capTools"></div>
+        <div class="fb" id="capFb" role="status" aria-live="polite"></div>
+        <div class="actions" id="capActions"></div>
+      </div>
+    </section>
+
+    <!-- ================= MAP SCALE ================= -->
+    <section class="screen" id="s-mapgame" aria-label="جزیرهٔ نقشه">
+      <div class="ghead">
+        <button class="icon-btn" data-back aria-label="بازگشت به نقشه">↩</button>
+        <div class="ttl"><h3>جزیرهٔ نقشه</h3><div class="sub">مقیاس نقشه</div><div class="dots" id="mapDots"></div></div>
+        <div class="star-pill"><span aria-hidden="true">⭐</span><span class="n" id="mapStars">۰</span></div>
+      </div>
+      <div class="card game-card">
+        <p class="task" id="mapTask"></p>
+        <p class="subtask" id="mapSub"></p>
+        <div class="stage" id="mapStage"></div>
+        <div class="tools" id="mapTools"></div>
+        <div class="fb" id="mapFb" role="status" aria-live="polite"></div>
+        <div class="actions" id="mapActions"></div>
+      </div>
+    </section>
+
+    <!-- ================= QUIZ ================= -->
+    <section class="screen" id="s-quiz" aria-label="سالن پرسش‌ها">
+      <div class="ghead">
+        <button class="icon-btn" data-back aria-label="بازگشت به نقشه">↩</button>
+        <div class="ttl"><h3>سالن پرسش‌ها</h3><div class="sub">مرور همهٔ درس‌ها</div><div class="dots" id="quizDots"></div></div>
+        <div class="star-pill"><span aria-hidden="true">⭐</span><span class="n" id="quizStars">۰</span></div>
+      </div>
+      <div class="card game-card">
+        <div class="q-top">
+          <span class="q-count" id="quizCount">پرسش ۱ از ۵</span>
+          <span class="q-count" id="quizScore">درست: ۰</span>
+        </div>
+        <div class="q-bar"><i id="quizBar"></i></div>
+        <p class="task" id="quizTask"></p>
+        <div class="stage" id="quizStage"></div>
+        <div class="fb" id="quizFb" role="status" aria-live="polite"></div>
+        <div class="actions" id="quizActions"></div>
+      </div>
+    </section>
+
+    <!-- ================= MATCH ================= -->
+    <section class="screen" id="s-match" aria-label="جورچین ابزارها">
+      <div class="ghead">
+        <button class="icon-btn" data-back aria-label="بازگشت به نقشه">↩</button>
+        <div class="ttl"><h3>جورچین ابزارها</h3><div class="sub">هر ابزار برای چه کاری است؟</div><div class="dots" id="matchDots"></div></div>
+        <div class="star-pill"><span aria-hidden="true">⭐</span><span class="n" id="matchStars">۰</span></div>
+      </div>
+      <div class="card game-card">
+        <p class="task" id="matchTask">یک ابزار را انتخاب کن، بعد کاری را که اندازه می‌گیرد انتخاب کن.</p>
+        <div class="stage" id="matchStage"></div>
+        <div class="fb" id="matchFb" role="status" aria-live="polite"></div>
+        <div class="actions" id="matchActions"></div>
+      </div>
+    </section>
+
+    <!-- ================= REWARDS ================= -->
+    <section class="screen" id="s-rewards" aria-label="جایزه‌ها">
+      <div class="page-head">
+        <h2>جایزه‌های تو</h2>
+        <p>هر ستاره‌ای که گرفتی، اینجاست.</p>
+      </div>
+      <div class="card reward-hero">
+        <div class="big-star" aria-hidden="true">⭐</div>
+        <div class="star-count"><span id="rwStars">۰</span><small>ستاره</small></div>
+        <div class="pbar"><i id="rwBar"></i></div>
+        <div class="pbar-lbl" id="rwLbl">۰ از ۶ ایستگاه</div>
+      </div>
+
+      <div class="sec-title">نشان‌ها</div>
+      <div class="badge-grid" id="badgeGrid"></div>
+
+      <div class="sec-title">برچسب‌ها</div>
+      <div class="sticker-grid" id="stickerGrid"></div>
+
+      <div class="chest" id="chest">
+        <span class="ch-ic" id="chestIcon" aria-hidden="true">🎁</span>
+        <div class="ch-tx" id="chestTx"><b>جعبهٔ جایزه</b>با تمام‌کردن ۳ ایستگاه باز می‌شود.</div>
+        <button class="btn btn--sun btn--sm" id="btnChest">باز کن</button>
+      </div>
+
+      <div class="actions" style="margin-top:18px">
+        <button class="btn btn--grape btn--big" id="btnCert">🏅 مدرک قهرمانی</button>
+        <button class="btn btn--ghost btn--big" data-go="map">🗺️ برگرد به نقشه</button>
+      </div>
+    </section>
+
+    <!-- ================= CERTIFICATE ================= -->
+    <section class="screen" id="s-cert" aria-label="مدرک قهرمانی">
+      <div class="page-head no-print">
+        <h2>مدرک تو آماده است!</h2>
+        <p>می‌توانی آن را چاپ کنی و به دیوار بزنی.</p>
+      </div>
+      <div class="cert" id="certSheet">
+        <div class="cert-in">
+          <div class="c-kicker">شهر اندازه‌گیری</div>
+          <h2>مدرک قهرمان اندازه‌گیری</h2>
+          <div class="c-line"></div>
+          <div class="c-name" id="certName">قهرمان من</div>
+          <p class="c-body">
+            آفرین! تو قهرمان اندازه‌گیری شدی.<br>
+            ترازو، خط‌کش، پیمانه و مقیاس نقشه را یاد گرفتی و با دقت اندازه گرفتی.
+          </p>
+          <div class="c-stars" id="certStars" aria-hidden="true">★★★</div>
+          <div class="c-seal" aria-hidden="true">🏅</div>
+          <div class="c-meta">
+            <span id="certDate"></span>
+            <span id="certPresenter"></span>
+          </div>
+        </div>
+      </div>
+      <div class="cert-actions no-print">
+        <button class="btn btn--primary" id="btnPrint">🖨️ چاپ مدرک</button>
+        <button class="btn btn--ghost" data-go="rewards">برگشت به جایزه‌ها</button>
+      </div>
+    </section>
+
+    <!-- ================= GLOSSARY ================= -->
+    <section class="screen" id="s-gloss" aria-label="واژه‌نامه">
+      <div class="page-head">
+        <h2>واژه‌نامهٔ ساده</h2>
+        <p>هر واژه را با زبان ساده بخوان.</p>
+      </div>
+      <div class="gloss" id="glossList"></div>
+      <p class="gloss-note">این واژه‌ها از پژوهش کلاسی پایهٔ سوم گرفته شده‌اند.</p>
+      <div class="actions"><button class="btn btn--ghost" data-go="menu">برگشت به منو</button></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- mascot helper -->
+<div class="helper" id="helper" aria-live="polite">
+  <div class="h-mascot" id="helperMascot" aria-hidden="true"></div>
+  <div class="h-bubble" id="helperBubble"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- parent / teacher modal -->
+<div class="modal" id="modalParent" role="dialog" aria-modal="true" aria-labelledby="parentTitle">
+  <div class="modal-box">
+    <h3 id="parentTitle">راهنما و اطلاعات برای بزرگ‌ترها</h3>
+
+    <h4>چطور بازی کنیم؟</h4>
+    <ol>
+      <li>روی «شروع ماجرا» بزن.</li>
+      <li>یکی از جزیره‌های شهر اندازه‌گیری را انتخاب کن.</li>
+      <li>هر مرحله را انجام بده تا ستاره بگیری.</li>
+      <li>با ۳ ایستگاه، سالن پرسش‌ها باز می‌شود.</li>
+      <li>در پایان، مدرک قهرمانی را چاپ کن.</li>
+    </ol>
+
+    <h4>این بازی برای چه ساخته شده؟</h4>
+    <p>این بازی برای دانش‌آموز پایهٔ سوم دبستان ساخته شده و بر پایهٔ پژوهش کلاسی «ترازو، اندازه‌گیری و مقیاس‌ها» است.</p>
+
+    <h4>هدف‌های یادگیری</h4>
+    <ul>
+      <li>معنی اندازه‌گیری، تخمین، واحد و ابزار</li>
+      <li>کار با ترازو و خواندن جرم با گرم و کیلوگرم</li>
+      <li>اندازه‌گیری طول با خط‌کش: میلی‌متر، سانتی‌متر، متر</li>
+      <li>گنجایش مایعات با میلی‌لیتر و لیتر</li>
+      <li>تبدیل‌های ساده: ۱ کیلوگرم = ۱۰۰۰ گرم، ۱ متر = ۱۰۰ سانتی‌متر، ۱ لیتر = ۱۰۰۰ میلی‌لیتر</li>
+      <li>مقیاس نقشه و کوچک‌نمایی</li>
+    </ul>
+
+    <h4>نکتهٔ آموزشی</h4>
+    <p>مبحث «مقیاس نقشه» و تفاوت «جرم و وزن» در پژوهش، تکمیلی هستند. اگر معلم این موضوع‌ها را نخواسته، می‌توانید ایستگاه نقشه را فقط برای آشنایی ببینید.</p>
+
+    <h4>تنظیم‌ها</h4>
+    <div class="toggle-row">
+      <span>صدا</span>
+      <button class="switch" id="swSound" role="switch" aria-checked="true" aria-label="صدا"></button>
+    </div>
+    <div class="toggle-row">
+      <span>کم‌کردن حرکت‌ها</span>
+      <button class="switch" id="swMotion" role="switch" aria-checked="false" aria-label="کم‌کردن حرکت‌ها"></button>
+    </div>
+    <p style="margin-top:10px;font-size:.78rem">هیچ اطلاعاتی به اینترنت فرستاده نمی‌شود. پیشرفت فقط روی همین دستگاه ذخیره می‌شود.</p>
+
+    <div class="modal-actions">
+      <button class="btn btn--primary" id="btnCloseParent">بستن</button>
+      <button class="btn btn--ghost" id="btnReset">پاک‌کردن پیشرفت</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   بخش ۱ — هستهٔ بازی
+   ============================================================ */
+'use strict';
+
+var CONFIG = {
+  gameTitle: 'ترازو، اندازه‌گیری و مقیاس‌ها',
+  presenterName: 'سیده ساره حسینی',
+  showPresenterName: true,
+  childFriendlyMode: true,
+  storageKey: 'sareh-measure-game-v1'
+};
+
+/* ---------- متن‌های اصلی ---------- */
+var TXT = {
+  yes: ['آفرین!', 'عالی بود!', 'درست است!', 'تو یک اندازه‌گیر دقیقی!'],
+  near: ['نزدیک بود! دوباره تلاش کن.', 'یک بار دیگر امتحان کن.', 'به راهنمایی ترازک توجه کن.'],
+  locked: 'این ایستگاه هنوز باز نشده است.',
+  zeroFirst: 'اول ترازو را صفر کن.',
+  centerObj: 'جسم را آرام وسط کفه بگذار.',
+  massOk: 'آفرین! جرم را درست اندازه گرفتی.',
+  fromZero: 'از صفر شروع کن.',
+  eyeLevel: 'از هم‌سطح چشم نگاه کن.',
+  guessFirst: 'اول حدس بزن، بعد اندازه بگیر.',
+  units: {
+    g: 'گرم', kg: 'کیلوگرم', mm: 'میلی‌متر', cm: 'سانتی‌متر',
+    m: 'متر', km: 'کیلومتر', ml: 'میلی‌لیتر', l: 'لیتر'
+  }
+};
+
+var FA_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+function fa(v) {
+  return String(v).replace(/[0-9]/g, function (d) { return FA_DIGITS[+d]; });
+}
+function massLabel(g) {
+  if (g >= 1000 && g % 1000 === 0) return fa(g / 1000) + ' ' + TXT.units.kg;
+  return fa(g) + ' ' + TXT.units.g;
+}
+function volLabel(ml) {
+  if (ml >= 1000 && ml % 1000 === 0) return fa(ml / 1000) + ' ' + TXT.units.l;
+  return fa(ml) + ' ' + TXT.units.ml;
+}
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+
+/* ---------- ایستگاه‌ها ---------- */
+var STATIONS = [
+  { id: 'balance',  name: 'بازار ترازو',        icon: '⚖️', levels: 5, badge: 'استاد ترازو',        sticker: 'ترازو',  color: 'coral', need: 0, desc: 'جرم و گرم و کیلوگرم' },
+  { id: 'ruler',    name: 'کارگاه خط‌کش',        icon: '📏', levels: 5, badge: 'قهرمان خط‌کش',       sticker: 'خط‌کش',  color: 'sky',   need: 0, desc: 'طول و سانتی‌متر' },
+  { id: 'capacity', name: 'آزمایشگاه گنجایش',   icon: '🧪', levels: 5, badge: 'دانشمند گنجایش',     sticker: 'پیمانه', color: 'mint',  need: 0, desc: 'میلی‌لیتر و لیتر' },
+  { id: 'mapgame',  name: 'جزیرهٔ نقشه',        icon: '🗺️', levels: 5, badge: 'کاشف مقیاس',         sticker: 'نقشه',   color: 'grape', need: 0, desc: 'مقیاس نقشه' },
+  { id: 'quiz',     name: 'سالن پرسش‌ها',       icon: '❓', levels: 5, badge: 'نابغهٔ اندازه‌گیری', sticker: 'ستاره',  color: 'sun',   need: 3, desc: 'مرور همهٔ درس‌ها' },
+  { id: 'match',    name: 'جورچین ابزارها',     icon: '🧩', levels: 1, badge: 'استاد ابزارها',      sticker: '',        color: 'sky',   need: 2, bonus: true, desc: 'هر ابزار برای چه کاری؟' }
+];
+var STICKER_ICONS = { 'ترازو': '⚖️', 'خط‌کش': '📏', 'پیمانه': '🧪', 'نقشه': '🗺️', 'ستاره': '⭐' };
+
+/* ---------- وضعیت ---------- */
+var STATE = {
+  stars: 0, prog: {}, badges: [], stickers: [],
+  sound: true, reduce: false, player: '', chest: false, screen: 'splash'
+};
+
+function defaultState() {
+  return { stars: 0, prog: {}, badges: [], stickers: [], sound: true, reduce: false, player: '', chest: false };
+}
+function loadState() {
+  try {
+    var raw = window.localStorage.getItem(CONFIG.storageKey);
+    if (!raw) return;
+    var d = JSON.parse(raw);
+    if (!d || typeof d !== 'object') return;
+    STATE.stars = Number(d.stars) || 0;
+    STATE.prog = (d.prog && typeof d.prog === 'object') ? d.prog : {};
+    STATE.badges = Array.isArray(d.badges) ? d.badges : [];
+    STATE.stickers = Array.isArray(d.stickers) ? d.stickers : [];
+    STATE.sound = d.sound !== false;
+    STATE.reduce = d.reduce === true;
+    STATE.player = typeof d.player === 'string' ? d.player : '';
+    STATE.chest = d.chest === true;
+  } catch (e) { /* حافظهٔ مرورگر در دسترس نیست */ }
+}
+function saveState() {
+  try {
+    window.localStorage.setItem(CONFIG.storageKey, JSON.stringify({
+      stars: STATE.stars, prog: STATE.prog, badges: STATE.badges, stickers: STATE.stickers,
+      sound: STATE.sound, reduce: STATE.reduce, player: STATE.player, chest: STATE.chest
+    }));
+  } catch (e) { /* بی‌صدا رد می‌شویم */ }
+}
+function progOf(id) {
+  if (!STATE.prog[id] || typeof STATE.prog[id] !== 'object') STATE.prog[id] = { levels: 0, done: false, rewarded: false };
+  var p = STATE.prog[id];
+  if (typeof p.levels !== 'number') p.levels = 0;
+  p.done = p.done === true;
+  p.rewarded = p.rewarded === true;
+  return p;
+}
+function doneCount() {
+  return STATIONS.filter(function (s) { return progOf(s.id).done; }).length;
+}
+function coreDoneCount() {
+  return STATIONS.filter(function (s) { return !s.bonus && progOf(s.id).done; }).length;
+}
+
+/* ---------- صدا (WebAudio، بدون فایل بیرونی) ---------- */
+var SFX = {
+  ctx: null,
+  ensure: function () {
+    if (!STATE.sound) return null;
+    try {
+      if (!this.ctx) {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        this.ctx = new AC();
+      }
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      return this.ctx;
+    } catch (e) { return null; }
+  },
+  tone: function (freq, dur, type, vol, delay, slideTo) {
+    var ctx = this.ensure();
+    if (!ctx) return;
+    try {
+      var t0 = ctx.currentTime + (delay || 0);
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.type = type || 'sine';
+      o.frequency.setValueAtTime(freq, t0);
+      if (slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(30, slideTo), t0 + dur);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol || 0.14, t0 + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start(t0);
+      o.stop(t0 + dur + 0.03);
+    } catch (e) { /* بی‌صدا */ }
+  },
+  click: function () { this.tone(520, 0.07, 'triangle', 0.09); },
+  pop: function () { this.tone(680, 0.09, 'sine', 0.12, 0, 1080); },
+  drip: function () { this.tone(820, 0.05, 'sine', 0.045, 0, 1180); },
+  good: function () { var s = this; [660, 880, 1174].forEach(function (f, i) { s.tone(f, 0.16, 'sine', 0.12, i * 0.075); }); },
+  bad: function () { this.tone(320, 0.2, 'sine', 0.09, 0, 210); },
+  star: function () { this.tone(1320, 0.08, 'sine', 0.09); this.tone(1760, 0.12, 'sine', 0.06, 0.07); },
+  win: function () { var s = this; [523, 659, 784, 1047, 1319].forEach(function (f, i) { s.tone(f, 0.3, 'triangle', 0.11, i * 0.11); }); },
+  whoosh: function () { this.tone(240, 0.2, 'sine', 0.06, 0, 90); }
+};
+
+/* ---------- افکت کاغذرنگی ---------- */
+var FX = {
+  cv: null, ctx: null, parts: [], raf: 0,
+  init: function () {
+    this.cv = document.getElementById('fx');
+    if (!this.cv || !this.cv.getContext) return;
+    this.ctx = this.cv.getContext('2d');
+    this.resize();
+    var self = this;
+    window.addEventListener('resize', function () { self.resize(); });
+  },
+  resize: function () {
+    if (!this.cv) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.cv.width = Math.floor(window.innerWidth * dpr);
+    this.cv.height = Math.floor(window.innerHeight * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  },
+  colors: ['#FFC93C', '#FF7A6B', '#4FB6E8', '#4FD2A4', '#A78BFA', '#FFB3C7'],
+  burst: function (x, y, n) {
+    if (STATE.reduce || !this.ctx) return;
+    n = n || 26;
+    for (var i = 0; i < n; i++) {
+      var ang = Math.random() * Math.PI * 2;
+      var sp = 2 + Math.random() * 7;
+      this.parts.push({
+        x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 2,
+        g: 0.16 + Math.random() * 0.1, size: 4 + Math.random() * 7,
+        rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3,
+        color: pick(this.colors), life: 1, round: Math.random() > 0.5
+      });
+    }
+    this.start();
+  },
+  rain: function (n) {
+    if (STATE.reduce || !this.ctx) return;
+    n = n || 60;
+    for (var i = 0; i < n; i++) {
+      this.parts.push({
+        x: Math.random() * window.innerWidth, y: -20 - Math.random() * 200,
+        vx: (Math.random() - 0.5) * 1.6, vy: 1.6 + Math.random() * 3,
+        g: 0.02, size: 5 + Math.random() * 8, rot: Math.random() * 6.28,
+        vr: (Math.random() - 0.5) * 0.22, color: pick(this.colors), life: 1,
+        round: Math.random() > 0.5
+      });
+    }
+    this.start();
+  },
+  start: function () {
+    if (this.raf) return;
+    var self = this;
+    var step = function () {
+      self.raf = window.requestAnimationFrame(step);
+      self.draw();
+    };
+    this.raf = window.requestAnimationFrame(step);
+  },
+  draw: function () {
+    var c = this.ctx, w = window.innerWidth, h = window.innerHeight;
+    c.clearRect(0, 0, w, h);
+    for (var i = this.parts.length - 1; i >= 0; i--) {
+      var p = this.parts[i];
+      p.vy += p.g; p.vx *= 0.995; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      if (p.y > h + 40 || p.x < -40 || p.x > w + 40) { this.parts.splice(i, 1); continue; }
+      c.save();
+      c.translate(p.x, p.y);
+      c.rotate(p.rot);
+      c.globalAlpha = 0.95;
+      c.fillStyle = p.color;
+      if (p.round) {
+        c.beginPath(); c.arc(0, 0, p.size / 2, 0, 6.2832); c.fill();
+      } else {
+        c.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.66);
+      }
+      c.restore();
+    }
+    if (!this.parts.length) {
+      window.cancelAnimationFrame(this.raf);
+      this.raf = 0;
+      c.clearRect(0, 0, w, h);
+    }
+  },
+  celebrate: function () {
+    var w = window.innerWidth, h = window.innerHeight;
+    this.burst(w / 2, h * 0.38, 40);
+    this.rain(40);
+  }
+};
+
+/* ---------- ماسکوت ---------- */
+function mascotSVG() {
+  return '' +
+    '<svg class="mascot-svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false">' +
+      '<g class="m-body">' +
+        '<ellipse cx="100" cy="186" rx="48" ry="7" fill="rgba(90,65,30,.12)"/>' +
+        '<g stroke="#E7A23B" stroke-width="3" stroke-linecap="round">' +
+          '<line x1="44" y1="110" x2="28" y2="138"/><line x1="44" y1="110" x2="60" y2="138"/>' +
+          '<line x1="156" y1="110" x2="140" y2="138"/><line x1="156" y1="110" x2="172" y2="138"/>' +
+        '</g>' +
+        '<path d="M14 136 q30 30 60 0 z" fill="#FFB27A"/>' +
+        '<path d="M126 136 q30 30 60 0 z" fill="#FFB27A"/>' +
+        '<rect x="92" y="108" width="16" height="56" rx="8" fill="#E88E4A"/>' +
+        '<rect x="56" y="158" width="88" height="20" rx="10" fill="#FF9E7A"/>' +
+        '<rect x="60" y="158" width="80" height="7" rx="3.5" fill="#FFB99B"/>' +
+        '<rect x="26" y="100" width="148" height="12" rx="6" fill="#F2A65A"/>' +
+        '<rect x="26" y="100" width="148" height="5" rx="2.5" fill="#FFC98A"/>' +
+        '<circle cx="100" cy="106" r="9" fill="#E88E4A"/>' +
+        '<circle cx="100" cy="106" r="4" fill="#FFF3DC"/>' +
+        '<circle cx="100" cy="66" r="42" fill="#FFE0A3"/>' +
+        '<ellipse cx="86" cy="44" rx="13" ry="7" fill="#FFFFFF" opacity=".38" transform="rotate(-28 86 44)"/>' +
+        '<ellipse class="m-eye" cx="86" cy="63" rx="5.6" ry="7.2" fill="#3B3050"/>' +
+        '<ellipse class="m-eye" cx="114" cy="63" rx="5.6" ry="7.2" fill="#3B3050"/>' +
+        '<circle cx="87.6" cy="60.4" r="1.9" fill="#fff"/>' +
+        '<circle cx="115.6" cy="60.4" r="1.9" fill="#fff"/>' +
+        '<circle cx="74" cy="76" r="7" fill="#FFAD9B" opacity=".7"/>' +
+        '<circle cx="126" cy="76" r="7" fill="#FFAD9B" opacity=".7"/>' +
+        '<path d="M91 78 q9 10 18 0" stroke="#3B3050" stroke-width="3.6" fill="none" stroke-linecap="round"/>' +
+        '<line x1="100" y1="26" x2="100" y2="14" stroke="#E7A23B" stroke-width="3" stroke-linecap="round"/>' +
+        '<circle cx="100" cy="11" r="6.5" fill="#FFC93C"/>' +
+      '</g>' +
+    '</svg>';
+}
+
+/* ---------- رابط کاربری کوچک ---------- */
+var UI = {
+  toastTimer: 0,
+  toast: function (msg, ms) {
+    var t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    window.clearTimeout(this.toastTimer);
+    this.toastTimer = window.setTimeout(function () { t.classList.remove('show'); }, ms || 2200);
+  },
+  helperTimer: 0,
+  say: function (msg, ms, happy) {
+    var box = document.getElementById('helper');
+    var bub = document.getElementById('helperBubble');
+    if (!box || !bub) return;
+    bub.textContent = msg;
+    box.classList.add('show');
+    var m = document.getElementById('helperMascot');
+    if (m) m.classList.toggle('mascot--happy', !!happy);
+    window.clearTimeout(this.helperTimer);
+    this.helperTimer = window.setTimeout(function () { box.classList.remove('show'); }, ms || 5200);
+  },
+  hideHelper: function () {
+    var box = document.getElementById('helper');
+    if (box) box.classList.remove('show');
+    window.clearTimeout(this.helperTimer);
+  },
+  fb: function (el, type, msg) {
+    if (!el) return;
+    el.className = 'fb show ' + type;
+    el.innerHTML = msg;
+  },
+  clearFb: function (el) { if (el) { el.className = 'fb'; el.innerHTML = ''; } },
+  actions: function (el, buttons) {
+    if (!el) return;
+    el.innerHTML = '';
+    buttons.forEach(function (b) {
+      var btn = document.createElement('button');
+      btn.className = 'btn ' + (b.cls || 'btn--mint');
+      btn.textContent = b.label;
+      if (b.id) btn.id = b.id;
+      btn.addEventListener('click', function () { SFX.click(); b.onClick(); });
+      el.appendChild(btn);
+    });
+  }
+};
+
+function refreshStars() {
+  var v = fa(STATE.stars);
+  ['starCount', 'balStars', 'rulStars', 'capStars', 'mapStars', 'quizStars', 'matchStars', 'rwStars', 'menuStars']
+    .forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = v;
+    });
+  var ms = document.getElementById('menuStations');
+  if (ms) ms.textContent = fa(doneCount());
+}
+
+function addStars(n) {
+  STATE.stars = Math.max(0, STATE.stars + n);
+  saveState();
+  refreshStars();
+}
+
+function setName() {
+  var nm = (STATE.player || '').trim();
+  var a = document.getElementById('menuName');
+  if (a) a.textContent = nm || 'دوست خوبم';
+  var c = document.getElementById('certName');
+  if (c) c.textContent = nm || 'قهرمان اندازه‌گیری';
+}
+
+/* ---------- مسیریابی ---------- */
+var CURRENT = 'splash';
+var SCREENS = {
+  splash:   { el: 's-splash',   topbar: false },
+  menu:     { el: 's-menu',     topbar: true },
+  map:      { el: 's-map',      topbar: true, enter: function () { renderMap(); } },
+  balance:  { el: 's-balance',  topbar: true, enter: function () { Balance.start(); } },
+  ruler:    { el: 's-ruler',    topbar: true, enter: function () { Ruler.start(); } },
+  capacity: { el: 's-capacity', topbar: true, enter: function () { Capacity.start(); } },
+  mapgame:  { el: 's-mapgame',  topbar: true, enter: function () { MapGame.start(); } },
+  quiz:     { el: 's-quiz',     topbar: true, enter: function () { Quiz.start(); } },
+  match:    { el: 's-match',    topbar: true, enter: function () { Match.start(); } },
+  rewards:  { el: 's-rewards',  topbar: true, enter: function () { renderRewards(); } },
+  cert:     { el: 's-cert',     topbar: true, enter: function () { renderCert(); } },
+  glossary: { el: 's-gloss',    topbar: true, enter: function () { renderGlossary(); } }
+};
+
+function go(name) {
+  var cfg = SCREENS[name];
+  if (!cfg) return;
+  $$('.screen').forEach(function (s) { s.classList.toggle('is-active', s.id === cfg.el); });
+  var tb = document.getElementById('topbar');
+  if (tb) tb.hidden = !cfg.topbar;
+  CURRENT = name;
+  STATE.screen = name;
+  UI.hideHelper();
+  refreshStars();
+  setName();
+  if (cfg.enter) cfg.enter();
+  try { window.scrollTo({ top: 0, behavior: STATE.reduce ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
+  armIdleHint();
+}
+
+/* ---------- پیشرفت ---------- */
+function completeLevel(gameId, idx, bonus) {
+  var p = progOf(gameId);
+  var st = STATIONS.filter(function (s) { return s.id === gameId; })[0];
+  if (p.levels < idx + 1) {
+    p.levels = idx + 1;
+    addStars(bonus ? 2 : 1);
+  }
+  if (st && p.levels >= st.levels) p.done = true;
+  saveState();
+  refreshStars();
+}
+
+function finishStation(gameId) {
+  var st = STATIONS.filter(function (s) { return s.id === gameId; })[0];
+  if (!st) return;
+  var p = progOf(gameId);
+  var first = !p.rewarded;
+  p.done = true;
+  p.rewarded = true;
+  p.levels = st.levels;
+  if (first) {
+    addStars(3);
+    if (st.badge && STATE.badges.indexOf(st.badge) < 0) STATE.badges.push(st.badge);
+    if (st.sticker && STATE.stickers.indexOf(st.sticker) < 0) STATE.stickers.push(st.sticker);
+  }
+  saveState();
+  refreshStars();
+  if (first) {
+    SFX.win();
+    FX.celebrate();
+    UI.say('آفرین! نشان «' + st.badge + '» را گرفتی.', 6000, true);
+  }
+}
+
+/* ---------- راهنمای بی‌حرکتی ---------- */
+var IDLE_HINTS = {
+  balance: 'اول ترازو را صفر کن، بعد جسم را آرام وسط کفه بگذار.',
+  ruler: 'ابتدای جسم را روی صفر خط‌کش بگذار.',
+  capacity: 'ظرف را هم‌سطح چشم نگاه کن تا عدد را درست بخوانی.',
+  mapgame: 'اول با خط‌کش روی نقشه اندازه بگیر، بعد با مقیاس حساب کن.',
+  quiz: 'آرام باش و گزینه‌ها را با دقت بخوان.',
+  match: 'اول ابزار را انتخاب کن، بعد کاری که اندازه می‌گیرد.',
+  map: 'روی هر جزیره بزن. اگر قفل بود، اول ایستگاه‌های دیگر را بازی کن.'
+};
+var idleTimer = 0;
+function armIdleHint() {
+  window.clearTimeout(idleTimer);
+  var h = IDLE_HINTS[CURRENT];
+  if (!h) return;
+  idleTimer = window.setTimeout(function () {
+    if (CURRENT === 'map' || SCREENS[CURRENT]) UI.say(h, 6500);
+  }, 16000);
+}
+/* ============================================================
+   بخش ۲ — نقشه، بازار ترازو، کارگاه خط‌کش
+   ============================================================ */
+
+function renderDots(el, total, cur) {
+  if (!el) return;
+  el.innerHTML = '';
+  for (var i = 0; i < total; i++) {
+    var d = document.createElement('i');
+    if (i < cur) d.className = 'on';
+    else if (i === cur) d.className = 'cur';
+    el.appendChild(d);
+  }
+}
+
+function stationDone(gameId, stageEl, actionsEl, fbEl) {
+  var st = STATIONS.filter(function (s) { return s.id === gameId; })[0];
+  finishStation(gameId);
+  if (fbEl) UI.clearFb(fbEl);
+  if (stageEl) {
+    stageEl.innerHTML = '' +
+      '<div class="done-box">' +
+        '<div class="di">🏅</div>' +
+        '<h4>ایستگاه تمام شد!</h4>' +
+        '<p>نشان «' + esc(st.badge) + '» را گرفتی و ۳ ستاره هم اضافه شد.</p>' +
+        '<p class="small">حالا می‌توانی ایستگاه دیگری را امتحان کنی.</p>' +
+      '</div>';
+  }
+  if (actionsEl) {
+    UI.actions(actionsEl, [
+      { label: '🗺️ برگرد به نقشه', cls: 'btn--primary', onClick: function () { go('map'); } },
+      { label: '🏆 جایزه‌ها', cls: 'btn--sun', onClick: function () { go('rewards'); } }
+    ]);
+  }
+}
+
+/* ============================================================
+   نقشهٔ شهر
+   ============================================================ */
+function renderMap() {
+  var wrap = document.getElementById('stationList');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  var done = doneCount();
+  STATIONS.forEach(function (st) {
+    var p = progOf(st.id);
+    var locked = done < st.need;
+    var b = document.createElement('button');
+    b.className = 'station' + (locked ? ' is-locked' : '') + (p.done ? ' is-done' : '');
+    b.type = 'button';
+    b.setAttribute('aria-label', st.name + (locked ? ' — قفل است' : ' — ' + fa(p.levels) + ' از ' + fa(st.levels) + ' مرحله انجام شده'));
+    var stars = '';
+    for (var i = 0; i < st.levels; i++) stars += '<span class="' + (i < p.levels ? 'on' : '') + '">★</span>';
+    b.innerHTML =
+      (st.bonus ? '<span class="tag tag--bonus">جایزه</span>' : (locked ? '' : (p.done ? '' : '<span class="tag">تازه</span>'))) +
+      '<span class="orb" aria-hidden="true">' + st.icon + '</span>' +
+      '<span class="nm">' + st.name + '</span>' +
+      '<span class="mini-stars" aria-hidden="true">' + stars + '</span>' +
+      (locked ? '<span class="lock-note">با تمام‌کردن ' + fa(st.need) + ' ایستگاه باز می‌شود</span>' : '<span class="lock-note">' + st.desc + '</span>');
+    b.addEventListener('click', function () {
+      if (locked) {
+        SFX.bad();
+        UI.toast(TXT.locked + ' (' + fa(st.need) + ' ایستگاه لازم است)');
+        return;
+      }
+      SFX.click();
+      go(st.id);
+    });
+    wrap.appendChild(b);
+  });
+  var mh = document.getElementById('mapHint');
+  if (mh) {
+    mh.innerHTML = 'ایستگاه‌های تمام‌شده: <b>' + fa(done) + '</b> از ' + fa(STATIONS.length) +
+      (done >= 3 ? ' — سالن پرسش‌ها باز شد!' : ' — با تمام‌کردن ۳ ایستگاه، سالن پرسش‌ها باز می‌شود.');
+  }
+}
+
+/* ============================================================
+   بازار ترازو
+   ============================================================ */
+var BAL_PAIRS = [
+  { a: { e: '🍎', n: 'سیب', m: 200 }, b: { e: '🍉', n: 'هندوانه', m: 2000 } },
+  { a: { e: '✏️', n: 'مداد', m: 10 }, b: { e: '🧽', n: 'پاک‌کن', m: 25 } },
+  { a: { e: '🍊', n: 'پرتقال', m: 250 }, b: { e: '🍋', n: 'لیمو', m: 120 } },
+  { a: { e: '🎈', n: 'بادکنک بزرگ', m: 5 }, b: { e: '🔑', n: 'کلید', m: 30 } },
+  { a: { e: '🍚', n: 'کیسهٔ برنج', m: 1000 }, b: { e: '🍞', n: 'نان', m: 700 } }
+];
+var BAL_OBJECTS = [
+  { e: '🍎', n: 'سیب', m: 300 },
+  { e: '🍊', n: 'پرتقال', m: 400 },
+  { e: '🧽', n: 'پاک‌کن', m: 100 },
+  { e: '🍚', n: 'کیسهٔ برنج', m: 1000 },
+  { e: '🍉', n: 'هندوانه', m: 2000 }
+];
+var BAL_LEVELS = [
+  { type: 'compare' },
+  { type: 'balance' },
+  { type: 'read' },
+  { type: 'convert', q: '۲ کیلوگرم چند گرم است؟', opts: ['۲۰۰۰ گرم', '۲۰۰ گرم', '۲۰۰۰۰ گرم'], a: 0, hint: 'هر کیلوگرم ۱۰۰۰ گرم است؛ پس ۲ کیلوگرم می‌شود ۲ × ۱۰۰۰.' },
+  { type: 'convert', q: '۱ کیلوگرم و ۵۰۰ گرم چند گرم است؟', opts: ['۱۵۰۰ گرم', '۱۰۵۰ گرم', '۵۰۰ گرم'], a: 0, hint: '۱۰۰۰ گرم + ۵۰۰ گرم = ۱۵۰۰ گرم.' }
+];
+
+function balanceSVG(o) {
+  o = o || {};
+  var angle = o.angle || 0;
+  var weights = o.weights || [];
+  var obj = o.obj || null;
+  var zeroed = o.zeroed !== false;
+  var cx = 260, cy = 122, arm = 168;
+  var rad = angle * Math.PI / 180;
+  var lx = cx - arm * Math.cos(rad), ly = cy - arm * Math.sin(rad);
+  var rx = cx + arm * Math.cos(rad), ry = cy + arm * Math.sin(rad);
+  var ply = ly + 62, pry = ry + 62;
+  var pw = 100;
+  var out = '<svg class="bal-svg" viewBox="0 68 520 258" role="img" aria-label="' + esc(o.label || 'ترازوی دوکفه‌ای') + '">';
+  out += '<ellipse cx="260" cy="310" rx="120" ry="12" fill="rgba(120,90,50,.10)"/>';
+  out += '<rect x="249" y="122" width="22" height="152" rx="11" fill="#E9C39A"/>';
+  out += '<rect x="252" y="122" width="7" height="152" rx="3.5" fill="#F7DFC2"/>';
+  out += '<rect x="178" y="268" width="164" height="26" rx="13" fill="#F0CBA2"/>';
+  out += '<rect x="178" y="268" width="164" height="8" rx="4" fill="#FFE6C9"/>';
+  out += '<rect x="196" y="292" width="30" height="12" rx="6" fill="#DDB185"/>';
+  out += '<rect x="294" y="292" width="30" height="12" rx="6" fill="#DDB185"/>';
+  if (!zeroed) {
+    out += '<path d="M336 292 l30 0 l-6 -13 z" fill="#C9A227"/>';
+    out += '<text x="372" y="258" font-size="12" fill="#A97B22" font-weight="bold">زیر ترازو کج است</text>';
+  }
+  out += '<line x1="' + lx + '" y1="' + ly + '" x2="' + rx + '" y2="' + ry + '" stroke="#F2A65A" stroke-width="14" stroke-linecap="round"/>';
+  out += '<line x1="' + lx + '" y1="' + (ly - 3) + '" x2="' + rx + '" y2="' + (ry - 3) + '" stroke="#FFD19A" stroke-width="4" stroke-linecap="round"/>';
+  out += '<line x1="' + lx + '" y1="' + ly + '" x2="' + (lx - 26) + '" y2="' + (ply - 12) + '" stroke="#D8B48C" stroke-width="3"/>';
+  out += '<line x1="' + lx + '" y1="' + ly + '" x2="' + (lx + 26) + '" y2="' + (ply - 12) + '" stroke="#D8B48C" stroke-width="3"/>';
+  out += '<line x1="' + rx + '" y1="' + ry + '" x2="' + (rx - 26) + '" y2="' + (pry - 12) + '" stroke="#D8B48C" stroke-width="3"/>';
+  out += '<line x1="' + rx + '" y1="' + ry + '" x2="' + (rx + 26) + '" y2="' + (pry - 12) + '" stroke="#D8B48C" stroke-width="3"/>';
+
+  /* کفهٔ چپ */
+  out += '<ellipse cx="' + lx + '" cy="' + ply + '" rx="' + (pw / 2) + '" ry="8" fill="#FFE3BE" stroke="#E7B98A" stroke-width="2"/>';
+  out += '<path d="M' + (lx - pw / 2) + ' ' + ply + ' a' + (pw / 2) + ' 28 0 0 0 ' + pw + ' 0 z" fill="#FFD3A0" stroke="#E7B98A" stroke-width="2"/>';
+  if (obj) {
+    out += '<text x="' + lx + '" y="' + (ply - 12) + '" text-anchor="middle" font-size="48">' + obj + '</text>';
+  } else {
+    out += '<text x="' + lx + '" y="' + (ply - 14) + '" text-anchor="middle" font-size="13" fill="#C9A87C">جسم</text>';
+  }
+  /* کفهٔ راست */
+  out += '<ellipse cx="' + rx + '" cy="' + pry + '" rx="' + (pw / 2) + '" ry="8" fill="#FFE3BE" stroke="#E7B98A" stroke-width="2"/>';
+  out += '<path d="M' + (rx - pw / 2) + ' ' + pry + ' a' + (pw / 2) + ' 28 0 0 0 ' + pw + ' 0 z" fill="#FFD3A0" stroke="#E7B98A" stroke-width="2"/>';
+  var shown = weights.slice(0, 4);
+  shown.forEach(function (g, i) {
+    var cw = 40, chh = 17;
+    var col = i % 2, row = Math.floor(i / 2);
+    var xx = rx - cw - 2 + col * (cw + 4);
+    var yy = pry - 29 - row * 20;
+    out += '<g><rect x="' + xx + '" y="' + yy + '" width="' + cw + '" height="' + chh + '" rx="6" fill="#DCE3F2" stroke="#B9C3DC" stroke-width="1.6"/>' +
+      '<text x="' + (xx + cw / 2) + '" y="' + (yy + 13) + '" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#3A4260">' + fa(g) + '</text></g>';
+  });
+  if (weights.length > 4) {
+    out += '<text x="' + rx + '" y="' + (pry - 70) + '" text-anchor="middle" font-size="11" fill="#6B6480">و ' + fa(weights.length - 4) + ' وزنهٔ دیگر</text>';
+  }
+  if (!weights.length) {
+    out += '<text x="' + rx + '" y="' + (pry - 14) + '" text-anchor="middle" font-size="13" fill="#C9A87C">وزنه‌ها</text>';
+  }
+  /* محور */
+  out += '<circle cx="260" cy="122" r="13" fill="#E9A23B"/>';
+  out += '<circle cx="260" cy="122" r="6" fill="#FFF3DC"/>';
+  out += '</svg>';
+  return out;
+}
+
+var Balance = {
+  idx: 0,
+  locked: false,
+  zeroed: false,
+  objPlaced: false,
+  weights: [],
+  obj: null,
+  queue: [],
+  qi: 0,
+  bonus: false,
+  warned: false,
+  el: function (id) { return document.getElementById(id); },
+
+  start: function () {
+    this.idx = 0;
+    this.queue = [];
+    this.qi = 0;
+    this.obj = null;
+    this.enter();
+  },
+
+  enter: function () {
+    this.locked = false;
+    this.zeroed = false;
+    this.objPlaced = false;
+    this.weights = [];
+    this.bonus = false;
+    this.warned = false;
+    var lv = BAL_LEVELS[this.idx];
+    renderDots(this.el('balDots'), BAL_LEVELS.length, this.idx);
+    UI.clearFb(this.el('balFb'));
+    this.el('balActions').innerHTML = '';
+    if (lv.type === 'compare') this.renderCompare();
+    else if (lv.type === 'balance') this.renderBalance();
+    else if (lv.type === 'read') this.renderRead();
+    else this.renderConvert(lv);
+    armIdleHint();
+  },
+
+  /* ---------- مرحله ۱: مقایسه ---------- */
+  renderCompare: function () {
+    if (this.qi === 0 && !this.queue.length) {
+      this.queue = shuffle(BAL_PAIRS).slice(0, 3);
+      this.qi = 0;
+    }
+    var pair = this.queue[this.qi];
+    this.el('balTask').textContent = 'کدام سنگین‌تر است؟';
+    this.el('balSub').textContent = 'با دقت نگاه کن. اندازهٔ بزرگ همیشه سنگین‌تر نیست!';
+    var stage = this.el('balStage');
+    stage.innerHTML = '<div class="cmp-grid">' +
+      '<button class="cmp-card" data-i="0"><span class="em">' + pair.a.e + '</span><span class="nm">' + pair.a.n + '</span><span class="ms" data-ms>جرم: ؟</span></button>' +
+      '<button class="cmp-card" data-i="1"><span class="em">' + pair.b.e + '</span><span class="nm">' + pair.b.n + '</span><span class="ms" data-ms>جرم: ؟</span></button>' +
+      '</div>';
+    this.el('balTools').innerHTML = '';
+    var self = this;
+    var correct = pair.a.m > pair.b.m ? 0 : 1;
+    $$('.cmp-card', stage).forEach(function (card) {
+      card.addEventListener('click', function () {
+        if (self.locked) return;
+        var i = +card.getAttribute('data-i');
+        if (i === correct) {
+          self.locked = true;
+          card.classList.add('right');
+          $$('.cmp-card', stage).forEach(function (c, k) {
+            var obj = k === 0 ? pair.a : pair.b;
+            c.querySelector('[data-ms]').textContent = massLabel(obj.m);
+          });
+          SFX.good();
+          FX.burst(window.innerWidth / 2, window.innerHeight * 0.4, 24);
+          UI.fb(self.el('balFb'), 'ok', 'آفرین! ' + pair.a.n + ' ' + massLabel(pair.a.m) + ' و ' + pair.b.n + ' ' + massLabel(pair.b.m) + ' است.');
+          self.afterCompare();
+        } else {
+          card.classList.add('wrong');
+          window.setTimeout(function () { card.classList.remove('wrong'); }, 500);
+          SFX.bad();
+          UI.fb(self.el('balFb'), 'no', 'نزدیک بود! دوباره نگاه کن. جسم بزرگ‌تر همیشه سنگین‌تر نیست.');
+        }
+      });
+    });
+  },
+
+  afterCompare: function () {
+    var self = this;
+    var last = this.qi >= this.queue.length - 1;
+    UI.actions(this.el('balActions'), [{
+      label: last ? 'ادامه ▶' : 'نمونهٔ بعدی ▶',
+      cls: 'btn--mint',
+      onClick: function () {
+        if (last) {
+          completeLevel('balance', self.idx, false);
+          self.advance();
+        } else {
+          self.qi++;
+          self.locked = false;
+          UI.clearFb(self.el('balFb'));
+          self.el('balActions').innerHTML = '';
+          self.renderCompare();
+        }
+      }
+    }]);
+  },
+
+  /* ---------- مرحله ۲: متعادل‌کردن ---------- */
+  renderBalance: function () {
+    if (!this.obj) this.obj = pick(BAL_OBJECTS);
+    this.el('balTask').textContent = 'با وزنه‌ها ترازو را متعادل کن.';
+    this.el('balSub').textContent = 'اول ترازو را صفر کن، بعد جسم را آرام وسط کفه بگذار.';
+    this.paint();
+  },
+
+  paint: function () {
+    var sum = this.weights.reduce(function (a, b) { return a + b; }, 0);
+    var angle = 0;
+    if (!this.zeroed) angle = 6;
+    else if (this.objPlaced) angle = clamp((sum - this.obj.m) / 700, -1, 1) * 14;
+    var self = this;
+    var label = 'ترازوی دوکفه‌ای';
+    if (this.objPlaced) label += '؛ در کفهٔ راست ' + this.weights.length + ' وزنه گذاشته شده';
+    var stage = this.el('balStage');
+    stage.innerHTML =
+      '<div class="bal-wrap">' +
+        balanceSVG({ angle: angle, weights: this.weights, obj: this.objPlaced ? this.obj.e : null, zeroed: this.zeroed, label: label }) +
+        '<div class="gauge" aria-hidden="true"><div class="trk"><span class="zone"></span><span class="dot" id="balDot"></span></div></div>' +
+        '<div class="hint-line" id="balHint"></div>' +
+      '</div>';
+    var dot = document.getElementById('balDot');
+    var off = 0;
+    if (!this.zeroed) off = 0.55;
+    else if (this.objPlaced) off = clamp((sum - this.obj.m) / 600, -1, 1);
+    if (dot) dot.style.left = (50 + off * 42) + '%';
+
+    var hint = this.el('balHint');
+    if (hint) {
+      if (!this.zeroed) hint.innerHTML = '<span aria-hidden="true">⚙️</span> ترازو صفر نیست؛ اول صفرش کن.';
+      else if (!this.objPlaced) hint.innerHTML = '<span aria-hidden="true">👆</span> جسم را بکش و در کفهٔ چپ بگذار.';
+      else hint.innerHTML = '<span aria-hidden="true">⚖️</span> وزنه‌های کفهٔ راست: ' + (sum ? massLabel(sum) : 'هنوز وزنه‌ای نیست') + ' — ترازو باید صاف شود.';
+    }
+
+    var tools = this.el('balTools');
+    tools.innerHTML = '';
+    if (!this.zeroed) {
+      var zb = document.createElement('button');
+      zb.className = 'zero-btn';
+      zb.innerHTML = '⚙️ ترازو را صفر کن';
+      zb.addEventListener('click', function () {
+        self.zeroed = true;
+        SFX.pop();
+        UI.fb(self.el('balFb'), 'info', 'ترازو صفر شد. حالا جسم را آرام وسط کفه بگذار.');
+        self.paint();
+      });
+      tools.appendChild(zb);
+    }
+    if (!this.objPlaced) {
+      var card = document.createElement('button');
+      card.className = 'obj-card';
+      card.innerHTML = '<span class="em">' + this.obj.e + '</span><span>' + this.obj.n + '</span>';
+      card.setAttribute('aria-label', 'برداشتن ' + this.obj.n + ' و گذاشتن در کفه');
+      makeDraggable(card, function () {
+        if (!self.zeroed) {
+          SFX.bad();
+          UI.fb(self.el('balFb'), 'no', TXT.zeroFirst);
+          UI.say('اول ترازو را صفر کن. دکمهٔ «ترازو را صفر کن» را بزن.', 4200);
+          return;
+        }
+        self.objPlaced = true;
+        SFX.pop();
+        UI.fb(self.el('balFb'), 'info', TXT.centerObj + ' حالا وزنه‌ها را در کفهٔ دیگر بگذار.');
+        self.paint();
+      });
+      tools.appendChild(card);
+    } else {
+      [100, 200, 500, 1000].forEach(function (g) {
+        var w = document.createElement('button');
+        w.className = 'weight' + (g === 500 ? ' w500' : (g === 1000 ? ' w1000' : ''));
+        w.innerHTML = '<span class="knob"></span><span>' + fa(g) + '</span><span>گرم</span>';
+        w.setAttribute('aria-label', 'گذاشتن وزنهٔ ' + fa(g) + ' گرم');
+        makeDraggable(w, function () {
+          if (self.locked) return;
+          if (!self.objPlaced) {
+            SFX.bad();
+            UI.fb(self.el('balFb'), 'no', TXT.centerObj + ' اول جسم را در کفه بگذار.');
+            return;
+          }
+          self.weights.push(g);
+          SFX.pop();
+          self.paint();
+          self.checkBalance();
+        });
+        tools.appendChild(w);
+      });
+      if (this.weights.length) {
+        var rm = document.createElement('button');
+        rm.className = 'btn btn--ghost btn--sm';
+        rm.textContent = 'برداشتن وزنه‌ها';
+        rm.addEventListener('click', function () {
+          self.weights = [];
+          SFX.click();
+          self.paint();
+        });
+        tools.appendChild(rm);
+      }
+    }
+  },
+
+  checkBalance: function () {
+    var sum = this.weights.reduce(function (a, b) { return a + b; }, 0);
+    var diff = sum - this.obj.m;
+    if (Math.abs(diff) < 1) {
+      this.locked = true;
+      SFX.good();
+      SFX.star();
+      FX.burst(window.innerWidth / 2, window.innerHeight * 0.35, 30);
+      UI.fb(this.el('balFb'), 'ok', 'آفرین! جرم را درست اندازه گرفتی. ' + this.obj.n + ' ' + massLabel(this.obj.m) + ' است.');
+      UI.say('آفرین! ' + this.obj.n + ' ' + massLabel(this.obj.m) + ' است.', 5000, true);
+      var self = this;
+      UI.actions(this.el('balActions'), [{
+        label: 'ادامه ▶', cls: 'btn--mint', onClick: function () {
+          completeLevel('balance', self.idx, false);
+          self.advance();
+        }
+      }]);
+      return;
+    }
+    if (diff > 200 && !this.warned) {
+      this.warned = true;
+      UI.fb(this.el('balFb'), 'no', 'کمی زیاد شد. یکی از وزنه‌ها را بردار و دوباره امتحان کن.');
+    }
+  },
+
+  /* ---------- مرحله ۳: خواندن ---------- */
+  renderRead: function () {
+    this.el('balTask').textContent = 'این پرتقال با این وزنه‌ها متعادل است. جرمش چند گرم است؟';
+    this.el('balSub').textContent = 'وزنه‌ها را با هم جمع کن.';
+    this.el('balStage').innerHTML = '<div class="bal-wrap">' +
+      balanceSVG({ angle: 0, weights: [500, 200, 100], obj: '🍊', zeroed: true, label: 'ترازوی متعادل با وزنه‌های ۵۰۰ و ۲۰۰ و ۱۰۰ گرم' }) +
+      '</div>';
+    this.el('balTools').innerHTML = '';
+    var self = this;
+    choiceGrid(this.el('balStage'), [
+      { label: '۸۰۰ گرم', ok: true },
+      { label: '۷۰۰ گرم', ok: false },
+      { label: '۹۰۰ گرم', ok: false }
+    ], function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finishSimple('آفرین! ۵۰۰ + ۲۰۰ + ۱۰۰ = ۸۰۰ گرم. پس جرم پرتقال ۸۰۰ گرم است.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('balFb'), 'no', 'نزدیک بود! وزنه‌ها را یکی‌یکی با هم جمع کن.');
+      }
+    });
+  },
+
+  /* ---------- مرحله ۴ و ۵: تبدیل ---------- */
+  renderConvert: function (lv) {
+    this.el('balTask').textContent = lv.q;
+    this.el('balSub').textContent = 'یادت باشد: ۱ کیلوگرم = ۱۰۰۰ گرم';
+    this.el('balStage').innerHTML = '<div class="conv-big" aria-hidden="true">' +
+      '<span class="cb">۱ کیلوگرم</span><span class="ceq">=</span><span class="cb cb--sun">۱۰۰۰ گرم</span></div>';
+    this.el('balTools').innerHTML = '';
+    var self = this;
+    choiceGrid(this.el('balStage'), shuffle(lv.opts.map(function (o, i) {
+      return { label: o, ok: i === lv.a };
+    })), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finishSimple('آفرین! ' + lv.opts[lv.a] + '. ' + lv.hint);
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('balFb'), 'no', lv.hint);
+      }
+    });
+  },
+
+  finishSimple: function (msg) {
+    this.locked = true;
+    SFX.good();
+    FX.burst(window.innerWidth / 2, window.innerHeight * 0.38, 26);
+    UI.fb(this.el('balFb'), 'ok', msg);
+    var self = this;
+    UI.actions(this.el('balActions'), [{
+      label: 'ادامه ▶', cls: 'btn--mint', onClick: function () {
+        completeLevel('balance', self.idx, false);
+        self.advance();
+      }
+    }]);
+  },
+
+  advance: function () {
+    if (this.idx < BAL_LEVELS.length - 1) {
+      this.idx++;
+      this.obj = null;
+      this.queue = [];
+      this.qi = 0;
+      this.enter();
+    } else {
+      stationDone('balance', this.el('balStage'), this.el('balActions'), this.el('balFb'));
+      this.el('balTask').textContent = 'ایستگاه بازار ترازو';
+      this.el('balSub').textContent = '';
+      this.el('balTools').innerHTML = '';
+    }
+  }
+};
+
+/* ---------- ساخت شبکهٔ گزینه‌ها ---------- */
+function choiceGrid(host, items, onPick) {
+  var old = host.querySelector('.choices');
+  if (old) old.parentNode.removeChild(old);
+  var wrap = document.createElement('div');
+  wrap.className = 'choices';
+  items.forEach(function (it, i) {
+    var b = document.createElement('button');
+    b.className = 'choice';
+    b.innerHTML = '<span class="badge" aria-hidden="true">' + (it.icon || fa(i + 1)) + '</span><span>' + it.label + '</span>';
+    b.addEventListener('click', function () {
+      if (b.classList.contains('is-right') || b.classList.contains('is-off')) return;
+      SFX.click();
+      onPick(!!it.ok, b);
+    });
+    wrap.appendChild(b);
+  });
+  host.appendChild(wrap);
+  return wrap;
+}
+
+/* ---------- کشیدن با انگشت و ماوس ---------- */
+function makeDraggable(el, onDrop) {
+  var startX = 0, startY = 0, dragging = false, ghost = null, rect = null;
+  el.addEventListener('pointerdown', function (e) {
+    if (el.disabled) return;
+    e.preventDefault();
+    rect = el.getBoundingClientRect();
+    dragging = true;
+    try { el.setPointerCapture(e.pointerId); } catch (err) { /* بی‌صدا */ }
+    ghost = el.cloneNode(true);
+    ghost.classList.add('dragging');
+    ghost.style.width = rect.width + 'px';
+    ghost.style.height = rect.height + 'px';
+    ghost.style.left = rect.left + 'px';
+    ghost.style.top = rect.top + 'px';
+    document.body.appendChild(ghost);
+    el.style.opacity = '0.25';
+    startX = e.clientX; startY = e.clientY;
+    SFX.click();
+  });
+  el.addEventListener('pointermove', function (e) {
+    if (!dragging || !ghost) return;
+    ghost.style.left = (rect.left + e.clientX - startX) + 'px';
+    ghost.style.top = (rect.top + e.clientY - startY) + 'px';
+  });
+  function end() {
+    if (!dragging) return;
+    dragging = false;
+    if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+    ghost = null;
+    el.style.opacity = '';
+    onDrop();
+  }
+  el.addEventListener('pointerup', end);
+  el.addEventListener('pointercancel', end);
+  el.addEventListener('pointerleave', function () { /* نگه‌داشتن درگ بیرون از عنصر */ });
+}
+
+/* ============================================================
+   کارگاه خط‌کش
+   ============================================================ */
+var RULER_OBJECTS = {
+  pencil: { n: 'مداد', cm: 7, ratio: 5, svg: '<svg viewBox="0 0 100 20" preserveAspectRatio="none"><rect x="0" y="2" width="14" height="16" rx="4" fill="#FF9E9E"/><rect x="10" y="2" width="4" height="16" fill="#E8C39A"/><rect x="14" y="3" width="70" height="14" fill="#FFD35E"/><rect x="14" y="3" width="70" height="6" fill="#FFE79B"/><path d="M84 3 L100 10 L84 17 z" fill="#F2D2A8"/><path d="M94 7 L100 10 L94 13 z" fill="#3B3050"/></svg>' },
+  eraser: { n: 'پاک‌کن', cm: 4, ratio: 2.2, svg: '<svg viewBox="0 0 100 45" preserveAspectRatio="none"><rect x="1" y="1" width="98" height="43" rx="9" fill="#FFB3C7"/><rect x="1" y="1" width="98" height="16" rx="9" fill="#FF8FB0"/><rect x="1" y="1" width="34" height="43" rx="9" fill="#F7F1E6"/><rect x="30" y="1" width="6" height="43" fill="#E9DFCC"/></svg>' },
+  spoon: { n: 'قاشق', cm: 6, ratio: 5.5, svg: '<svg viewBox="0 0 100 18" preserveAspectRatio="none"><rect x="26" y="6" width="72" height="6" rx="3" fill="#CFD8E6"/><rect x="26" y="6" width="72" height="2" rx="1" fill="#EFF4FA"/><ellipse cx="14" cy="9" rx="14" ry="8" fill="#CFD8E6"/><ellipse cx="12" cy="7" rx="8" ry="4" fill="#EFF4FA"/></svg>' },
+  key: { n: 'کلید', cm: 3, ratio: 3, svg: '<svg viewBox="0 0 100 34" preserveAspectRatio="none"><circle cx="16" cy="17" r="14" fill="#F2C24A"/><circle cx="16" cy="17" r="7" fill="#FFF6DF"/><rect x="28" y="13" width="66" height="8" rx="4" fill="#F2C24A"/><rect x="70" y="21" width="7" height="11" rx="3" fill="#F2C24A"/><rect x="86" y="21" width="7" height="11" rx="3" fill="#F2C24A"/></svg>' },
+  crayon: { n: 'مدادشمعی', cm: 5, ratio: 6, svg: '<svg viewBox="0 0 100 16" preserveAspectRatio="none"><rect x="0" y="1" width="88" height="14" rx="4" fill="#A78BFA"/><rect x="0" y="1" width="88" height="5" rx="2.5" fill="#C9B8FF"/><path d="M88 1 L100 8 L88 15 z" fill="#8B6BF0"/><rect x="0" y="1" width="18" height="14" rx="4" fill="#E3D8FF"/></svg>' }
+};
+
+var RULER_LEVELS = [
+  { type: 'tool' },
+  { type: 'measure', obj: 'pencil', estimate: false },
+  { type: 'measure', obj: 'eraser', estimate: true },
+  { type: 'units' },
+  { type: 'mm' }
+];
+
+var Ruler = {
+  idx: 0,
+  ppc: 30,
+  zeroX: 26,
+  maxCm: 15,
+  aligned: false,
+  locked: false,
+  bonus: false,
+  guess: null,
+  unitState: {},
+  el: function (id) { return document.getElementById(id); },
+
+  start: function () { this.idx = 0; this.enter(); },
+
+  enter: function () {
+    this.locked = false;
+    this.aligned = false;
+    this.bonus = false;
+    this.guess = null;
+    var lv = RULER_LEVELS[this.idx];
+    renderDots(this.el('rulDots'), RULER_LEVELS.length, this.idx);
+    UI.clearFb(this.el('rulFb'));
+    this.el('rulActions').innerHTML = '';
+    this.el('rulTools').innerHTML = '';
+    if (lv.type === 'tool') this.renderTool();
+    else if (lv.type === 'measure') this.renderMeasure(lv);
+    else if (lv.type === 'units') this.renderUnits();
+    else this.renderMM();
+    armIdleHint();
+  },
+
+  renderTool: function () {
+    this.el('rulTask').textContent = 'برای اندازه‌گیری طول مداد کدام ابزار بهتر است؟';
+    this.el('rulSub').textContent = 'هر ابزار برای یک کار ساخته شده است.';
+    this.el('rulStage').innerHTML = '<div class="tool-row" aria-hidden="true">' +
+      '<span class="tool-chip">✏️</span><span class="tool-q">؟</span></div>';
+    var self = this;
+    choiceGrid(this.el('rulStage'), shuffle([
+      { label: 'خط‌کش', icon: '📏', ok: true },
+      { label: 'ترازو', icon: '⚖️', ok: false },
+      { label: 'پیمانه', icon: '🧪', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! برای طول مداد، خط‌کش مناسب است. واحد آن سانتی‌متر است.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('rulFb'), 'no', 'این ابزار برای چیز دیگری است. به شکل ابزارها نگاه کن.');
+      }
+    });
+  },
+
+  renderMeasure: function (lv) {
+    var obj = RULER_OBJECTS[lv.obj];
+    this.el('rulTask').textContent = 'طول ' + obj.n + ' را اندازه بگیر.';
+    this.el('rulSub').textContent = lv.estimate ? 'اول حدس بزن، بعد اندازه بگیر.' : 'ابتدای جسم را روی صفر خط‌کش بگذار.';
+    this.el('rulStage').innerHTML =
+      '<div class="ruler-stage" id="rulBox">' +
+        '<div class="obj-tip" id="rulTip">جسم را به سمت صفر بکش</div>' +
+        '<div class="measure-obj" id="rulObj" role="button" tabindex="0" aria-label="جسم متحرک؛ با کلیدهای جهت‌دار جابه‌جا کن"></div>' +
+        '<svg class="ruler-svg" id="rulSvg" aria-hidden="true"></svg>' +
+      '</div>';
+    this.buildRuler(lv);
+    if (lv.estimate) this.renderEstimate(lv);
+  },
+
+  buildRuler: function (lv) {
+    var box = document.getElementById('rulBox');
+    var svg = document.getElementById('rulSvg');
+    var objEl = document.getElementById('rulObj');
+    if (!box || !svg || !objEl) return;
+    var w = box.clientWidth;
+    var h = svg.getBoundingClientRect().height || 96;
+    var self = this;
+    this.maxCm = w < 430 ? 12 : 15;
+    this.zeroX = 26;
+    this.ppc = (w - this.zeroX - 16) / this.maxCm;
+    this.w = w; this.h = h;
+
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    var s = '';
+    s += '<rect x="0" y="' + (h - 74) + '" width="' + w + '" height="74" fill="#FFF6E0"/>';
+    s += '<rect x="0" y="' + (h - 74) + '" width="' + w + '" height="74" fill="none" stroke="#E9D3A8" stroke-width="2"/>';
+    s += '<rect x="0" y="' + (h - 74) + '" width="' + w + '" height="10" fill="#FFE7B8"/>';
+    for (var c = 0; c <= this.maxCm; c++) {
+      var x = this.zeroX + c * this.ppc;
+      s += '<line x1="' + x + '" y1="' + (h - 64) + '" x2="' + x + '" y2="' + (h - 20) + '" stroke="#B08A4E" stroke-width="2"/>';
+      s += '<text x="' + x + '" y="' + (h - 6) + '" text-anchor="middle" font-size="14" font-weight="bold" fill="#8A6A34">' + fa(c) + '</text>';
+      if (c < this.maxCm) {
+        for (var m = 1; m < 10; m++) {
+          var mx = x + (m * this.ppc / 10);
+          var th = (m === 5) ? 16 : 9;
+          s += '<line x1="' + mx + '" y1="' + (h - 64) + '" x2="' + mx + '" y2="' + (h - 64 + th) + '" stroke="#C9A87C" stroke-width="1"/>';
+        }
+      }
+    }
+    s += '<circle class="zero-glow" cx="' + this.zeroX + '" cy="' + (h - 74) + '" r="9" fill="#FFC93C"/>';
+    svg.innerHTML = s;
+
+    var cm = RULER_OBJECTS[lv.obj].cm;
+    var ow = cm * this.ppc;
+    objEl.style.width = ow + 'px';
+    objEl.style.bottom = '74px';
+    objEl.style.left = (this.zeroX + Math.min(ow * 0.9, 70)) + 'px';
+    objEl.innerHTML = RULER_OBJECTS[lv.obj].svg;
+    this.objEl = objEl;
+    this.objWidth = ow;
+    this.lv = lv;
+    this.bindDrag();
+  },
+
+  bindDrag: function () {
+    var el = this.objEl, self = this;
+    if (!el) return;
+    var startX = 0, startLeft = 0, dragging = false;
+    function down(e) {
+      if (self.locked) return;
+      e.preventDefault();
+      dragging = true;
+      startX = e.clientX;
+      startLeft = parseFloat(el.style.left) || 0;
+      el.classList.add('grabbing');
+      try { el.setPointerCapture(e.pointerId); } catch (err) { /* بی‌صدا */ }
+      SFX.click();
+    }
+    function move(e) {
+      if (!dragging) return;
+      var maxLeft = Math.max(0, self.w - self.objWidth - 4);
+      var left = clamp(startLeft + (e.clientX - startX), 0, maxLeft);
+      el.style.left = left + 'px';
+    }
+    function up() {
+      if (!dragging) return;
+      dragging = false;
+      el.classList.remove('grabbing');
+      var left = parseFloat(el.style.left) || 0;
+      if (Math.abs(left - self.zeroX) < 12) {
+        el.style.left = self.zeroX + 'px';
+        el.classList.add('aligned');
+        if (!self.aligned) {
+          self.aligned = true;
+          SFX.pop();
+          self.showReadChoices();
+        }
+      } else if (left < self.zeroX + 12) {
+        el.style.left = self.zeroX + 'px';
+      }
+    }
+    el.addEventListener('pointerdown', down);
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    el.addEventListener('keydown', function (e) {
+      if (self.locked) return;
+      var step = self.ppc / 2;
+      var left = parseFloat(el.style.left) || 0;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var d = e.key === 'ArrowRight' ? step : -step;
+        el.style.left = clamp(left + d, 0, Math.max(0, self.w - self.objWidth - 4)) + 'px';
+        if (Math.abs(parseFloat(el.style.left) - self.zeroX) < 3) {
+          el.style.left = self.zeroX + 'px';
+          el.classList.add('aligned');
+          if (!self.aligned) { self.aligned = true; SFX.pop(); self.showReadChoices(); }
+        }
+      }
+    });
+  },
+
+  renderEstimate: function (lv) {
+    var obj = RULER_OBJECTS[lv.obj];
+    var self = this;
+    var stage = this.el('rulStage');
+    var box = document.createElement('div');
+    box.className = 'est-box';
+    box.innerHTML = '<div class="est-q">قبل از اندازه‌گیری، حدس بزن: طول ' + obj.n + ' چند سانتی‌متر است؟</div>';
+    var row = document.createElement('div');
+    row.className = 'est-row';
+    var correct = obj.cm;
+    var opts = shuffle([correct, correct + 3, Math.max(1, correct - 2)]);
+    opts.forEach(function (v) {
+      var b = document.createElement('button');
+      b.className = 'est-btn';
+      b.textContent = fa(v) + ' سانتی‌متر';
+      b.addEventListener('click', function () {
+        if (self.guess !== null) return;
+        self.guess = v;
+        SFX.pop();
+        $$('.est-btn', row).forEach(function (x) { x.classList.add('is-off'); });
+        b.classList.remove('is-off');
+        b.classList.add('picked');
+        if (Math.abs(v - correct) <= 1) {
+          self.bonus = true;
+          UI.fb(self.el('rulFb'), 'ok', 'حدس خوبی بود! حالا با خط‌کش اندازه بگیر.');
+        } else {
+          UI.fb(self.el('rulFb'), 'info', 'حالا با خط‌کش اندازه بگیر و حدس خودت را بررسی کن.');
+        }
+        UI.say('حالا جسم را بکش تا ابتدایش روی صفر خط‌کش بیفتد.', 5000);
+      });
+      row.appendChild(b);
+    });
+    box.appendChild(row);
+    stage.appendChild(box);
+  },
+
+  showReadChoices: function () {
+    var lv = this.lv;
+    var obj = RULER_OBJECTS[lv.obj];
+    var cm = obj.cm;
+    var tip = this.el('rulTip');
+    if (tip) tip.textContent = 'حالا عدد انتهای جسم را بخوان';
+    this.el('rulTask').textContent = 'طول ' + obj.n + ' چند سانتی‌متر است؟';
+    var self = this;
+    var opts = [cm, cm + 2, Math.max(1, cm - 3)];
+    if (opts[1] === opts[0]) opts[1] = cm + 3;
+    choiceGrid(this.el('rulStage'), shuffle(opts.map(function (v) {
+      return { label: fa(v) + ' سانتی‌متر', ok: v === cm };
+    })), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        var bonus = self.bonus;
+        self.finish('آفرین! طول ' + obj.n + ' ' + fa(cm) + ' سانتی‌متر است.' + (bonus ? ' حدس تو هم نزدیک بود!' : ''), bonus);
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('rulFb'), 'no', 'از صفر شروع کن و عدد انتهای جسم را بخوان.');
+      }
+    });
+  },
+
+  renderUnits: function () {
+    this.el('rulTask').textContent = 'واحد مناسب را انتخاب کن.';
+    this.el('rulSub').textContent = 'سانتی‌متر، متر یا کیلومتر؟';
+    var rows = [
+      { q: 'طول مداد', a: 'سانتی‌متر', icon: '✏️' },
+      { q: 'طول کلاس', a: 'متر', icon: '🏫' },
+      { q: 'فاصلهٔ دو شهر', a: 'کیلومتر', icon: '🏙️' }
+    ];
+    var self = this;
+    var html = '<div class="unit-rows">';
+    rows.forEach(function (r, i) {
+      html += '<div class="unit-row" data-i="' + i + '">' +
+        '<div class="ur-q"><span aria-hidden="true">' + r.icon + '</span> ' + r.q + '</div>' +
+        '<div class="ur-btns">' +
+          '<button class="ub" data-v="سانتی‌متر">سانتی‌متر</button>' +
+          '<button class="ub" data-v="متر">متر</button>' +
+          '<button class="ub" data-v="کیلومتر">کیلومتر</button>' +
+        '</div></div>';
+    });
+    html += '</div>';
+    var stage = this.el('rulStage');
+    stage.innerHTML = html;
+    var solved = 0;
+    $$('.unit-row', stage).forEach(function (row, i) {
+      var btns = $$('.ub', row);
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (row.classList.contains('ok')) return;
+          if (b.getAttribute('data-v') === rows[i].a) {
+            row.classList.add('ok');
+            b.classList.add('is-right');
+            btns.forEach(function (x) { x.disabled = true; });
+            solved++;
+            SFX.pop();
+            if (solved === rows.length) {
+              self.finish('آفرین! مداد را با سانتی‌متر، کلاس را با متر و فاصلهٔ شهرها را با کیلومتر می‌سنجیم.');
+            } else {
+              UI.fb(self.el('rulFb'), 'info', 'درست است! ' + (rows.length - solved) + ' مورد دیگر مانده.');
+            }
+          } else {
+            b.classList.add('is-wrong');
+            SFX.bad();
+            window.setTimeout(function () { b.classList.remove('is-wrong'); }, 500);
+            UI.fb(self.el('rulFb'), 'no', 'به اندازهٔ آن چیز فکر کن. خیلی بزرگ است یا کوچک؟');
+          }
+        });
+      });
+    });
+  },
+
+  renderMM: function () {
+    this.el('rulTask').textContent = '۱۰ میلی‌متر چند سانتی‌متر است؟';
+    this.el('rulSub').textContent = 'روی خط‌کش، ۱۰ خط کوچک برابر ۱ سانتی‌متر است.';
+    this.el('rulStage').innerHTML = '<div class="mm-demo" aria-hidden="true">' +
+      '<div class="mm-seg">' + Array(11).join('<i></i>') + '</div>' +
+      '<div class="mm-lbl">۱۰ میلی‌متر = ۱ سانتی‌متر</div></div>';
+    var self = this;
+    choiceGrid(this.el('rulStage'), shuffle([
+      { label: '۱ سانتی‌متر', ok: true },
+      { label: '۱۰ سانتی‌متر', ok: false },
+      { label: '۱۰۰ سانتی‌متر', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! ۱۰ میلی‌متر برابر ۱ سانتی‌متر است.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('rulFb'), 'no', 'به خط‌های کوچک بین دو عدد نگاه کن؛ ۱۰ تا هستند.');
+      }
+    });
+  },
+
+  finish: function (msg, bonus) {
+    this.locked = true;
+    SFX.good();
+    FX.burst(window.innerWidth / 2, window.innerHeight * 0.36, 28);
+    UI.fb(this.el('rulFb'), 'ok', msg);
+    var self = this;
+    UI.actions(this.el('rulActions'), [{
+      label: 'ادامه ▶', cls: 'btn--mint', onClick: function () {
+        completeLevel('ruler', self.idx, !!bonus);
+        self.advance();
+      }
+    }]);
+  },
+
+  advance: function () {
+    if (this.idx < RULER_LEVELS.length - 1) {
+      this.idx++;
+      this.enter();
+    } else {
+      stationDone('ruler', this.el('rulStage'), this.el('rulActions'), this.el('rulFb'));
+      this.el('rulTask').textContent = 'ایستگاه کارگاه خط‌کش';
+      this.el('rulSub').textContent = '';
+      this.el('rulTools').innerHTML = '';
+    }
+  }
+};
+/* ============================================================
+   بخش ۳ — آزمایشگاه گنجایش و جزیرهٔ نقشه
+   ============================================================ */
+
+/* ---------- آزمایشگاه گنجایش ---------- */
+var CAP_LEVELS = [
+  { type: 'tool' },
+  { type: 'pour', target: 250, capacity: 400, step: 5, tol: 8 },
+  { type: 'pour', target: 1000, capacity: 1000, step: 10, tol: 12 },
+  { type: 'sub' },
+  { type: 'eye' }
+];
+
+var BEK = { top: 58, bot: 300, x0: 48, x1: 192 };
+
+function beakerSVG(cap, target) {
+  var top = BEK.top, bot = BEK.bot;
+  var s = '<svg class="beaker-svg" viewBox="0 0 240 340" role="img" aria-label="ظرف درجه‌بندی‌شده با گنجایش ' + fa(cap) + ' میلی‌لیتر">';
+  s += '<ellipse cx="120" cy="312" rx="76" ry="9" fill="rgba(120,90,50,.10)"/>';
+  s += '<defs><clipPath id="bekClip"><rect x="' + BEK.x0 + '" y="' + (top + 2) + '" width="' + (BEK.x1 - BEK.x0) + '" height="' + (bot - top - 4) + '" rx="12"/></clipPath></defs>';
+  s += '<g clip-path="url(#bekClip)">';
+  s += '<rect id="bekLiquid" x="' + BEK.x0 + '" y="' + bot + '" width="' + (BEK.x1 - BEK.x0) + '" height="0" fill="#6FD3F2"/>';
+  s += '<ellipse id="bekSurf" cx="120" cy="' + bot + '" rx="72" ry="7" fill="#B7ECFB"/>';
+  s += '<circle class="bub" cx="90" cy="' + (bot - 20) + '" r="4" fill="#FFFFFF" opacity=".55"/>';
+  s += '<circle class="bub b2" cx="130" cy="' + (bot - 40) + '" r="3" fill="#FFFFFF" opacity=".5"/>';
+  s += '<circle class="bub b3" cx="112" cy="' + (bot - 60) + '" r="5" fill="#FFFFFF" opacity=".4"/>';
+  s += '</g>';
+  s += '<rect x="' + BEK.x0 + '" y="' + top + '" width="' + (BEK.x1 - BEK.x0) + '" height="' + (bot - top) + '" rx="14" fill="rgba(255,255,255,.35)" stroke="#9FCFE4" stroke-width="4"/>';
+  s += '<rect x="' + (BEK.x0 + 6) + '" y="' + (top + 8) + '" width="10" height="' + (bot - top - 40) + '" rx="5" fill="#FFFFFF" opacity=".55"/>';
+  s += '<path d="M' + BEK.x0 + ' ' + (top + 4) + ' q-14 6 -10 20" fill="none" stroke="#9FCFE4" stroke-width="4" stroke-linecap="round"/>';
+
+  var stepM = cap <= 500 ? 50 : 100;
+  for (var v = 0; v <= cap; v += stepM) {
+    var y = bot - (v / cap) * (bot - top);
+    var big = (v % (cap <= 500 ? 100 : 200) === 0);
+    s += '<line x1="' + (BEK.x1 - (big ? 18 : 10)) + '" y1="' + y + '" x2="' + BEK.x1 + '" y2="' + y + '" stroke="#7FB6CE" stroke-width="' + (big ? 2.4 : 1.4) + '"/>';
+    if (big) {
+      s += '<text x="' + (BEK.x1 + 8) + '" y="' + (y + 4.5) + '" direction="ltr" text-anchor="start" font-size="14" font-weight="bold" fill="#3E7089">' + fa(v) + '</text>';
+    }
+  }
+  if (target) {
+    var ty = bot - (target / cap) * (bot - top);
+    s += '<line x1="' + (BEK.x0 - 4) + '" y1="' + ty + '" x2="' + (BEK.x1 + 2) + '" y2="' + ty + '" stroke="#FF7A6B" stroke-width="2.6" stroke-dasharray="7 6"/>';
+    s += '<text x="' + (BEK.x0 + 4) + '" y="' + (ty - 8) + '" direction="ltr" text-anchor="start" font-size="13" font-weight="bold" fill="#D9452F">هدف</text>';
+  }
+  s += '<text x="120" y="' + (bot + 22) + '" text-anchor="middle" font-size="13" font-weight="bold" fill="#3E7089">' + fa(cap) + ' میلی‌لیتر</text>';
+  s += '</svg>';
+  return s;
+}
+
+var Capacity = {
+  idx: 0,
+  value: 0,
+  pouring: false,
+  timer: 0,
+  locked: false,
+  warned: false,
+  cap: 400,
+  target: 250,
+  el: function (id) { return document.getElementById(id); },
+
+  start: function () { this.idx = 0; this.enter(); },
+
+  enter: function () {
+    this.stopPour();
+    this.value = 0;
+    this.locked = false;
+    this.warned = false;
+    var lv = CAP_LEVELS[this.idx];
+    renderDots(this.el('capDots'), CAP_LEVELS.length, this.idx);
+    UI.clearFb(this.el('capFb'));
+    this.el('capActions').innerHTML = '';
+    this.el('capTools').innerHTML = '';
+    if (lv.type === 'tool') this.renderTool();
+    else if (lv.type === 'pour') this.renderPour(lv);
+    else if (lv.type === 'sub') this.renderSub();
+    else this.renderEye();
+    armIdleHint();
+  },
+
+  renderTool: function () {
+    this.el('capTask').textContent = 'برای اندازه‌گیری مقدار آب کدام وسیله مناسب است؟';
+    this.el('capSub').textContent = 'به شکل ظرف‌ها دقت کن.';
+    this.el('capStage').innerHTML = '<div class="tool-row" aria-hidden="true"><span class="tool-chip">💧</span><span class="tool-q">؟</span></div>';
+    var self = this;
+    choiceGrid(this.el('capStage'), shuffle([
+      { label: 'پیمانهٔ درجه‌بندی‌شده', icon: '🧪', ok: true },
+      { label: 'خط‌کش', icon: '📏', ok: false },
+      { label: 'ترازو', icon: '⚖️', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! گنجایش مایع را با پیمانه یا ظرف درجه‌بندی‌شده می‌سنجیم.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('capFb'), 'no', 'این وسیله برای چیز دیگری است. ما می‌خواهیم مقدار مایع را بدانیم.');
+      }
+    });
+  },
+
+  renderPour: function (lv) {
+    this.cap = lv.capacity;
+    this.target = lv.target;
+    this.step = lv.step;
+    this.tol = lv.tol;
+    this.value = 0;
+    this.el('capTask').textContent = 'آن‌قدر بریز تا ' + volLabel(lv.target) + ' شود.';
+    this.el('capSub').textContent = 'دکمهٔ «بریز» را نگه دار، و به‌موقع رها کن.';
+    this.el('capStage').innerHTML =
+      '<div class="lab-wrap">' +
+        '<div class="beaker-box" id="bekBox">' + beakerSVG(lv.capacity, lv.target) + '</div>' +
+        '<div class="pour-panel">' +
+          '<div class="readout"><span id="bekRead">۰</span><small>میلی‌لیتر</small></div>' +
+          '<button class="pour-btn" id="pourBtn"><span class="ic" aria-hidden="true">💧</span><span>بریز</span></button>' +
+          '<button class="btn btn--ghost btn--sm" id="emptyBtn">خالی کن</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="hint-line"><span aria-hidden="true">👁️</span> ظرف را هم‌سطح چشم نگاه کن.</div>';
+    var self = this;
+    var btn = document.getElementById('pourBtn');
+    var empty = document.getElementById('emptyBtn');
+    btn.addEventListener('pointerdown', function (e) { e.preventDefault(); self.startPour(); });
+    btn.addEventListener('pointerup', function () { self.stopPour(); });
+    btn.addEventListener('pointercancel', function () { self.stopPour(); });
+    btn.addEventListener('pointerleave', function () { self.stopPour(); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); self.addStep(); }
+    });
+    empty.addEventListener('click', function () {
+      self.stopPour();
+      self.value = 0;
+      SFX.whoosh();
+      self.update();
+      UI.clearFb(self.el('capFb'));
+      self.warned = false;
+    });
+    this.update();
+  },
+
+  startPour: function () {
+    if (this.locked || this.pouring) return;
+    this.pouring = true;
+    var self = this;
+    this.addStep();
+    this.timer = window.setInterval(function () { self.addStep(); }, 90);
+  },
+  stopPour: function () {
+    this.pouring = false;
+    if (this.timer) { window.clearInterval(this.timer); this.timer = 0; }
+  },
+  addStep: function () {
+    if (this.locked) { this.stopPour(); return; }
+    this.value = Math.min(this.cap, this.value + this.step);
+    SFX.drip();
+    this.update();
+    if (Math.abs(this.value - this.target) <= this.tol) {
+      this.value = this.target;
+      this.update();
+      this.success();
+    } else if (this.value > this.target + this.tol && !this.warned) {
+      this.warned = true;
+      UI.fb(this.el('capFb'), 'no', 'کمی بیشتر از هدف شد. «خالی کن» را بزن و دوباره امتحان کن.');
+    }
+  },
+  update: function () {
+    var liq = document.getElementById('bekLiquid');
+    var surf = document.getElementById('bekSurf');
+    var read = document.getElementById('bekRead');
+    var top = BEK.top, bot = BEK.bot;
+    var frac = clamp(this.value / this.cap, 0, 1);
+    var y = bot - frac * (bot - top);
+    if (liq) { liq.setAttribute('y', y); liq.setAttribute('height', Math.max(0, bot - y)); }
+    if (surf) { surf.setAttribute('cy', y); }
+    if (read) { read.textContent = fa(this.value); }
+  },
+  success: function () {
+    this.locked = true;
+    this.stopPour();
+    SFX.good();
+    FX.burst(window.innerWidth / 2, window.innerHeight * 0.36, 26);
+    UI.fb(this.el('capFb'), 'ok', 'آفرین! ' + volLabel(this.value) + ' شد. حالا دقیقاً روی هدف است.');
+    var self = this;
+    UI.actions(this.el('capActions'), [{
+      label: 'ادامه ▶', cls: 'btn--mint', onClick: function () {
+        completeLevel('capacity', self.idx, false);
+        self.advance();
+      }
+    }]);
+  },
+
+  renderSub: function () {
+    this.el('capTask').textContent = 'یک بطری ۱ لیتری داریم. ۲۵۰ میلی‌لیتر از آن را مصرف می‌کنیم. چقدر می‌ماند؟';
+    this.el('capSub').textContent = '۱ لیتر = ۱۰۰۰ میلی‌لیتر';
+    this.el('capStage').innerHTML = '<div class="sub-demo" aria-hidden="true">' +
+      '<div class="sd-row"><span class="sd-lbl">کل</span><div class="sd-bar"><i style="width:100%"></i></div><span class="sd-v">۱۰۰۰</span></div>' +
+      '<div class="sd-row"><span class="sd-lbl">مصرف</span><div class="sd-bar"><i class="used" style="width:25%"></i></div><span class="sd-v">۲۵۰</span></div>' +
+      '<div class="sd-row"><span class="sd-lbl">مانده</span><div class="sd-bar"><i class="left" style="width:75%"></i></div><span class="sd-v">؟</span></div>' +
+      '</div>';
+    var self = this;
+    choiceGrid(this.el('capStage'), shuffle([
+      { label: '۷۵۰ میلی‌لیتر', ok: true },
+      { label: '۲۵۰ میلی‌لیتر', ok: false },
+      { label: '۹۵۰ میلی‌لیتر', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! ۱۰۰۰ − ۲۵۰ = ۷۵۰ میلی‌لیتر.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('capFb'), 'no', 'از ۱۰۰۰ میلی‌لیتر، ۲۵۰ میلی‌لیتر کم کن.');
+      }
+    });
+  },
+
+  renderEye: function () {
+    this.el('capTask').textContent = 'برای خواندن مقدار مایع، از کجا باید نگاه کنیم؟';
+    this.el('capSub').textContent = 'اگر کج نگاه کنیم، عدد را اشتباه می‌خوانیم.';
+    this.el('capStage').innerHTML = '<div class="eye-demo" aria-hidden="true">' +
+      '<div class="ed"><span>🙄</span><small>از بالا</small></div>' +
+      '<div class="ed good"><span>👁️</span><small>هم‌سطح</small></div>' +
+      '<div class="ed"><span>😒</span><small>از پهلو</small></div>' +
+      '</div>';
+    var self = this;
+    choiceGrid(this.el('capStage'), shuffle([
+      { label: 'از هم‌سطح چشم', icon: '👁️', ok: true },
+      { label: 'از بالای ظرف', icon: '⬆️', ok: false },
+      { label: 'از پهلو و کج', icon: '↔️', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! از هم‌سطح چشم نگاه می‌کنیم تا خط مایع را درست بخوانیم.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('capFb'), 'no', TXT.eyeLevel + ' اگر کج نگاه کنی، خطا می‌کنی.');
+      }
+    });
+  },
+
+  finish: function (msg) {
+    this.locked = true;
+    this.stopPour();
+    SFX.good();
+    FX.burst(window.innerWidth / 2, window.innerHeight * 0.36, 26);
+    UI.fb(this.el('capFb'), 'ok', msg);
+    var self = this;
+    UI.actions(this.el('capActions'), [{
+      label: 'ادامه ▶', cls: 'btn--mint', onClick: function () {
+        completeLevel('capacity', self.idx, false);
+        self.advance();
+      }
+    }]);
+  },
+
+  advance: function () {
+    if (this.idx < CAP_LEVELS.length - 1) {
+      this.idx++;
+      this.enter();
+    } else {
+      stationDone('capacity', this.el('capStage'), this.el('capActions'), this.el('capFb'));
+      this.el('capTask').textContent = 'ایستگاه آزمایشگاه گنجایش';
+      this.el('capSub').textContent = '';
+      this.el('capTools').innerHTML = '';
+    }
+  }
+};
+
+/* ---------- جزیرهٔ نقشه ---------- */
+var MAP_LEVELS = [
+  { type: 'concept' },
+  { type: 'scale', cm: 2 },
+  { type: 'scale', cm: 4 },
+  { type: 'class' },
+  { type: 'reverse', km: 5 }
+];
+
+function mapSVG(o) {
+  o = o || {};
+  var cm = o.cm || 0;
+  var s = '<svg class="map-svg" viewBox="0 0 640 400" role="img" aria-label="' + esc(o.label || 'نقشهٔ جزیره با مقیاس') + '">';
+  s += '<defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CBEEFB"/><stop offset="1" stop-color="#A8DEF5"/></linearGradient></defs>';
+  s += '<rect width="640" height="400" fill="url(#seaG)"/>';
+  for (var i = 0; i < 5; i++) {
+    var wy = 40 + i * 78;
+    s += '<path d="M0 ' + wy + ' q40 -10 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".45"/>';
+  }
+  /* جزیرهٔ چپ */
+  s += '<ellipse cx="132" cy="150" rx="104" ry="66" fill="#FCE7BE" opacity=".95"/>';
+  s += '<ellipse cx="132" cy="142" rx="88" ry="52" fill="#A9E5A0"/>';
+  s += '<ellipse cx="104" cy="126" rx="30" ry="18" fill="#C7F0BC"/>';
+  s += '<text x="132" y="158" text-anchor="middle" font-size="46">🏝️</text>';
+  s += '<text x="132" y="196" text-anchor="middle" font-size="13" font-weight="bold" fill="#3F7A44">جزیرهٔ آغاز</text>';
+  /* جزیرهٔ راست */
+  s += '<ellipse cx="516" cy="228" rx="96" ry="62" fill="#FCE7BE" opacity=".95"/>';
+  s += '<ellipse cx="516" cy="220" rx="80" ry="48" fill="#A9E5A0"/>';
+  s += '<text x="516" y="236" text-anchor="middle" font-size="44">🏰</text>';
+  s += '<text x="516" y="272" text-anchor="middle" font-size="13" font-weight="bold" fill="#3F7A44">قلعهٔ گنج</text>';
+  /* مسیر */
+  s += '<path d="M196 176 C 280 120, 380 250, 452 226" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" opacity=".85"/>';
+  s += '<path d="M196 176 C 280 120, 380 250, 452 226" fill="none" stroke="#FF7A6B" stroke-width="4" stroke-dasharray="10 10" stroke-linecap="round"/>';
+  s += '<text x="300" y="150" text-anchor="middle" font-size="26">⛵</text>';
+  /* قطب‌نما */
+  s += '<g transform="translate(596,54)"><circle r="26" fill="#FFFFFF" opacity=".85"/><path d="M0 -18 L7 0 L0 18 L-7 0 Z" fill="#FF7A6B"/><text y="-30" text-anchor="middle" font-size="11" font-weight="bold" fill="#2E6C86">شمال</text></g>';
+  /* خط‌کش پایین */
+  s += '<g transform="translate(40,320)">';
+  s += '<rect x="0" y="0" width="560" height="56" rx="12" fill="#FFFDF3" stroke="#E9D3A8" stroke-width="2"/>';
+  for (var c = 0; c <= 14; c++) {
+    var x = 16 + c * 38;
+    s += '<line x1="' + x + '" y1="10" x2="' + x + '" y2="' + (c % 1 === 0 ? 26 : 20) + '" stroke="#B08A4E" stroke-width="1.6"/>';
+    s += '<text x="' + x + '" y="46" text-anchor="middle" font-size="10" fill="#8A6A34">' + fa(c) + '</text>';
+  }
+  if (cm > 0) {
+    var bw = cm * 38;
+    s += '<rect x="16" y="4" width="' + bw + '" height="34" rx="6" fill="#FF7A6B" opacity=".18"/>';
+    s += '<path d="M16 4 h' + bw + '" stroke="#D9452F" stroke-width="3"/>';
+    s += '<text x="' + (16 + bw / 2) + '" y="-8" text-anchor="middle" font-size="15" font-weight="bold" fill="#B4452F">' + fa(cm) + ' سانتی‌متر</text>';
+  }
+  s += '<text x="288" y="70" text-anchor="middle" font-size="11" fill="#8A6A34">خط‌کش روی نقشه</text>';
+  s += '</g>';
+  s += '</svg>';
+  return s;
+}
+
+function classroomSVG() {
+  var s = '<svg class="map-svg" viewBox="0 0 640 400" role="img" aria-label="نقشهٔ کلاس از نمای بالا با مقیاس">';
+  s += '<rect width="640" height="400" fill="#FFFBF2"/>';
+  s += '<rect x="30" y="30" width="580" height="330" rx="12" fill="#FFFFFF" stroke="#E0D3B8" stroke-width="4"/>';
+  s += '<rect x="30" y="30" width="580" height="14" fill="#FFE7B8"/>';
+  /* تخته */
+  s += '<rect x="240" y="40" width="160" height="10" rx="5" fill="#4FB6E8"/>';
+  /* در و پنجره */
+  s += '<rect x="56" y="298" width="64" height="46" rx="5" fill="#D9C7A6"/>';
+  s += '<text x="88" y="290" text-anchor="middle" font-size="11" fill="#8A7A5E">در</text>';
+  s += '<rect x="566" y="118" width="16" height="116" rx="4" fill="#BEE7FA"/>';
+  s += '<text x="574" y="108" text-anchor="middle" font-size="11" fill="#5A87A0">پنجره</text>';
+  /* میز معلم با اندازهٔ ۲ سانتی‌متر */
+  s += '<g transform="translate(268,80)">';
+  s += '<rect x="0" y="0" width="104" height="36" rx="9" fill="#FFD9C0" stroke="#E8A07A" stroke-width="2"/>';
+  s += '<rect x="16" y="36" width="72" height="10" rx="5" fill="#F0BFA0"/>';
+  s += '<text x="52" y="-8" text-anchor="middle" font-size="12" font-weight="bold" fill="#8A5B3A">میز معلم</text>';
+  s += '<path d="M0 62 h104" stroke="#D9452F" stroke-width="2.5"/>';
+  s += '<path d="M0 55 v14 M104 55 v14" stroke="#D9452F" stroke-width="2.5"/>';
+  s += '<text x="52" y="80" text-anchor="middle" font-size="12" font-weight="bold" fill="#B4452F">۲ سانتی‌متر</text>';
+  s += '</g>';
+  /* میزهای دانش‌آموزان */
+  var cols = [127, 277, 427];
+  var rows = [180, 252, 316];
+  for (var r = 0; r < rows.length; r++) {
+    for (var c = 0; c < cols.length; c++) {
+      var x = cols[c], y = rows[r];
+      s += '<rect x="' + x + '" y="' + y + '" width="86" height="38" rx="8" fill="#FFE9C9" stroke="#E7C79A" stroke-width="2"/>';
+      s += '<rect x="' + (x + 16) + '" y="' + (y + 38) + '" width="54" height="10" rx="5" fill="#F3D6AC"/>';
+    }
+  }
+  s += '<text x="320" y="386" text-anchor="middle" font-size="13" font-weight="bold" fill="#8A6A34">۱ سانتی‌متر روی نقشه = ۵۰ سانتی‌متر در کلاس</text>';
+  s += '</svg>';
+  return s;
+}
+
+var MapGame = {
+  idx: 0,
+  locked: false,
+  el: function (id) { return document.getElementById(id); },
+
+  start: function () { this.idx = 0; this.enter(); },
+
+  enter: function () {
+    this.locked = false;
+    var lv = MAP_LEVELS[this.idx];
+    renderDots(this.el('mapDots'), MAP_LEVELS.length, this.idx);
+    UI.clearFb(this.el('mapFb'));
+    this.el('mapActions').innerHTML = '';
+    this.el('mapTools').innerHTML = '';
+    if (lv.type === 'concept') this.renderConcept();
+    else if (lv.type === 'scale') this.renderScale(lv);
+    else if (lv.type === 'class') this.renderClass();
+    else this.renderReverse(lv);
+    armIdleHint();
+  },
+
+  renderConcept: function () {
+    this.el('mapTask').textContent = 'نقشه چیست؟';
+    this.el('mapSub').textContent = 'به تصویر نگاه کن.';
+    this.el('mapStage').innerHTML = '<div class="map-stage">' + mapSVG({ cm: 0 }) + '</div>';
+    var self = this;
+    choiceGrid(this.el('mapStage'), shuffle([
+      { label: 'تصویر کوچک‌شدهٔ یک مکان واقعی', icon: '🗺️', ok: true },
+      { label: 'یک وسیله برای سنجیدن جرم', icon: '⚖️', ok: false },
+      { label: 'یک ظرف برای اندازه‌گیری آب', icon: '🧪', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! نقشه، تصویر کوچک‌شدهٔ یک مکان واقعی است.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('mapFb'), 'no', 'به شکل نگاه کن؛ این یک نقشه است، نه ابزار جرم یا آب.');
+      }
+    });
+  },
+
+  renderScale: function (lv) {
+    this.el('mapTask').textContent = 'فاصلهٔ دو جزیره روی نقشه ' + fa(lv.cm) + ' سانتی‌متر است. در واقعیت چند کیلومتر است؟';
+    this.el('mapSub').textContent = 'مقیاس: ۱ سانتی‌متر روی نقشه = ۱ کیلومتر در واقعیت';
+    this.el('mapStage').innerHTML = '<div class="map-stage">' + mapSVG({ cm: lv.cm, label: 'نقشه با مسیر ' + fa(lv.cm) + ' سانتی‌متری' }) + '</div>' +
+      '<div class="legend"><span class="box"></span> ۱ سانتی‌متر روی نقشه = ۱ کیلومتر در واقعیت</div>';
+    var self = this;
+    choiceGrid(this.el('mapStage'), shuffle([
+      { label: fa(lv.cm) + ' کیلومتر', ok: true },
+      { label: fa(lv.cm * 10) + ' کیلومتر', ok: false },
+      { label: fa(lv.cm) + ' متر', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! هر ۱ سانتی‌متر برابر ۱ کیلومتر است؛ پس ' + fa(lv.cm) + ' سانتی‌متر = ' + fa(lv.cm) + ' کیلومتر.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('mapFb'), 'no', 'مقیاس می‌گوید هر ۱ سانتی‌متر برابر ۱ کیلومتر است.');
+      }
+    });
+  },
+
+  renderClass: function () {
+    this.el('mapTask').textContent = 'روی نقشهٔ کلاس، میز معلم ۲ سانتی‌متر است. در کلاس چند سانتی‌متر است؟';
+    this.el('mapSub').textContent = 'مقیاس: ۱ سانتی‌متر روی نقشه = ۵۰ سانتی‌متر در کلاس';
+    this.el('mapStage').innerHTML = '<div class="map-stage">' + classroomSVG() + '</div>' +
+      '<div class="legend"><span class="box"></span> ۱ سانتی‌متر روی نقشه = ۵۰ سانتی‌متر در کلاس</div>';
+    var self = this;
+    choiceGrid(this.el('mapStage'), shuffle([
+      { label: '۱۰۰ سانتی‌متر (۱ متر)', ok: true },
+      { label: '۵۰ سانتی‌متر', ok: false },
+      { label: '۲ سانتی‌متر', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! ۲ × ۵۰ = ۱۰۰ سانتی‌متر؛ یعنی ۱ متر.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('mapFb'), 'no', 'هر ۱ سانتی‌متر روی نقشه ۵۰ سانتی‌متر است؛ ۲ سانتی‌متر یعنی ۲ × ۵۰.');
+      }
+    });
+  },
+
+  renderReverse: function (lv) {
+    this.el('mapTask').textContent = 'فاصلهٔ واقعی دو جزیره ' + fa(lv.km) + ' کیلومتر است. روی نقشه چند سانتی‌متر می‌شود؟';
+    this.el('mapSub').textContent = 'مقیاس: ۱ سانتی‌متر = ۱ کیلومتر';
+    this.el('mapStage').innerHTML = '<div class="map-stage">' + mapSVG({ cm: 0 }) + '</div>' +
+      '<div class="legend"><span class="box"></span> ۱ سانتی‌متر روی نقشه = ۱ کیلومتر در واقعیت</div>' +
+      '<div class="hint-line"><span aria-hidden="true">🔎</span> این بار از واقعیت به نقشه می‌رویم.</div>';
+    var self = this;
+    choiceGrid(this.el('mapStage'), shuffle([
+      { label: fa(lv.km) + ' سانتی‌متر', ok: true },
+      { label: fa(lv.km * 2) + ' سانتی‌متر', ok: false },
+      { label: fa(lv.km) + ' متر', ok: false }
+    ]), function (ok, btn) {
+      if (ok) {
+        btn.classList.add('is-right');
+        self.finish('آفرین! هر ۱ کیلومتر، ۱ سانتی‌متر روی نقشه است؛ پس ' + fa(lv.km) + ' کیلومتر = ' + fa(lv.km) + ' سانتی‌متر.');
+      } else {
+        btn.classList.add('is-wrong');
+        SFX.bad();
+        UI.fb(self.el('mapFb'), 'no', 'مقیاس را برعکس بخوان: هر ۱ کیلومتر = ۱ سانتی‌متر روی نقشه.');
+      }
+    });
+  },
+
+  finish: function (msg) {
+    this.locked = true;
+    SFX.good();
+    FX.burst(window.innerWidth / 2, window.innerHeight * 0.36, 26);
+    UI.fb(this.el('mapFb'), 'ok', msg);
+    var self = this;
+    UI.actions(this.el('mapActions'), [{
+      label: 'ادامه ▶', cls: 'btn--mint', onClick: function () {
+        completeLevel('mapgame', self.idx, false);
+        self.advance();
+      }
+    }]);
+  },
+
+  advance: function () {
+    if (this.idx < MAP_LEVELS.length - 1) {
+      this.idx++;
+      this.enter();
+    } else {
+      stationDone('mapgame', this.el('mapStage'), this.el('mapActions'), this.el('mapFb'));
+      this.el('mapTask').textContent = 'ایستگاه جزیرهٔ نقشه';
+      this.el('mapSub').textContent = '';
+      this.el('mapTools').innerHTML = '';
+    }
+  }
+};
+/* ============================================================
+   بخش ۴ — سالن پرسش‌ها، جورچین، جایزه‌ها، مدرک، واژه‌نامه
+   ============================================================ */
+
+var QUIZ_BANK = [
+  { q: 'برای سنجیدن جرم یک سیب از چه ابزاری استفاده می‌کنیم؟', o: ['ترازو', 'خط‌کش', 'دماسنج'], a: 0, h: 'جرم را با ترازو می‌سنجیم.' },
+  { q: 'هر کیلوگرم چند گرم است؟', o: ['۱۰۰۰ گرم', '۱۰۰ گرم', '۱۰ گرم'], a: 0, h: '۱ کیلوگرم = ۱۰۰۰ گرم' },
+  { q: '۲ کیلوگرم چند گرم است؟', o: ['۲۰۰۰ گرم', '۲۰۰ گرم', '۲۰۰۰۰ گرم'], a: 0, h: '۲ × ۱۰۰۰ = ۲۰۰۰' },
+  { q: 'برای اندازه‌گیری طول مداد کدام ابزار مناسب‌تر است؟', o: ['خط‌کش', 'ترازو', 'پیمانه'], a: 0, h: 'طول‌های کوتاه را با خط‌کش می‌سنجیم.' },
+  { q: 'هر لیتر چند میلی‌لیتر است؟', o: ['۱۰۰۰ میلی‌لیتر', '۱۰۰ میلی‌لیتر', '۱۰ میلی‌لیتر'], a: 0, h: '۱ لیتر = ۱۰۰۰ میلی‌لیتر' },
+  { q: 'اگر ۱ سانتی‌متر روی نقشه برابر ۱ کیلومتر باشد، ۴ سانتی‌متر چه فاصله‌ای را نشان می‌دهد؟', o: ['۴ کیلومتر', '۴۰ کیلومتر', '۴ متر'], a: 0, h: 'هر ۱ سانتی‌متر = ۱ کیلومتر' },
+  { q: 'آیا جسم بزرگ‌تر همیشه جرم بیشتری دارد؟', o: ['خیر؛ جنس جسم هم مهم است', 'بله، همیشه', 'فقط اگر گرد باشد'], a: 0, h: 'یک جسم کوچک فلزی می‌تواند از یک جسم بزرگ سبک سنگین‌تر باشد.' },
+  { q: 'چرا عدد اندازه‌گیری را با واحد می‌نویسیم؟', o: ['تا دیگران بدانند اندازه با چه واحدی است', 'چون عدد تنها کافی نیست و قشنگ‌تر است', 'چون معلم دوست دارد'], a: 0, h: 'عدد بدون واحد معنی دقیقی ندارد.' },
+  { q: 'اگر ترازو صفر را نشان ندهد چه کار می‌کنیم؟', o: ['آن را صفر می‌کنیم یا از بزرگ‌تر کمک می‌گیریم', 'با آن اندازه می‌گیریم', 'ترازو را تکان می‌دهیم'], a: 0, h: 'اندازه‌گیری با ترازوی صفرنشده خطا دارد.' },
+  { q: 'ترازو چه چیزی را اندازه می‌گیرد؟', o: ['جرم', 'طول', 'دما'], a: 0, h: 'ترازو ابزار سنجش جرم است.' },
+  { q: '۱ متر چند سانتی‌متر است؟', o: ['۱۰۰ سانتی‌متر', '۱۰ سانتی‌متر', '۱۰۰۰ سانتی‌متر'], a: 0, h: '۱ متر = ۱۰۰ سانتی‌متر' },
+  { q: 'برای اندازه‌گیری گنجایش آب کدام واحد مناسب است؟', o: ['لیتر و میلی‌لیتر', 'گرم و کیلوگرم', 'متر و کیلومتر'], a: 0, h: 'گنجایش مایع با لیتر و میلی‌لیتر بیان می‌شود.' },
+  { q: 'مقیاس نقشه چه چیزی را نشان می‌دهد؟', o: ['رابطهٔ فاصلهٔ نقشه با فاصلهٔ واقعی', 'جرم اجسام روی نقشه', 'دمای هوا'], a: 0, h: 'مقیاس، فاصلهٔ نقشه را به فاصلهٔ واقعی مربوط می‌کند.' },
+  { q: 'اگر جسم را کج و از لبهٔ خط‌کش شروع کنیم، چه می‌شود؟', o: ['اندازه اشتباه می‌شود', 'اندازه دقیق‌تر می‌شود', 'هیچ تفاوتی ندارد'], a: 0, h: 'باید از صفر خط‌کش شروع کنیم.' }
+];
+
+var Quiz = {
+  list: [],
+  i: 0,
+  correct: 0,
+  locked: false,
+  el: function (id) { return document.getElementById(id); },
+
+  start: function () {
+    this.list = shuffle(QUIZ_BANK).slice(0, 5);
+    this.i = 0;
+    this.correct = 0;
+    this.render();
+  },
+
+  render: function () {
+    this.locked = false;
+    var q = this.list[this.i];
+    var total = this.list.length;
+    renderDots(this.el('quizDots'), total, this.i);
+    this.el('quizTask').textContent = q.q;
+    this.el('quizCount').textContent = 'پرسش ' + fa(this.i + 1) + ' از ' + fa(total);
+    this.el('quizScore').textContent = 'درست: ' + fa(this.correct);
+    var bar = this.el('quizBar');
+    if (bar) bar.style.width = ((this.i) / total * 100) + '%';
+    UI.clearFb(this.el('quizFb'));
+    this.el('quizActions').innerHTML = '';
+    var stage = this.el('quizStage');
+    stage.innerHTML = '';
+    var self = this;
+    var opts = shuffle(q.o.map(function (t, k) { return { label: t, ok: k === q.a }; }));
+    choiceGrid(stage, opts, function (ok, btn) {
+      if (self.locked) return;
+      if (ok) {
+        self.locked = true;
+        btn.classList.add('is-right');
+        self.correct++;
+        addStars(1);
+        SFX.good();
+        SFX.star();
+        FX.burst(window.innerWidth / 2, window.innerHeight * 0.4, 24);
+        UI.fb(self.el('quizFb'), 'ok', pick(TXT.yes) + ' ' + q.h);
+        self.el('quizScore').textContent = 'درست: ' + fa(self.correct);
+        var barEl = self.el('quizBar');
+        if (barEl) barEl.style.width = ((self.i + 1) / self.list.length * 100) + '%';
+        UI.actions(self.el('quizActions'), [{
+          label: self.i < self.list.length - 1 ? 'پرسش بعدی ▶' : 'دیدن نتیجه ▶',
+          cls: 'btn--mint',
+          onClick: function () { self.i++; if (self.i >= self.list.length) self.finish(); else self.render(); }
+        }]);
+      } else {
+        btn.classList.add('is-off');
+        btn.classList.add('is-wrong');
+        window.setTimeout(function () { btn.classList.remove('is-wrong'); }, 480);
+        SFX.bad();
+        UI.fb(self.el('quizFb'), 'no', pick(TXT.near) + ' ' + q.h);
+      }
+    });
+  },
+
+  finish: function () {
+    var total = this.list.length;
+    var c = this.correct;
+    var msg = c === total ? 'همهٔ پرسش‌ها را درست جواب دادی! تو یک نابغهٔ اندازه‌گیری هستی.' :
+      (c >= 3 ? 'خیلی خوب بود! بیشتر پرسش‌ها را درست جواب دادی.' : 'تلاش خوبی بود! یک بار دیگر بازی کن و بهتر شو.');
+    this.el('quizTask').textContent = 'نتیجهٔ سالن پرسش‌ها';
+    this.el('quizStage').innerHTML = '<div class="done-box">' +
+      '<div class="di">' + (c === total ? '🌟' : '💫') + '</div>' +
+      '<h4>' + fa(c) + ' از ' + fa(total) + ' درست</h4>' +
+      '<p>' + msg + '</p></div>';
+    this.el('quizActions').innerHTML = '';
+    UI.fb(this.el('quizFb'), 'ok', 'ستاره‌های پرسش‌ها به حساب تو اضافه شد.');
+    var self = this;
+    window.setTimeout(function () {
+      stationDone('quiz', null, self.el('quizActions'), self.el('quizFb'));
+      self.el('quizTask').textContent = 'ایستگاه سالن پرسش‌ها';
+    }, 1400);
+  }
+};
+
+/* ---------- جورچین ---------- */
+var MATCH_PAIRS = [
+  { t: 'ترازو', ti: '⚖️', w: 'جرم یک سیب' },
+  { t: 'خط‌کش', ti: '📏', w: 'طول مداد' },
+  { t: 'پیمانه', ti: '🧪', w: 'گنجایش آب' },
+  { t: 'نقشه', ti: '🗺️', w: 'فاصلهٔ دو شهر' },
+  { t: 'دماسنج', ti: '🌡️', w: 'دمای هوا' }
+];
+
+var Match = {
+  sel: null,
+  done: 0,
+  el: function (id) { return document.getElementById(id); },
+
+  start: function () {
+    this.sel = null;
+    this.done = 0;
+    renderDots(this.el('matchDots'), 1, 0);
+    UI.clearFb(this.el('matchFb'));
+    this.el('matchActions').innerHTML = '';
+    this.el('matchTask').textContent = 'یک ابزار را انتخاب کن، بعد کاری را که اندازه می‌گیرد انتخاب کن.';
+    var left = shuffle(MATCH_PAIRS);
+    var right = shuffle(MATCH_PAIRS);
+    var html = '<div class="match-wrap"><div class="match-col"><h4>ابزار</h4>';
+    left.forEach(function (p) {
+      html += '<button class="match-item" data-side="t" data-k="' + p.t + '"><span class="ic" aria-hidden="true">' + p.ti + '</span>' + p.t + '</button>';
+    });
+    html += '</div><div class="match-col"><h4>چه چیزی را می‌سنجد؟</h4>';
+    right.forEach(function (p) {
+      html += '<button class="match-item" data-side="w" data-k="' + p.t + '"><span class="ic" aria-hidden="true">' + p.w.charAt(0) + '</span>' + p.w + '</button>';
+    });
+    html += '</div></div>';
+    this.el('matchStage').innerHTML = html;
+    this.bind();
+  },
+
+  bind: function () {
+    var self = this;
+    var stage = this.el('matchStage');
+    $$('.match-item', stage).forEach(function (item) {
+      item.addEventListener('click', function () {
+        if (item.classList.contains('done')) return;
+        var side = item.getAttribute('data-side');
+        var k = item.getAttribute('data-k');
+        if (side === 't') {
+          $$('.match-item[data-side="t"]', stage).forEach(function (x) { x.classList.remove('sel'); });
+          item.classList.add('sel');
+          self.sel = k;
+          SFX.click();
+          return;
+        }
+        if (!self.sel) {
+          SFX.bad();
+          UI.fb(self.el('matchFb'), 'info', 'اول یک ابزار را از ستون راست انتخاب کن.');
+          return;
+        }
+        var toolEl = $('.match-item[data-side="t"][data-k="' + self.sel + '"]', stage);
+        if (k === self.sel) {
+          item.classList.add('done');
+          if (toolEl) { toolEl.classList.add('done'); toolEl.classList.remove('sel'); }
+          self.sel = null;
+          self.done++;
+          SFX.pop();
+          if (self.done >= MATCH_PAIRS.length) {
+            UI.fb(self.el('matchFb'), 'ok', 'آفرین! همهٔ ابزارها را درست جفت کردی.');
+            window.setTimeout(function () {
+              stationDone('match', self.el('matchStage'), self.el('matchActions'), self.el('matchFb'));
+              self.el('matchTask').textContent = 'ایستگاه جورچین ابزارها';
+            }, 900);
+          } else {
+            UI.fb(self.el('matchFb'), 'ok', 'درست است! ' + fa(MATCH_PAIRS.length - self.done) + ' جفت دیگر مانده.');
+          }
+        } else {
+          item.classList.add('wrong');
+          window.setTimeout(function () { item.classList.remove('wrong'); }, 480);
+          SFX.bad();
+          UI.fb(self.el('matchFb'), 'no', 'این دو به هم نمی‌خورند. دوباره فکر کن.');
+        }
+      });
+    });
+  }
+};
+
+/* ---------- جایزه‌ها ---------- */
+var BADGE_LIST = ['استاد ترازو', 'قهرمان خط‌کش', 'دانشمند گنجایش', 'کاشف مقیاس', 'نابغهٔ اندازه‌گیری', 'استاد ابزارها'];
+var BADGE_ICONS = {
+  'استاد ترازو': '⚖️', 'قهرمان خط‌کش': '📏', 'دانشمند گنجایش': '🧪',
+  'کاشف مقیاس': '🗺️', 'نابغهٔ اندازه‌گیری': '🌟', 'استاد ابزارها': '🧩'
+};
+
+function renderRewards() {
+  refreshStars();
+  var done = doneCount();
+  var bar = document.getElementById('rwBar');
+  if (bar) bar.style.width = (done / STATIONS.length * 100) + '%';
+  var lbl = document.getElementById('rwLbl');
+  if (lbl) lbl.textContent = fa(done) + ' از ' + fa(STATIONS.length) + ' ایستگاه';
+
+  var bg = document.getElementById('badgeGrid');
+  if (bg) {
+    bg.innerHTML = '';
+    BADGE_LIST.forEach(function (b) {
+      var on = STATE.badges.indexOf(b) >= 0;
+      var d = document.createElement('div');
+      d.className = 'badge' + (on ? ' on' : '');
+      d.innerHTML = '<span class="bi" aria-hidden="true">' + BADGE_ICONS[b] + '</span><span>' + b + '</span>' +
+        '<span style="font-size:.6rem;opacity:.8">' + (on ? 'گرفتی' : 'هنوز نه') + '</span>';
+      bg.appendChild(d);
+    });
+  }
+
+  var sg = document.getElementById('stickerGrid');
+  if (sg) {
+    sg.innerHTML = '';
+    Object.keys(STICKER_ICONS).forEach(function (k) {
+      var on = STATE.stickers.indexOf(k) >= 0;
+      var d = document.createElement('div');
+      d.className = 'sticker' + (on ? ' on' : '');
+      d.title = k;
+      d.innerHTML = '<span aria-hidden="true">' + STICKER_ICONS[k] + '</span>';
+      sg.appendChild(d);
+    });
+  }
+
+  var chestTx = document.getElementById('chestTx');
+  var chestBtn = document.getElementById('btnChest');
+  var chestIcon = document.getElementById('chestIcon');
+  if (STATE.chest) {
+    if (chestTx) chestTx.innerHTML = '<b>جعبه باز شد!</b> آیا می‌دانی؟ جرم تو روی ماه عوض نمی‌شود، اما وزنت کمتر می‌شود.';
+    if (chestBtn) { chestBtn.textContent = 'باز شد'; chestBtn.disabled = true; }
+    if (chestIcon) chestIcon.textContent = '🧞';
+  } else if (done >= 3) {
+    if (chestTx) chestTx.innerHTML = '<b>جعبه آمادهٔ باز شدن است!</b> روی «باز کن» بزن.';
+    if (chestBtn) { chestBtn.textContent = 'باز کن'; chestBtn.disabled = false; }
+    if (chestIcon) chestIcon.textContent = '🎁';
+  } else {
+    if (chestTx) chestTx.innerHTML = '<b>جعبهٔ جایزه</b>با تمام‌کردن ۳ ایستگاه باز می‌شود.';
+    if (chestBtn) { chestBtn.textContent = 'بسته است'; chestBtn.disabled = true; }
+    if (chestIcon) chestIcon.textContent = '🎁';
+  }
+
+  var cb = document.getElementById('btnCert');
+  if (cb) {
+    var ok = coreDoneCount() >= 5;
+    cb.style.opacity = ok ? '1' : '.55';
+    cb.setAttribute('aria-disabled', ok ? 'false' : 'true');
+  }
+}
+
+function persianDate() {
+  try {
+    return new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date());
+  } catch (e) {
+    var d = new Date();
+    return fa(d.getFullYear()) + '/' + fa(d.getMonth() + 1) + '/' + fa(d.getDate());
+  }
+}
+
+function renderCert() {
+  setName();
+  var d = document.getElementById('certDate');
+  if (d) d.textContent = 'تاریخ: ' + persianDate();
+  var p = document.getElementById('certPresenter');
+  if (p) {
+    p.textContent = (CONFIG.showPresenterName && CONFIG.presenterName) ? 'ارائه‌دهنده: ' + CONFIG.presenterName : '';
+  }
+  var st = document.getElementById('certStars');
+  if (st) {
+    var n = clamp(coreDoneCount(), 1, 5);
+    st.textContent = Array(n + 1).join('★');
+  }
+}
+
+/* ---------- واژه‌نامه ---------- */
+var GLOSS = [
+  { w: 'اندازه‌گیری', d: 'پیدا کردن مقدار یک ویژگی با ابزار و واحد مناسب؛ مثل طول مداد یا جرم سیب.' },
+  { w: 'تخمین', d: 'حدس نزدیک به مقدار واقعی، پیش از اندازه‌گیری دقیق.' },
+  { w: 'واحد', d: 'مقدار مشترکی که اندازه را با آن بیان می‌کنیم؛ مثل سانتی‌متر یا کیلوگرم.' },
+  { w: 'ابزار', d: 'وسیله‌ای که برای اندازه‌گیری به کار می‌رود؛ مثل خط‌کش یا ترازو.' },
+  { w: 'ترازو', d: 'ابزاری برای سنجیدن یا مقایسهٔ جرم اجسام.' },
+  { w: 'جرم', d: 'مقدار مادهٔ تشکیل‌دهندهٔ یک جسم. با گرم و کیلوگرم اندازه می‌گیریم.' },
+  { w: 'وزن', d: 'نیروی گرانش بر جسم. در گفتار روزمره گاهی به جای جرم گفته می‌شود.' },
+  { w: 'گرم', d: 'واحد کوچک جرم؛ برای چیزهای سبک مثل پاک‌کن.' },
+  { w: 'کیلوگرم', d: 'واحد بزرگ‌تر جرم؛ ۱ کیلوگرم = ۱۰۰۰ گرم.' },
+  { w: 'خط‌کش', d: 'ابزار اندازه‌گیری طول‌های کوتاه با درجه‌بندی میلی‌متر و سانتی‌متر.' },
+  { w: 'سانتی‌متر', d: 'واحد طول؛ ۱ سانتی‌متر = ۱۰ میلی‌متر.' },
+  { w: 'متر', d: 'واحد طول برای اندازه‌های بزرگ‌تر؛ ۱ متر = ۱۰۰ سانتی‌متر.' },
+  { w: 'کیلومتر', d: 'واحد طول برای فاصله‌های دور؛ ۱ کیلومتر = ۱۰۰۰ متر.' },
+  { w: 'گنجایش', d: 'مقدار مایعی که یک ظرف می‌تواند در خود جای دهد.' },
+  { w: 'میلی‌لیتر', d: 'واحد گنجایش برای مقدار کم مایع.' },
+  { w: 'لیتر', d: 'واحد گنجایش برای مقدار بیشتر؛ ۱ لیتر = ۱۰۰۰ میلی‌لیتر.' },
+  { w: 'درجه‌بندی', d: 'خط‌ها و عددهایی که روی ابزار هستند و خواندن اندازه را ممکن می‌کنند.' },
+  { w: 'مقیاس نقشه', d: 'رابطهٔ فاصلهٔ روی نقشه با فاصلهٔ واقعی؛ مثلاً ۱ سانتی‌متر = ۱ کیلومتر.' }
+];
+
+function renderGlossary() {
+  var host = document.getElementById('glossList');
+  if (!host) return;
+  host.innerHTML = '';
+  GLOSS.forEach(function (g) {
+    var d = document.createElement('div');
+    d.className = 'gterm';
+    d.innerHTML = '<b>' + g.w + '</b><span>' + g.d + '</span>';
+    host.appendChild(d);
+  });
+}
+
+/* ============================================================
+   تنظیم‌ها، مودال، و راه‌اندازی
+   ============================================================ */
+function syncSoundUI() {
+  ['btnSound', 'btnSoundSplash'].forEach(function (id) {
+    var b = document.getElementById(id);
+    if (!b) return;
+    b.textContent = STATE.sound ? '🔊' : '🔇';
+    b.setAttribute('aria-pressed', STATE.sound ? 'true' : 'false');
+    b.setAttribute('aria-label', STATE.sound ? 'صدا روشن است. برای خاموش کردن بزن' : 'صدا خاموش است. برای روشن کردن بزن');
+  });
+  var sw = document.getElementById('swSound');
+  if (sw) sw.setAttribute('aria-checked', STATE.sound ? 'true' : 'false');
+}
+
+function setSound(on) {
+  STATE.sound = !!on;
+  saveState();
+  syncSoundUI();
+  if (STATE.sound) SFX.pop();
+}
+
+function applyMotion() {
+  document.documentElement.classList.toggle('reduce-motion', STATE.reduce);
+  var sw = document.getElementById('swMotion');
+  if (sw) sw.setAttribute('aria-checked', STATE.reduce ? 'true' : 'false');
+}
+
+function openParent() {
+  var m = document.getElementById('modalParent');
+  if (!m) return;
+  m.classList.add('open');
+  SFX.click();
+  syncSoundUI();
+  applyMotion();
+}
+function closeParent() {
+  var m = document.getElementById('modalParent');
+  if (m) m.classList.remove('open');
+}
+
+function resetProgress() {
+  var ok = window.confirm('همهٔ ستاره‌ها، نشان‌ها و پیشرفت پاک شود؟');
+  if (!ok) return;
+  STATE = defaultState();
+  STATE.player = '';
+  saveState();
+  refreshStars();
+  applyMotion();
+  syncSoundUI();
+  closeParent();
+  var inp = document.getElementById('playerName');
+  if (inp) inp.value = '';
+  go('splash');
+  UI.toast('پیشرفت پاک شد.');
+}
+
+/* ---------- راه‌اندازی ---------- */
+function init() {
+  loadState();
+  applyMotion();
+  FX.init();
+
+  var sm = document.getElementById('splashMascot');
+  if (sm) sm.innerHTML = mascotSVG();
+  var hm = document.getElementById('helperMascot');
+  if (hm) hm.innerHTML = mascotSVG();
+
+  var pl = document.getElementById('presenterLine');
+  if (pl) {
+    if (CONFIG.showPresenterName && CONFIG.presenterName) {
+      pl.hidden = false;
+      pl.textContent = 'ارائه‌دهنده: ' + CONFIG.presenterName;
+    } else {
+      pl.hidden = true;
+    }
+  }
+
+  var inp = document.getElementById('playerName');
+  if (inp) {
+    inp.value = STATE.player || '';
+    inp.addEventListener('input', function () {
+      STATE.player = inp.value.slice(0, 18);
+      saveState();
+      setName();
+    });
+  }
+
+  refreshStars();
+  setName();
+  syncSoundUI();
+
+  /* دکمه‌ها */
+  var start = document.getElementById('btnStart');
+  if (start) start.addEventListener('click', function () {
+    SFX.ensure(); SFX.click();
+    go('menu');
+  });
+  var help = document.getElementById('btnHelp');
+  if (help) help.addEventListener('click', openParent);
+  var bps = document.getElementById('btnParentSplash');
+  if (bps) bps.addEventListener('click', openParent);
+  var bpm = document.getElementById('btnParentMenu');
+  if (bpm) bpm.addEventListener('click', openParent);
+  var bcs = document.getElementById('btnCloseParent');
+  if (bcs) bcs.addEventListener('click', function () { SFX.click(); closeParent(); });
+  var brs = document.getElementById('btnReset');
+  if (brs) brs.addEventListener('click', resetProgress);
+
+  ['btnSound', 'btnSoundSplash'].forEach(function (id) {
+    var b = document.getElementById(id);
+    if (b) b.addEventListener('click', function () { setSound(!STATE.sound); });
+  });
+  var sws = document.getElementById('swSound');
+  if (sws) sws.addEventListener('click', function () { setSound(!STATE.sound); });
+  var swm = document.getElementById('swMotion');
+  if (swm) swm.addEventListener('click', function () {
+    STATE.reduce = !STATE.reduce;
+    saveState();
+    applyMotion();
+    SFX.click();
+  });
+
+  var home = document.getElementById('btnHome');
+  if (home) home.addEventListener('click', function () { SFX.click(); go('menu'); });
+
+  $$('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-go');
+      if (t === 'rewards') { SFX.click(); go('rewards'); return; }
+      SFX.click();
+      go(t);
+    });
+  });
+  $$('[data-back]').forEach(function (b) {
+    b.addEventListener('click', function () { SFX.click(); go('map'); });
+  });
+
+  var bc = document.getElementById('btnCert');
+  if (bc) bc.addEventListener('click', function () {
+    if (coreDoneCount() < 5) {
+      SFX.bad();
+      UI.toast('برای گرفتن مدرک، ۵ ایستگاه اصلی را کامل کن.');
+      return;
+    }
+    SFX.win();
+    FX.celebrate();
+    go('cert');
+  });
+
+  var bch = document.getElementById('btnChest');
+  if (bch) bch.addEventListener('click', function () {
+    if (doneCount() < 3) { SFX.bad(); UI.toast('اول ۳ ایستگاه را تمام کن.'); return; }
+    if (STATE.chest) { UI.toast('این جعبه قبلاً باز شده است.'); return; }
+    STATE.chest = true;
+    addStars(2);
+    saveState();
+    SFX.win();
+    FX.celebrate();
+    UI.toast('۲ ستارهٔ هدیه گرفتی! 🎉');
+    renderRewards();
+    UI.say('آیا می‌دانی؟ جرم تو روی ماه عوض نمی‌شود، اما وزنت کمتر می‌شود.', 8000, true);
+  });
+
+  var bp = document.getElementById('btnPrint');
+  if (bp) bp.addEventListener('click', function () {
+    SFX.click();
+    try { window.print(); } catch (e) { UI.toast('چاپ در این مرورگر ممکن نیست.'); }
+  });
+
+  var modal = document.getElementById('modalParent');
+  if (modal) modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeParent();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeParent();
+  });
+
+  document.addEventListener('pointerdown', function () { SFX.ensure(); }, { once: true });
+
+  /* تغییر اندازهٔ صفحه */
+  var rt = 0;
+  window.addEventListener('resize', function () {
+    window.clearTimeout(rt);
+    rt = window.setTimeout(function () {
+      if (CURRENT === 'ruler') {
+        var box = document.getElementById('rulBox');
+        if (box && Ruler.lv) Ruler.buildRuler(Ruler.lv);
+      }
+    }, 220);
+  });
+
+  go('splash');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+</script>
+</body>
+</html>
