@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>سرزمین اعشار — بازی‌های عدد ممیزدار برای پایهٔ سوم</title>
+<meta name="description" content="هفت بازی داستانی فارسی برای یادگیری عددهای اعشاری (دهم): شکلات، محور، جدول ارزش مکانی، خط‌کش، مقایسه و جمع — ساخته‌شده برای دانش‌آموزان پایهٔ سوم دبستان.">
+<meta name="theme-color" content="#F3EEFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='58' r='30' fill='%237C5CE6'/%3E%3Ccircle cx='40' cy='52' r='6' fill='%23fff'/%3E%3Ccircle cx='62' cy='52' r='6' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+/* ============ design tokens ============ */
+:root{
+  --bg:#F5F0FF; --card:#FFFFFF; --ink:#33285C; --muted:#7A7099; --soft:#A79EC4;
+  --purple:#7C5CE6; --purple-d:#5B3FC4; --teal:#0FB5A6; --teal-d:#0A8F84;
+  --coral:#FF6B57; --amber:#FFB703; --pink:#F45B9C; --blue:#2E93C6; --green:#57B84C;
+  --line:rgba(51,40,92,.12);
+  --ff:'Vazirmatn','IRANSansX','IRANSans','Geeza Pro','Tahoma','Segoe UI',system-ui,sans-serif;
+  --sh:0 2px 4px rgba(70,45,140,.05),0 14px 34px rgba(70,45,140,.10);
+  --rad:24px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--ff);color:var(--ink);background:var(--bg);
+  line-height:1.8;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(820px 480px at 88% -10%, #E4D9FF 0%, rgba(228,217,255,0) 62%),
+    radial-gradient(700px 460px at 4% 0%, #D6F6F2 0%, rgba(214,246,242,0) 60%),
+    radial-gradient(760px 520px at 50% 115%, #FFE9D6 0%, rgba(255,233,214,0) 62%),
+    linear-gradient(180deg,#F8F4FF,#F3EEFF 55%,#FDF3EA);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.45;
+  background-image:radial-gradient(rgba(110,85,190,.12) 1.2px, transparent 1.2px);
+  background-size:30px 30px;
+  mask-image:radial-gradient(ellipse 75% 55% at 50% 0%, #000 0%, transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 75% 55% at 50% 0%, #000 0%, transparent 78%);
+}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--purple);outline-offset:3px;border-radius:12px}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{background:#EDE6FB;border-radius:8px}
+::-webkit-scrollbar-thumb{background:#B9A6EE;border-radius:8px;border:3px solid #EDE6FB}
+::-webkit-scrollbar-thumb:hover{background:var(--purple)}
+
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 70px}
+.screen{display:none;animation:pop .45s cubic-bezier(.2,.8,.3,1) both}
+.screen.on{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+
+/* ============ top bar ============ */
+.topbar{
+  position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;
+  padding:10px 16px;margin:0 -16px 14px;
+  background:rgba(248,244,255,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar .brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:.95rem}
+.topbar .brand svg{width:30px;height:30px}
+.topbar .sp{flex:1}
+.iconbtn{
+  display:inline-grid;place-items:center;width:42px;height:42px;border-radius:14px;
+  border:1.5px solid var(--line);background:#fff;color:var(--ink);font-size:1.15rem;
+  box-shadow:0 2px 0 rgba(70,45,140,.08);transition:transform .15s;
+}
+.iconbtn:active{transform:scale(.92)}
+.starbox{
+  display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #FFD98A;
+  color:#8A5B00;font-weight:900;font-size:.9rem;padding:7px 14px;border-radius:999px;
+  box-shadow:0 2px 0 rgba(233,162,27,.18);
+}
+.back-landing{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;white-space:nowrap;
+  background:linear-gradient(150deg,#12C2B0,#2E93C6);color:#fff;
+  font-weight:900;font-size:.85rem;padding:8px 15px;border-radius:999px;
+  box-shadow:0 3px 0 var(--teal-d);
+  transition:transform .14s, box-shadow .14s, filter .2s;
+}
+.back-landing:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.back-landing:active{transform:translateY(2px);box-shadow:0 1px 0 var(--teal-d)}
+.back-landing .bi{font-size:1.05rem;line-height:1}
+@media (max-width:600px){.back-landing .bl{display:none}.back-landing{padding:8px 11px}.topbar{gap:7px}.topbar .brand-t{display:none}.topbar .brand{padding-inline-end:0}}
+
+/* ============ generic pieces ============ */
+.panel{
+  background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:var(--rad);
+  box-shadow:var(--sh);padding:22px;
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:none;border-radius:16px;padding:13px 26px;font-size:1rem;font-weight:900;
+  background:var(--purple);color:#fff;box-shadow:0 4px 0 var(--purple-d);
+  transition:transform .12s, box-shadow .12s, filter .2s;
+}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--purple-d)}
+.btn.teal{background:var(--teal);box-shadow:0 4px 0 var(--teal-d)}
+.btn.teal:active{box-shadow:0 1px 0 var(--teal-d)}
+.btn.ghost{background:#fff;color:var(--purple);border:2px solid #D9CCF7;box-shadow:0 3px 0 #E4DBF8}
+.btn.ghost:active{box-shadow:0 1px 0 #E4DBF8}
+.btn.big{font-size:1.12rem;padding:16px 34px;border-radius:18px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;display:inline-block}
+
+/* mascot + speech */
+.mascot-row{display:flex;align-items:flex-end;gap:12px;margin:6px 0 16px}
+.mascot{width:74px;height:74px;flex:none;animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.bubble{
+  position:relative;background:#fff;border:2px solid #E3D9F8;border-radius:18px;
+  padding:12px 16px;font-weight:700;font-size:.95rem;line-height:1.9;flex:1;
+  box-shadow:0 4px 14px rgba(70,45,140,.07);
+}
+.bubble::after{
+  content:"";position:absolute;bottom:16px;inset-inline-start:-9px;width:16px;height:16px;
+  background:#fff;border-inline-start:2px solid #E3D9F8;border-bottom:2px solid #E3D9F8;
+  transform:rotate(45deg);border-radius:3px;
+}
+.bubble b{color:var(--purple-d)}
+.bubble .num{font-weight:900;color:var(--teal-d)}
+
+/* progress dots */
+.dots{display:flex;gap:8px;justify-content:center;margin:14px 0 4px}
+.dots i{width:12px;height:12px;border-radius:50%;background:#E2D9F6;transition:all .3s}
+.dots i.done{background:var(--teal)}
+.dots i.cur{background:var(--purple);transform:scale(1.3);box-shadow:0 0 0 4px rgba(124,92,230,.18)}
+
+/* answer option buttons */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:18px}
+.opt{
+  border:2.5px solid #E3D9F8;background:#fff;border-radius:18px;padding:14px 10px;
+  font-size:1.35rem;font-weight:900;color:var(--ink);
+  box-shadow:0 4px 0 #E9E1FA;transition:transform .12s, border-color .2s, background .2s;
+}
+.opt:hover{border-color:var(--purple);transform:translateY(-2px)}
+.opt:active{transform:translateY(2px);box-shadow:0 1px 0 #E9E1FA}
+.opt.good{border-color:var(--green);background:#EAF8E7;color:#2E7D26;animation:pulseG .5s}
+.opt.bad{border-color:var(--coral);background:#FFEBE7;color:#C2402F;animation:shake .4s}
+.opt[disabled]{pointer-events:none;opacity:.75}
+@keyframes pulseG{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* station header */
+.st-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.st-head h2{margin:0;font-size:1.35rem;font-weight:900}
+.st-head .lvl{
+  margin-inline-start:auto;background:#EFE8FD;color:var(--purple-d);font-weight:900;
+  font-size:.82rem;padding:5px 14px;border-radius:999px;
+}
+.hearts{display:flex;gap:3px;font-size:1.05rem}
+.hearts .off{filter:grayscale(1);opacity:.35}
+
+/* result overlay */
+.overlay{
+  position:fixed;inset:0;z-index:80;display:none;place-items:center;padding:20px;
+  background:rgba(45,30,90,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.overlay.on{display:grid}
+.result-card{
+  background:#fff;border-radius:28px;padding:30px 26px;max-width:430px;width:100%;
+  text-align:center;box-shadow:0 30px 80px rgba(30,15,70,.35);
+  animation:pop .4s cubic-bezier(.2,.8,.3,1) both;
+}
+.result-card h3{margin:8px 0 4px;font-size:1.5rem;font-weight:900}
+.result-card p{color:var(--muted);font-weight:700;margin:0 0 16px}
+.bigstars{font-size:2.6rem;letter-spacing:6px;margin:6px 0}
+.bigstars .off{filter:grayscale(1);opacity:.3}
+.result-card .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* confetti canvas */
+#confetti{position:fixed;inset:0;z-index:90;pointer-events:none}
+
+/* ============ map screen ============ */
+.hero{text-align:center;padding:18px 0 6px}
+.hero h1{font-size:clamp(1.7rem,5.6vw,2.7rem);margin:8px 0 6px;font-weight:900;letter-spacing:-.5px}
+.hero h1 .hl{position:relative;white-space:nowrap}
+.hero h1 .hl::after{
+  content:"";position:absolute;inset-inline:-6px;bottom:.08em;height:.34em;z-index:-1;
+  background:linear-gradient(90deg,#C9B6FF,#8FE8DF);border-radius:6px;opacity:.8;
+}
+.hero .lede{color:var(--muted);font-weight:700;max-width:52ch;margin:0 auto;font-size:.98rem}
+.map{position:relative;margin-top:22px;display:grid;gap:14px}
+.station{
+  --a:var(--purple);--tint:#EFE8FD;
+  display:flex;align-items:center;gap:16px;text-align:start;width:100%;
+  background:#fff;border:2px solid transparent;border-radius:22px;padding:16px 18px;
+  box-shadow:var(--sh);transition:transform .2s, border-color .2s;position:relative;overflow:hidden;
+}
+.station::before{
+  content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:6px;background:var(--a);opacity:.85;
+}
+.station:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--a) 40%, #fff)}
+.station .emo{
+  flex:none;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;
+  font-size:1.9rem;background:var(--tint);
+}
+.station .tx{flex:1;min-width:0}
+.station .tx b{display:block;font-size:1.06rem;font-weight:900}
+.station .tx small{color:var(--muted);font-weight:700;font-size:.8rem;line-height:1.7;display:block}
+.station .st-stars{flex:none;font-size:.95rem;letter-spacing:2px;white-space:nowrap}
+.station .st-stars .off{filter:grayscale(1);opacity:.3}
+.station.locked{opacity:.62}
+.station.locked .emo{filter:grayscale(.7)}
+.station .locknote{font-size:.7rem;color:var(--coral);font-weight:800}
+.map-foot{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.gembar{
+  display:flex;align-items:center;gap:8px;justify-content:center;margin:18px auto 0;
+  background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 18px;
+  font-weight:800;font-size:.85rem;color:var(--muted);width:fit-content;max-width:100%;
+}
+.gembar .g{font-size:1.15rem;filter:grayscale(1);opacity:.3;transition:all .4s}
+.gembar .g.lit{filter:none;opacity:1;transform:scale(1.12)}
+
+/* ============ chocolate visual ============ */
+.choc-zone{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:center;margin:14px 0}
+.choc{
+  display:grid;grid-template-columns:repeat(10,1fr);gap:4px;background:#8A5A3B;
+  padding:7px;border-radius:14px;width:min(100%,340px);box-shadow:inset 0 0 0 2px #6E4429,0 6px 16px rgba(90,50,20,.25);
+}
+.choc.fullbar{outline:3px solid var(--amber);outline-offset:3px}
+.choc .pc{
+  aspect-ratio:1/1.35;border-radius:6px;background:#B4825C;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.18), inset 0 2px 0 rgba(255,255,255,.22);
+  border:none;padding:0;transition:background .18s, transform .12s;position:relative;
+}
+.choc .pc.eaten{background:#F7C948;box-shadow:inset 0 -3px 0 rgba(160,110,0,.35), inset 0 2px 0 rgba(255,255,255,.5)}
+.choc .pc.tappable:hover{transform:scale(1.08)}
+.choc-cap{text-align:center;font-weight:800;font-size:.8rem;color:var(--muted);margin-top:6px}
+.readout{
+  display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;
+  background:#F7F3FF;border:2px dashed #D9CCF7;border-radius:18px;padding:12px 18px;margin:14px auto 0;width:fit-content;max-width:100%;
+}
+.readout .frac{display:inline-flex;flex-direction:column;align-items:center;font-weight:900;font-size:1.25rem;line-height:1.35}
+.readout .frac .den{border-top:3px solid var(--ink);padding:0 8px}
+.readout .eq{font-size:1.4rem;font-weight:900;color:var(--soft)}
+.readout .dec{font-size:1.9rem;font-weight:900;color:var(--teal-d)}
+.readout .say{font-size:.85rem;font-weight:800;color:var(--muted);width:100%;text-align:center}
+
+/* place value mini table */
+.pvtable{display:flex;justify-content:center;gap:0;margin:16px auto 0;width:fit-content;direction:ltr}
+.pvtable .cell{min-width:86px;text-align:center;border:2px solid #D9CCF7;background:#fff;padding:8px 10px}
+.pvtable .cell:first-child{border-radius:14px 0 0 14px}
+.pvtable .cell:last-child{border-radius:0 14px 14px 0}
+.pvtable .cell.head{background:#EFE8FD;font-weight:900;font-size:.85rem;color:var(--purple-d)}
+.pvtable .cell.sep{min-width:44px;background:#FFF6DE;border-color:#F0D48A;font-size:1.6rem;font-weight:900;color:#B47B00}
+.pvtable .cell .v{font-size:1.7rem;font-weight:900}
+
+/* ============ number line ============ */
+.nl-wrap{margin:20px 0 6px;padding-bottom:6px}
+.nl{position:relative;height:150px;width:100%;min-width:0;direction:ltr}
+.nl .frog{position:absolute;top:2px;font-size:2rem;transition:left .6s cubic-bezier(.34,1.4,.5,1);transform:translateX(-50%);z-index:3}
+.nl svg{position:absolute;inset:0;width:100%;height:100%}
+.nl .tickbtn{
+  position:absolute;top:calc(95px - var(--tick,28px)/2);transform:translateX(-50%);
+  width:var(--tick,28px);height:var(--tick,28px);border-radius:50%;
+  border:2px solid #D9CCF7;background:#fff;color:transparent;font-size:.6rem;font-weight:900;
+  transition:background .15s,border-color .15s;z-index:2;padding:0;
+}
+.nl .tickbtn:hover{border-color:var(--purple);background:#EFE8FD}
+.nl .tickbtn.picked{background:var(--purple);border-color:var(--purple-d);color:#fff}
+.nl .tickbtn.good{background:var(--green);border-color:#3E8F35;color:#fff}
+.nl .tickbtn.bad{background:var(--coral);border-color:#C2402F;color:#fff}
+
+/* ============ digit factory ============ */
+.target-say{
+  text-align:center;font-size:1.3rem;font-weight:900;color:var(--purple-d);
+  background:#F7F3FF;border-radius:16px;padding:12px;margin:10px 0;
+}
+.slotrow{display:flex;justify-content:center;align-items:center;gap:10px;margin:18px 0;direction:ltr}
+.slot{
+  width:76px;height:88px;border-radius:18px;border:3px dashed #C9B8F2;background:#FBF9FF;
+  display:grid;place-items:center;font-size:2.2rem;font-weight:900;color:var(--ink);transition:all .2s;
+}
+.slot.filled{border-style:solid;border-color:var(--purple);background:#EFE8FD}
+.slot.sep{border:none;background:none;width:34px;font-size:2.4rem;color:#B47B00}
+.slotlab{display:flex;justify-content:center;gap:10px;direction:ltr;margin-top:-8px}
+.slotlab span{width:76px;text-align:center;font-size:.75rem;font-weight:800;color:var(--muted)}
+.slotlab span.sep{width:34px}
+.digitrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
+.digitrow .dlabel{width:100%;text-align:center;font-weight:800;font-size:.82rem;color:var(--muted)}
+.digit{
+  width:48px;height:52px;border-radius:13px;border:2px solid #E3D9F8;background:#fff;
+  font-size:1.35rem;font-weight:900;box-shadow:0 3px 0 #E9E1FA;transition:all .12s;
+}
+.digit:hover{border-color:var(--teal);transform:translateY(-2px)}
+.digit.sel{background:var(--teal);border-color:var(--teal-d);color:#fff;box-shadow:0 3px 0 var(--teal-d)}
+
+/* ============ ruler ============ */
+.ruler-zone{margin:18px 0 4px;padding-bottom:8px}
+.ruler-inner{width:100%;min-width:0;direction:ltr;position:relative;padding-top:46px}
+.pencil{position:absolute;top:0;height:34px;transition:width .8s cubic-bezier(.2,.8,.3,1)}
+.ruler-svg{width:100%;height:110px;display:block}
+
+/* ============ compare ============ */
+.cmp-zone{display:flex;align-items:stretch;justify-content:center;gap:14px;margin:16px 0;flex-wrap:wrap}
+.cmp-card{flex:1;min-width:150px;max-width:230px;background:#F7F3FF;border-radius:18px;padding:14px;text-align:center}
+.cmp-card .val{font-size:1.9rem;font-weight:900;color:var(--purple-d)}
+.cmp-bars{display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:10px;direction:ltr}
+.cmp-wholes{display:flex;gap:4px}
+.cmp-wholes .w{width:30px;height:30px;border-radius:7px;background:var(--amber);box-shadow:inset 0 -3px 0 rgba(160,110,0,.3),inset 0 2px 0 rgba(255,255,255,.4)}
+.cmp-strip{display:flex;gap:2px}
+.cmp-strip i{width:13px;height:36px;border-radius:3px;background:#E2D9F6;transition:background .4s}
+.cmp-strip i.f{background:var(--teal)}
+.croc{display:flex;flex-direction:column;gap:10px;justify-content:center}
+.croc button{
+  width:66px;height:56px;border-radius:16px;border:2.5px solid #E3D9F8;background:#fff;
+  font-size:1.7rem;font-weight:900;color:var(--green);box-shadow:0 3px 0 #E9E1FA;transition:all .12s;
+}
+.croc button:hover{border-color:var(--green);transform:scale(1.07)}
+.croc button.good{background:#EAF8E7;border-color:var(--green)}
+.croc button.bad{background:#FFEBE7;border-color:var(--coral);color:var(--coral)}
+.croc-note{text-align:center;font-size:.8rem;font-weight:800;color:var(--muted)}
+
+/* ============ add station ============ */
+.add-eq{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:12px 0;direction:ltr}
+.add-eq .term{text-align:center}
+.add-eq .term .val{font-size:1.5rem;font-weight:900;color:var(--purple-d)}
+.add-eq .op{font-size:1.7rem;font-weight:900;color:var(--soft)}
+.minibar{display:flex;gap:2px;direction:ltr;margin-top:6px;justify-content:center}
+.minibar i{width:11px;height:34px;border-radius:3px;background:#E2D9F6}
+.minibar i.f{background:var(--teal)}
+.minibar i.f2{background:var(--pink)}
+
+/* ============ certificate ============ */
+.cert{
+  background:#fff;border-radius:26px;padding:34px 28px;text-align:center;position:relative;
+  border:3px solid var(--amber);box-shadow:var(--sh);overflow:hidden;
+}
+.cert::before{
+  content:"";position:absolute;inset:10px;border:2px dashed #F0D48A;border-radius:18px;pointer-events:none;
+}
+.cert .medal{font-size:3.2rem}
+.cert h2{font-size:1.6rem;font-weight:900;margin:6px 0}
+.cert .cname{font-size:1.9rem;font-weight:900;color:var(--purple-d);margin:8px 0}
+.cert p{color:var(--muted);font-weight:700;margin:6px 0}
+.cert .cstars{font-size:1.4rem;letter-spacing:3px;margin:8px 0}
+.nameform{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.nameform input{
+  font-family:inherit;font-size:1rem;font-weight:800;padding:12px 16px;border-radius:14px;
+  border:2px solid #D9CCF7;background:#FBF9FF;color:var(--ink);min-width:220px;text-align:center;
+}
+.nameform input:focus{outline:none;border-color:var(--purple)}
+
+/* lesson steps */
+.lesson-actions{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+.hintline{text-align:center;font-size:.85rem;font-weight:800;color:var(--teal-d);min-height:1.6em;margin-top:8px}
+
+/* footer */
+.foot{margin-top:34px;text-align:center;font-size:.78rem;color:var(--soft);font-weight:700}
+.foot a{color:var(--purple-d)}
+
+@media (max-width:600px){
+  .panel{padding:16px}
+  .mascot{width:56px;height:56px}
+  .bubble{font-size:.86rem;padding:10px 12px}
+  .opt{font-size:1.15rem;padding:12px 8px}
+  .station .emo{width:50px;height:50px;font-size:1.55rem}
+  .slot{width:62px;height:74px;font-size:1.8rem}
+  .slotlab span{width:62px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+@media print{
+  body::before,body::after,.topbar,.map-foot,.no-print,#confetti{display:none !important}
+  body{background:#fff}
+  .cert{box-shadow:none;border-width:4px}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <div class="topbar no-print">
+    <span class="brand">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/></svg>
+      <span class="brand-t">سرزمین اعشار</span>
+    </span>
+    <a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a>
+    <span class="sp"></span>
+    <span class="starbox" title="ستاره‌های تو">⭐ <span id="totalStars" class="num">۰</span></span>
+    <button class="iconbtn" id="soundBtn" title="صدا" aria-label="روشن/خاموش کردن صدا">🔊</button>
+    <button class="iconbtn" id="homeBtn" title="نقشهٔ بازی" aria-label="بازگشت به نقشه">🗺️</button>
+  </div>
+
+  <!-- ================= MAP ================= -->
+  <section class="screen on" id="scr-map" aria-label="نقشهٔ سرزمین اعشار">
+    <header class="hero">
+      <h1>به <span class="hl">سرزمین اعشار</span> خوش آمدی!</h1>
+      <p class="lede">
+        پل رنگین‌کمانِ سرزمین شکسته و فقط با عددهای ممیزدار درست می‌شود!
+        با «ممیزک» همراه شو، از هر ایستگاه یک گوهر بگیر و پل را دوباره بساز.
+      </p>
+    </header>
+
+    <div class="mascot-row">
+      <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/><path d="M50 22 v6" stroke="#FFB703" stroke-width="3"/></svg>
+      <div class="bubble" id="mapBubble">سلام! من <b>ممیزک</b> هستم. اول به <b>کلاس جادویی</b> بیا تا با عددهای ممیزدار آشنا بشیم، بعد ایستگاه‌ها رو یکی‌یکی فتح کن!</div>
+    </div>
+
+    <div class="gembar" id="gembar" aria-label="گوهرهای جمع‌شده">
+      <span>گوهرهای پل:</span>
+      <span class="g" data-g="lesson">📖</span><span class="g" data-g="s1">💎</span><span class="g" data-g="s2">💎</span><span class="g" data-g="s3">💎</span><span class="g" data-g="s4">💎</span><span class="g" data-g="s5">💎</span><span class="g" data-g="s6">💎</span>
+    </div>
+
+    <div class="map" id="mapList"></div>
+
+    <div class="map-foot">
+      <button class="btn ghost" id="resetBtn">🧹 شروع از اول</button>
+      <a class="btn ghost" href="../index.html">🏠 شهر اندازه‌گیری</a>
+    </div>
+  </section>
+
+  <!-- ================= LESSON ================= -->
+  <section class="screen" id="scr-lesson" aria-label="کلاس جادویی">
+    <div class="st-head"><h2>📖 کلاس جادویی ممیزک</h2><span class="lvl" id="lessonStepLab">قدم ۱ از ۵</span></div>
+    <div class="panel">
+      <div class="mascot-row">
+        <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/></svg>
+        <div class="bubble" id="lessonBubble"></div>
+      </div>
+      <div id="lessonStage"></div>
+      <div class="hintline" id="lessonHint"></div>
+      <div class="lesson-actions">
+        <button class="btn ghost" id="lessonBack">قبلی</button>
+        <button class="btn" id="lessonNext">بعدی ⬅</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GENERIC STATION ================= -->
+  <section class="screen" id="scr-game" aria-label="ایستگاه بازی">
+    <div class="st-head">
+      <h2 id="gTitle"></h2>
+      <span class="hearts" id="gHearts" aria-label="جان‌ها"></span>
+      <span class="lvl" id="gLvl"></span>
+    </div>
+    <div class="panel">
+      <div class="mascot-row">
+        <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/></svg>
+        <div class="bubble" id="gBubble"></div>
+      </div>
+      <div id="gStage"></div>
+      <div class="hintline" id="gHint"></div>
+      <div class="dots" id="gDots"></div>
+    </div>
+  </section>
+
+  <!-- ================= EXAM ================= -->
+  <section class="screen" id="scr-exam" aria-label="آزمون قهرمانی">
+    <div class="st-head"><h2>🏆 آزمون قهرمانی پل رنگین‌کمان</h2><span class="lvl" id="exLvl"></span></div>
+    <div class="panel">
+      <div class="mascot-row">
+        <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/></svg>
+        <div class="bubble" id="exBubble"></div>
+      </div>
+      <div id="exStage"></div>
+      <div class="hintline" id="exHint"></div>
+      <div class="dots" id="exDots"></div>
+    </div>
+  </section>
+
+  <!-- ================= CERTIFICATE ================= -->
+  <section class="screen" id="scr-cert" aria-label="گواهی قهرمانی">
+    <div class="cert" id="certBox">
+      <div class="medal">🏅</div>
+      <h2>گواهی قهرمان سرزمین اعشار</h2>
+      <p>این گواهی با افتخار تقدیم می‌شود به</p>
+      <div class="cname" id="certName">ساره سادات</div>
+      <p>که با تلاش و هوش خود، عددهای ممیزدار را یاد گرفت،<br>هر شش ایستگاه را فتح کرد و پل رنگین‌کمان را دوباره ساخت!</p>
+      <div class="cstars" id="certStars"></div>
+      <p id="certDate"></p>
+      <p style="font-size:.8rem">🌈 سرزمین اعشار · پایهٔ سوم دبستان</p>
+    </div>
+    <div class="nameform no-print">
+      <input id="nameInput" type="text" maxlength="40" placeholder="اسمت را بنویس…" aria-label="نام برای گواهی">
+      <button class="btn teal" id="nameSave">ثبت نام</button>
+    </div>
+    <div class="map-foot no-print">
+      <button class="btn" id="printBtn">🖨️ چاپ گواهی</button>
+      <button class="btn ghost" id="certBack">بازگشت به نقشه</button>
+    </div>
+  </section>
+
+  <footer class="foot no-print">
+    ساخته‌شده با ❤ برای <b>ساره سادات</b> و هم‌کلاسی‌هایش · پایهٔ سوم دبستان ·
+    <a href="../index.html">شهر اندازه‌گیری</a>
+  </footer>
+</div>
+
+<!-- result overlay -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true">
+  <div class="result-card">
+    <div id="ovEmoji" style="font-size:3rem">🎉</div>
+    <h3 id="ovTitle"></h3>
+    <div class="bigstars" id="ovStars"></div>
+    <p id="ovText"></p>
+    <div class="row">
+      <button class="btn ghost" id="ovRetry">🔁 دوباره</button>
+      <button class="btn" id="ovNext">ادامه ⬅</button>
+    </div>
+  </div>
+</div>
+<script>
+'use strict';
+/* ================= helpers ================= */
+const $ = s => document.querySelector(s);
+const FA = '۰۱۲۳۴۵۶۷۸۹';
+const fa = n => String(n).replace(/\d/g, d => FA[d]);
+const fmt = (x, p = 1) => {
+  const v = Math.round(x * 10 ** p);
+  const i = Math.floor(v / 10 ** p), d = v % 10 ** p;
+  return fa(i) + '٫' + fa(String(d).padStart(p, '0'));
+};
+const numSpan = (x, p = 1) => `<span class="num">${fmt(x, p)}</span>`;
+const ONES = ['صفر','یک','دو','سه','چهار','پنج','شش','هفت','هشت','نه'];
+const sayTenth = t => ONES[t] + ' دهم';
+const say = x => {
+  const v = Math.round(x * 10), i = Math.floor(v / 10), t = v % 10;
+  if (t === 0) return ONES[i] || fa(i);
+  return i === 0 ? sayTenth(t) : (ONES[i] || fa(i)) + ' و ' + sayTenth(t);
+};
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* ================= storage ================= */
+const KEY = 'sareh-decimals-v1';
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)) || {}; } catch { S = {}; }
+S.stars = S.stars || {};
+S.lesson = !!S.lesson;
+S.examBest = S.examBest || 0;
+S.name = S.name || 'ساره سادات';
+S.muted = !!S.muted;
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+
+/* ================= audio ================= */
+let AC = null;
+function ac() { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); return AC; }
+function tone(f, t0, dur, type = 'sine', vol = .16) {
+  if (S.muted) return;
+  try {
+    const c = ac(), o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(0, c.currentTime + t0);
+    g.gain.linearRampToValueAtTime(vol, c.currentTime + t0 + .02);
+    g.gain.exponentialRampToValueAtTime(.001, c.currentTime + t0 + dur);
+    o.connect(g).connect(c.destination);
+    o.start(c.currentTime + t0); o.stop(c.currentTime + t0 + dur + .05);
+  } catch {}
+}
+const sfx = {
+  click: () => tone(660, 0, .08, 'triangle', .1),
+  good: () => { tone(523, 0, .12, 'triangle'); tone(659, .09, .12, 'triangle'); tone(784, .18, .2, 'triangle'); },
+  bad: () => { tone(220, 0, .18, 'sawtooth', .08); tone(174, .12, .22, 'sawtooth', .08); },
+  win: () => { [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i * .12, .22, 'triangle')); },
+  jump: () => { tone(440, 0, .07, 'square', .06); tone(880, .06, .1, 'square', .06); },
+};
+
+/* ================= confetti ================= */
+const cvs = $('#confetti'), ctx = cvs.getContext('2d');
+let parts = [], confLoop = null;
+function sizeCvs() { cvs.width = innerWidth * devicePixelRatio; cvs.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); }
+sizeCvs(); addEventListener('resize', sizeCvs);
+addEventListener('resize', () => { if (window._nlFit) window._nlFit(); });
+function confetti(n = 90) {
+  const colors = ['#7C5CE6', '#0FB5A6', '#FF6B57', '#FFB703', '#F45B9C', '#2E93C6', '#57B84C'];
+  for (let i = 0; i < n; i++) parts.push({
+    x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * .3,
+    vx: (Math.random() - .5) * 2.4, vy: 2 + Math.random() * 3.2,
+    s: 5 + Math.random() * 7, r: Math.random() * Math.PI, vr: (Math.random() - .5) * .25,
+    c: colors[rnd(0, colors.length - 1)],
+  });
+  if (!confLoop) confLoop = requestAnimationFrame(confTick);
+}
+function confTick() {
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+  parts = parts.filter(p => p.y < innerHeight + 30);
+  for (const p of parts) {
+    p.x += p.vx; p.y += p.vy; p.r += p.vr;
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+    ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .6); ctx.restore();
+  }
+  if (parts.length) confLoop = requestAnimationFrame(confTick);
+  else { confLoop = null; ctx.clearRect(0, 0, innerWidth, innerHeight); }
+}
+
+/* ================= router ================= */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $('#' + id).classList.add('on');
+  scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================= stations config ================= */
+const STATIONS = [
+  { id: 'lesson', emo: '📖', name: 'کلاس جادویی', desc: 'اول اینجا! با دهم و ممیز آشنا شو', a: '#7C5CE6', tint: '#EFE8FD' },
+  { id: 's1', emo: '🍫', name: 'کارخانهٔ شکلات', desc: 'شکل‌ها را به عدد ممیزدار تبدیل کن', a: '#B4652F', tint: '#F7EBDD' },
+  { id: 's2', emo: '🐸', name: 'پرش قورباغه', desc: 'عددهای ممیزدار را روی محور پیدا کن', a: '#0FB5A6', tint: '#DFF7F4' },
+  { id: 's3', emo: '🏭', name: 'کارخانهٔ رقم‌ها', desc: 'با جدول ارزش مکانی عدد بساز', a: '#2E93C6', tint: '#E3F2FB' },
+  { id: 's4', emo: '📏', name: 'خط‌کش جادویی', desc: 'اندازه‌ها را با اعشار بخوان', a: '#E9A23B', tint: '#FFF3DC' },
+  { id: 's5', emo: '🐊', name: 'تمساح گرسنه', desc: 'کدام عدد بزرگ‌تر است؟ مقایسه کن', a: '#57B84C', tint: '#E8F6E5' },
+  { id: 's6', emo: '🧃', name: 'آبمیوه‌فروشی', desc: 'عددهای ممیزدار را جمع کن', a: '#F45B9C', tint: '#FDE7F1' },
+  { id: 'exam', emo: '🏆', name: 'آزمون قهرمانی', desc: 'پل رنگین‌کمان را بساز و گواهی بگیر!', a: '#FFB703', tint: '#FFF6DE' },
+];
+const GAME_IDS = ['s1', 's2', 's3', 's4', 's5', 's6'];
+const starsOf = id => S.stars[id] || 0;
+const totalStars = () => GAME_IDS.reduce((s, id) => s + starsOf(id), 0) + S.examBest;
+const unlocked = id => {
+  if (id === 'lesson') return true;
+  if (id === 'exam') return S.lesson && GAME_IDS.every(g => starsOf(g) > 0);
+  const i = GAME_IDS.indexOf(id);
+  if (i === 0) return S.lesson;
+  return starsOf(GAME_IDS[i - 1]) > 0;
+};
+const starStr = (n, max = 3) => '⭐'.repeat(n) + '<span class="off">' + '⭐'.repeat(max - n) + '</span>';
+
+function renderMap() {
+  $('#totalStars').textContent = fa(totalStars());
+  const list = $('#mapList');
+  list.innerHTML = '';
+  STATIONS.forEach(st => {
+    const open = unlocked(st.id);
+    const b = document.createElement('button');
+    b.className = 'station' + (open ? '' : ' locked');
+    b.style.setProperty('--a', st.a); b.style.setProperty('--tint', st.tint);
+    const stars = st.id === 'lesson' ? (S.lesson ? '✅' : '') :
+      st.id === 'exam' ? (S.examBest ? starStr(S.examBest) : '') : starStr(starsOf(st.id));
+    b.innerHTML = `<span class="emo">${open ? st.emo : '🔒'}</span>
+      <span class="tx"><b>${st.name}</b><small>${st.desc}</small>${open ? '' : '<span class="locknote">اول ایستگاه قبلی را کامل کن!</span>'}</span>
+      <span class="st-stars">${stars}</span>`;
+    b.addEventListener('click', () => {
+      sfx.click();
+      if (!open) { $('#mapBubble').innerHTML = 'این ایستگاه هنوز قفله! اول <b>' + STATIONS[STATIONS.indexOf(st) - 1].name + '</b> را کامل کن. 🔒'; sfx.bad(); return; }
+      if (st.id === 'lesson') startLesson();
+      else if (st.id === 'exam') startExam();
+      else startStation(st.id);
+    });
+    list.appendChild(b);
+  });
+  document.querySelectorAll('#gembar .g').forEach(g => {
+    const id = g.dataset.g;
+    g.classList.toggle('lit', id === 'lesson' ? S.lesson : starsOf(id) > 0);
+  });
+  const done = GAME_IDS.filter(g => starsOf(g) > 0).length;
+  $('#mapBubble').innerHTML = S.examBest
+    ? 'تو قهرمان سرزمین اعشاری! 🌈 پل رنگین‌کمان ساخته شد. هر وقت خواستی دوباره بازی کن و ستاره‌های بیشتری بگیر!'
+    : done === 0
+      ? 'سلام! من <b>ممیزک</b> هستم. اول به <b>کلاس جادویی</b> بیا تا با عددهای ممیزدار آشنا بشیم، بعد ایستگاه‌ها رو یکی‌یکی فتح کن!'
+      : `آفرین! تا حالا <b>${fa(done)} گوهر</b> گرفتی. ${fa(6 - done)} ایستگاه دیگه مونده تا آزمون قهرمانی باز بشه! 💪`;
+}
+
+/* ================= shared visuals ================= */
+function chocHTML(w, t, tappable = false) {
+  let h = '<div class="choc-zone">';
+  for (let i = 0; i < w; i++) h += `<div><div class="choc fullbar">${'<span class="pc eaten"></span>'.repeat(10)}</div><div class="choc-cap">یک شکلات کامل = ${fa(1)}</div></div>`;
+  h += `<div><div class="choc${tappable ? ' tap' : ''}" data-t="${t}">`;
+  for (let i = 0; i < 10; i++) h += tappable
+    ? `<button class="pc tappable${i < t ? ' eaten' : ''}" data-i="${i}" aria-label="تکهٔ ${fa(i + 1)}"></button>`
+    : `<span class="pc${i < t ? ' eaten' : ''}"></span>`;
+  h += `</div><div class="choc-cap">${fa(10)} تکهٔ مساوی · هر تکه = یک دهم</div></div></div>`;
+  return h;
+}
+function readoutHTML(w, t) {
+  const total = w * 10 + t;
+  return `<div class="readout">
+    <span class="frac"><span class="num">${fa(total)}</span><span class="den num">${fa(10)}</span></span>
+    <span class="eq">=</span><span class="dec num">${fmt(w + t / 10)}</span>
+    <span class="say">${say(w + t / 10)}</span></div>`;
+}
+function pvHTML(w, t) {
+  return `<div class="pvtable">
+    <div class="cell head">یکان<br><small>(کامل)</small></div><div class="cell head sep">ممیز</div><div class="cell head">دهم<br><small>(تکه‌ها)</small></div>
+  </div><div class="pvtable" style="margin-top:4px">
+    <div class="cell"><span class="v num">${fa(w)}</span></div><div class="cell sep">٫</div><div class="cell"><span class="v num" style="color:var(--teal-d)">${fa(t)}</span></div>
+  </div>`;
+}
+function barsHTML(v) {
+  const w = Math.floor(v + 1e-9), t = Math.round((v - w) * 10);
+  let h = '<div class="cmp-bars">';
+  if (w > 0) h += '<div class="cmp-wholes">' + '<span class="w"></span>'.repeat(w) + '</div>';
+  h += '<div class="cmp-strip">';
+  for (let i = 0; i < 10; i++) h += `<i class="${i < t ? 'f' : ''}"></i>`;
+  return h + '</div></div>';
+}
+function miniStrip(t, cls = 'f') {
+  let h = '<div class="minibar">';
+  for (let i = 0; i < 10; i++) h += `<i class="${i < t ? cls : ''}"></i>`;
+  return h + '</div>';
+}
+
+/* ================= options builder ================= */
+function makeOpts(correct, distractors, p = 1) {
+  const set = [correct];
+  for (const d of distractors) {
+    if (set.every(x => Math.abs(x - d) > 1e-9) && d >= 0) set.push(d);
+    if (set.length === 4) break;
+  }
+  let guard = 0;
+  while (set.length < 4 && guard++ < 50) {
+    const d = Math.max(0, correct + (rnd(0, 1) ? 1 : -1) * rnd(1, 9) / 10);
+    if (set.every(x => Math.abs(x - d) > 1e-9)) set.push(d);
+  }
+  return shuffle(set).map(v => ({ v, label: fmt(v, p) }));
+}
+function optsHTML(opts, suffix = '') {
+  return `<div class="opts">${opts.map((o, i) =>
+    `<button class="opt" data-i="${i}"><span class="num">${o.label}</span>${suffix ? `<small style="display:block;font-size:.7rem;color:var(--muted)">${suffix}</small>` : ''}</button>`).join('')}</div>`;
+}
+/* ================= lesson ================= */
+const LESSON = [
+  { bubble: 'این یک <b>شکلات کامل</b> است؛ یعنی <b>۱ واحد</b>. ولی من شکلاتم را با دوست‌هایم قسمت می‌کنم… بیا ببینیم چطور!', next: 'تقسیم کن! ✂️' },
+  { bubble: 'شکلات را به <b>۱۰ تکهٔ مساوی</b> تقسیم کردم. هر تکه می‌شود <b>یک دهم</b>؛ یعنی کسر <span class="num">۱/۱۰</span>. وقتی چیزی را به ده قسمت مساوی تقسیم کنیم، هر قسمت «یک دهم» است.', next: 'بعدی ⬅' },
+  { bubble: 'حالا نوبت توست! روی تکه‌ها بزن و <b>۳ تکه</b> را زرد کن. ببین عددش چطور عوض می‌شود!', target: 3, next: 'بعدی ⬅' },
+  { bubble: 'به این عدد جدید سلام کن: <b>عدد ممیزدار!</b> آن نقطهٔ کوچکِ وسط، «<b>ممیز</b>» نام دارد. سمت چپ ممیز، <b>بخش کامل</b> است و سمت راستش، <b>تکه‌های دهم</b>. پس <span class="num">۰٫۳</span> یعنی صفر کامل و سه دهم — همان «سه دهم»!', next: 'بعدی ⬅' },
+  { bubble: 'یک بار دیگر تمرین کن: این بار <b>۷ تکه</b> را زرد کن و عددش را بلند بخوان!', target: 7, next: 'بعدی ⬅' },
+  { bubble: 'حالا یک شکلات <b>کامل</b> داریم و <b>۴ تکه</b> از شکلات دوم. می‌شود <span class="num">۱٫۴</span> — «یک و چهار دهم». دیدی؟ عددهای ممیزدار از یک هم بزرگ‌تر می‌شوند! 🎓 حالا آماده‌ای گوهر اول را بگیری!', next: 'پایان کلاس 🎓' },
+];
+let L = { step: 0, k: 0 };
+function startLesson() { L = { step: 0, k: 0 }; show('scr-lesson'); renderLesson(); }
+function renderLesson() {
+  const st = LESSON[L.step];
+  $('#lessonStepLab').textContent = `قدم ${fa(L.step + 1)} از ${fa(LESSON.length)}`;
+  $('#lessonBubble').innerHTML = st.bubble;
+  $('#lessonHint').textContent = '';
+  const stage = $('#lessonStage');
+  if (L.step === 0) {
+    stage.innerHTML = `<div class="choc-zone"><div><div class="choc fullbar">${'<span class="pc eaten"></span>'.repeat(10)}</div><div class="choc-cap">۱ شکلات کامل</div></div></div>`;
+  } else if (L.step === 1) {
+    stage.innerHTML = chocHTML(0, 1) + readoutHTML(0, 1);
+  } else if (st.target !== undefined) {
+    stage.innerHTML = chocHTML(0, L.k, true) + readoutHTML(0, L.k);
+    stage.querySelectorAll('.pc.tappable').forEach(p => p.addEventListener('click', () => {
+      const i = +p.dataset.i;
+      L.k = p.classList.contains('eaten') ? i : i + 1;
+      sfx.click();
+      stage.querySelectorAll('.pc.tappable').forEach((q, j) => q.classList.toggle('eaten', j < L.k));
+      const ro = stage.querySelector('.readout');
+      ro.outerHTML = readoutHTML(0, L.k);
+      if (L.k === st.target) { sfx.good(); $('#lessonHint').textContent = `آفرین! ${say(L.k / 10)} = ${fmt(L.k / 10)} 🌟`; }
+      else $('#lessonHint').textContent = `الان ${fa(L.k)} تکه زرد است؛ هدف: ${fa(st.target)} تکه`;
+      updateLessonBtns();
+    }));
+    $('#lessonHint').textContent = `روی تکه‌ها بزن تا ${fa(st.target)} تکه زرد شود`;
+  } else if (L.step === 3) {
+    stage.innerHTML = chocHTML(0, 3) + readoutHTML(0, 3) + pvHTML(0, 3);
+  } else {
+    stage.innerHTML = chocHTML(1, 4) + readoutHTML(1, 4) + pvHTML(1, 4);
+  }
+  $('#lessonBack').textContent = L.step === 0 ? '🗺️ نقشه' : 'قبلی';
+  $('#lessonNext').textContent = st.next;
+  updateLessonBtns();
+}
+function updateLessonBtns() {
+  const st = LESSON[L.step];
+  $('#lessonNext').disabled = st.target !== undefined && L.k !== st.target;
+}
+$('#lessonBack').addEventListener('click', () => {
+  sfx.click();
+  if (L.step === 0) { show('scr-map'); renderMap(); }
+  else { L.step--; L.k = 0; renderLesson(); }
+});
+$('#lessonNext').addEventListener('click', () => {
+  const st = LESSON[L.step];
+  if (st.target !== undefined && L.k !== st.target) return;
+  sfx.click();
+  if (L.step === LESSON.length - 1) {
+    const first = !S.lesson;
+    S.lesson = true; save();
+    if (first) { confetti(120); sfx.win(); }
+    show('scr-map'); renderMap();
+  } else { L.step++; L.k = 0; renderLesson(); }
+});
+
+/* ================= quiz engine ================= */
+let Q = null;
+function runQuiz(cfg) {
+  Q = Object.assign({ idx: 0, mistakes: 0, locked: false }, cfg);
+  show(cfg.screen);
+  if (cfg.titleEl) $(cfg.titleEl).textContent = cfg.title;
+  renderQ();
+}
+function renderQ() {
+  const q = Q.qs[Q.idx];
+  Q.locked = false;
+  $(Q.lvlEl).textContent = `پرسش ${fa(Q.idx + 1)} از ${fa(Q.qs.length)}`;
+  $(Q.bubbleEl).innerHTML = q.prompt;
+  $(Q.hintEl).textContent = '';
+  if (Q.heartsEl) $(Q.heartsEl).innerHTML = Array.from({ length: 3 }, (_, i) => `<span class="${i < 3 - Q.mistakes ? '' : 'off'}">❤️</span>`).join('');
+  $(Q.dotsEl).innerHTML = Q.qs.map((_, i) => `<i class="${i < Q.idx ? 'done' : i === Q.idx ? 'cur' : ''}"></i>`).join('');
+  window._nlFit = null;
+  RENDER[q.type](q, $(Q.stageEl));
+}
+function judge(ok, explain, guide) {
+  if (Q.locked) return;
+  const hint = $(Q.hintEl);
+  if (ok) {
+    Q.locked = true; sfx.good();
+    hint.style.color = 'var(--teal-d)';
+    hint.innerHTML = '✅ ' + explain;
+    setTimeout(() => { Q.idx++; Q.idx < Q.qs.length ? renderQ() : Q.onDone(Q.mistakes); }, Q.retryMode ? 1400 : 2200);
+  } else {
+    Q.mistakes++; sfx.bad();
+    if (Q.heartsEl) $(Q.heartsEl).innerHTML = Array.from({ length: 3 }, (_, i) => `<span class="${i < Math.max(0, 3 - Q.mistakes) ? '' : 'off'}">❤️</span>`).join('');
+    hint.style.color = 'var(--coral)';
+    hint.innerHTML = '💡 ' + (Q.retryMode ? (guide || 'دوباره فکر کن، تو می‌تونی!') : explain);
+    if (!Q.retryMode) {
+      Q.locked = true;
+      setTimeout(() => { Q.idx++; Q.idx < Q.qs.length ? renderQ() : Q.onDone(Q.mistakes); }, 2400);
+    }
+  }
+}
+
+/* ================= overlay ================= */
+function showOverlay({ emoji, title, stars, text, retryLabel, nextLabel, onRetry, onNext }) {
+  $('#ovEmoji').textContent = emoji;
+  $('#ovTitle').textContent = title;
+  $('#ovStars').innerHTML = stars === null ? '' : starStr(stars);
+  $('#ovText').innerHTML = text;
+  $('#ovRetry').textContent = retryLabel || '🔁 دوباره';
+  $('#ovNext').textContent = nextLabel || 'ادامه ⬅';
+  $('#overlay').classList.add('on');
+  $('#ovRetry').onclick = () => { sfx.click(); $('#overlay').classList.remove('on'); onRetry(); };
+  $('#ovNext').onclick = () => { sfx.click(); $('#overlay').classList.remove('on'); onNext(); };
+}
+
+/* ================= station flow ================= */
+function startStation(id) {
+  const st = STATIONS.find(s => s.id === id);
+  runQuiz({
+    screen: 'scr-game', titleEl: '#gTitle', title: st.emo + ' ' + st.name,
+    bubbleEl: '#gBubble', stageEl: '#gStage', hintEl: '#gHint', dotsEl: '#gDots',
+    lvlEl: '#gLvl', heartsEl: '#gHearts', retryMode: true,
+    qs: GEN[id](),
+    onDone: mistakes => {
+      const stars = clamp(3 - mistakes, 1, 3);
+      const improved = stars > starsOf(id);
+      S.stars[id] = Math.max(starsOf(id), stars); save();
+      confetti(stars === 3 ? 140 : 80); sfx.win();
+      const i = GAME_IDS.indexOf(id);
+      const nextId = i < 5 ? GAME_IDS[i + 1] : 'exam';
+      const nextSt = STATIONS.find(s => s.id === nextId);
+      showOverlay({
+        emoji: '💎', title: 'گوهر گرفتی!', stars,
+        text: improved ? `ایستگاه «${st.name}» با ${fa(stars)} ستاره تمام شد!${stars === 3 ? ' بی‌نقص بودی! 🌟' : ''}` : `ستاره‌های این ایستگاه: ${fa(stars)}. برای ۳ ستاره، بدون اشتباه بازی کن!`,
+        nextLabel: nextId === 'exam' ? '🏆 آزمون قهرمانی' : `${nextSt.emo} ایستگاه بعدی`,
+        onRetry: () => startStation(id),
+        onNext: () => { if (unlocked(nextId)) { nextId === 'exam' ? startExam() : startStation(nextId); } else { show('scr-map'); renderMap(); } },
+      });
+      renderMap();
+    },
+  });
+}
+
+/* ================= exam flow ================= */
+function startExam() {
+  const qs = [GEN.s1()[0], GEN.s2()[1], GEN.s3()[0], GEN.s4()[0], GEN.s5()[0], GEN.s6()[2]];
+  qs.push(GEN.s1()[3], GEN.s5()[3]);
+  shuffle(qs);
+  runQuiz({
+    screen: 'scr-exam', titleEl: null, title: '',
+    bubbleEl: '#exBubble', stageEl: '#exStage', hintEl: '#exHint', dotsEl: '#exDots',
+    lvlEl: '#exLvl', heartsEl: null, retryMode: false, qs,
+    onDone: mistakes => {
+      const score = qs.length - mistakes;
+      if (score >= 6) {
+        const stars = score >= 8 ? 3 : score >= 7 ? 2 : 1;
+        S.examBest = Math.max(S.examBest, stars); save();
+        confetti(220); sfx.win();
+        showOverlay({
+          emoji: '🌈', title: 'پل رنگین‌کمان ساخته شد!', stars,
+          text: `از ${fa(qs.length)} پرسش، ${fa(score)} تا درست! تو حالا قهرمان سرزمین اعشاری. گواهی‌ات آماده است!`,
+          retryLabel: '🔁 آزمون دوباره', nextLabel: '🏅 گواهی من',
+          onRetry: startExam, onNext: openCert,
+        });
+      } else {
+        sfx.bad();
+        showOverlay({
+          emoji: '🌱', title: 'نزدیک بودی!', stars: null,
+          text: `از ${fa(qs.length)} پرسش، ${fa(score)} تا درست شد. برای ساختن پل باید دست‌کم ${fa(6)} تا درست باشد. ایستگاه‌ها را تمرین کن و برگرد!`,
+          retryLabel: '🔁 همین حالا دوباره', nextLabel: '🗺️ نقشه',
+          onRetry: startExam, onNext: () => { show('scr-map'); renderMap(); },
+        });
+      }
+      renderMap();
+    },
+  });
+}
+/* ================= renderers ================= */
+function wireOpts(stage, q, explain, guide) {
+  const btns = [...stage.querySelectorAll('.opt')];
+  btns.forEach(b => b.addEventListener('click', () => {
+    const ok = Math.abs(q.opts[+b.dataset.i].v - q.answer) < 1e-9;
+    if (ok) {
+      b.classList.add('good'); btns.forEach(x => x.disabled = true);
+      judge(true, explain);
+    } else {
+      b.classList.add('bad'); b.disabled = true;
+      if (!Q.retryMode) {
+        btns.forEach(x => { x.disabled = true; if (Math.abs(q.opts[+x.dataset.i].v - q.answer) < 1e-9) x.classList.add('good'); });
+      }
+      judge(false, explain, guide);
+    }
+  }));
+}
+
+const RENDER = {
+  choc(q, stage) {
+    stage.innerHTML = chocHTML(q.w, q.t) + optsHTML(q.opts);
+    wireOpts(stage, q,
+      `${numSpan(q.answer)} یعنی ${say(q.answer)}. ${q.w ? fa(q.w) + ' کامل و ' : ''}${fa(q.t)} تکه از ${fa(10)} = ${sayTenth(q.t)}.`,
+      `اول شکلات‌های کامل را بشمار (${fa(q.w)})، بعد تکه‌های زرد را (${fa(q.t)}). می‌شود ${fa(q.w)} ممیز ${fa(q.t)}.`);
+  },
+
+  'nl-place'(q, stage) {
+    stage.innerHTML = nlWrap(q.max, true, 0);
+    const wrap = stage.querySelector('.nl');
+    const frog = wrap.querySelector('.frog');
+    const fit = () => {
+      const spacing = (wrap.clientWidth * 0.9) / (q.max * 10);
+      wrap.style.setProperty('--tick', clamp(spacing * 0.8, 13, 30) + 'px');
+    };
+    fit(); window._nlFit = fit;
+    wrap.querySelectorAll('.tickbtn').forEach(b => b.addEventListener('click', () => {
+      const v = +b.dataset.v;
+      if (Math.abs(v - q.v) < 1e-9) {
+        b.classList.add('good'); frog.style.left = pct(v, q.max); sfx.jump();
+        wrap.querySelectorAll('.tickbtn').forEach(x => x.disabled = true);
+        judge(true, `قورباغه روی ${numSpan(q.v)} پرید! این عدد بین ${fa(Math.floor(q.v))} و ${fa(Math.floor(q.v) + 1)} است.`);
+      } else {
+        b.classList.add('bad'); setTimeout(() => b.classList.remove('bad'), 600);
+        if (!Q.retryMode) { wrap.querySelector(`.tickbtn[data-v="${q.v}"]`).classList.add('good'); frog.style.left = pct(q.v, q.max); }
+        judge(false, `${numSpan(q.v)} یعنی از ${fa(Math.floor(q.v))} به اندازهٔ ${sayTenth(Math.round(q.v * 10) % 10)} جلوتر.`,
+          `${numSpan(q.v)} بین ${fa(Math.floor(q.v))} و ${fa(Math.floor(q.v) + 1)} است؛ از ${fa(Math.floor(q.v))} به اندازهٔ ${fa(Math.round(q.v * 10) % 10)} قدم کوچک به راست برو.`);
+      }
+    }));
+  },
+
+  'nl-read'(q, stage) {
+    stage.innerHTML = nlWrap(q.max, false, q.v) + optsHTML(q.opts);
+    wireOpts(stage, q,
+      `قورباغه روی ${numSpan(q.v)} نشسته: ${fa(Math.floor(q.v))} کامل و ${sayTenth(Math.round(q.v * 10) % 10)}.`,
+      `اول ببین قورباغه بین کدام دو عدد است (${fa(Math.floor(q.v))} و ${fa(Math.floor(q.v) + 1)})، بعد قدم‌های کوچک را بشمار.`);
+  },
+
+  build(q, stage) {
+    stage.innerHTML = `
+      <div class="target-say">«${say(q.answer)}» را بساز!</div>
+      ${chocHTML(q.w, q.t)}
+      <div class="slotrow">
+        <div class="slot" id="slotW">؟</div><div class="slot sep">٫</div><div class="slot" id="slotT">؟</div>
+      </div>
+      <div class="slotlab"><span>یکان (کامل)</span><span class="sep"></span><span>دهم (تکه‌ها)</span></div>
+      <div class="digitrow" id="rowW"><span class="dlabel">رقمِ بخش کامل را انتخاب کن:</span>${Array.from({ length: 4 }, (_, i) => `<button class="digit" data-d="${i}">${fa(i)}</button>`).join('')}</div>
+      <div class="digitrow" id="rowT"><span class="dlabel">رقمِ دهم را انتخاب کن:</span>${Array.from({ length: 10 }, (_, i) => `<button class="digit" data-d="${i}">${fa(i)}</button>`).join('')}</div>
+      <div style="text-align:center;margin-top:14px"><button class="btn teal" id="buildCheck">✔ بررسی کن</button></div>`;
+    const sel = { w: null, t: null };
+    const wire = (row, key, slot) => stage.querySelectorAll(`#${row} .digit`).forEach(d => d.addEventListener('click', () => {
+      sfx.click();
+      sel[key] = +d.dataset.d;
+      stage.querySelectorAll(`#${row} .digit`).forEach(x => x.classList.toggle('sel', x === d));
+      const s = stage.querySelector('#' + slot);
+      s.textContent = fa(sel[key]); s.classList.add('filled'); s.style.borderColor = '';
+    }));
+    wire('rowW', 'w', 'slotW'); wire('rowT', 't', 'slotT');
+    stage.querySelector('#buildCheck').addEventListener('click', () => {
+      if (sel.w === null || sel.t === null) { $(Q.hintEl).textContent = 'اول هر دو رقم را انتخاب کن!'; $(Q.hintEl).style.color = 'var(--muted)'; return; }
+      const ok = sel.w === q.w && sel.t === q.t;
+      if (ok) {
+        stage.querySelectorAll('.digit,#buildCheck').forEach(x => x.disabled = true);
+        judge(true, `ساختی: ${numSpan(q.answer)} = ${say(q.answer)}! ${fa(q.w)} کامل و ${fa(q.t)} دهم.`);
+      } else {
+        if (sel.w !== q.w) { const s = stage.querySelector('#slotW'); s.style.borderColor = 'var(--coral)'; }
+        if (sel.t !== q.t) { const s = stage.querySelector('#slotT'); s.style.borderColor = 'var(--coral)'; }
+        if (!Q.retryMode) {
+          stage.querySelector('#slotW').textContent = fa(q.w);
+          stage.querySelector('#slotT').textContent = fa(q.t);
+          stage.querySelectorAll('.digit,#buildCheck').forEach(x => x.disabled = true);
+        }
+        judge(false, `${numSpan(q.answer)}: رقم کامل ${fa(q.w)} و رقم دهم ${fa(q.t)} است.`,
+          `${sel.w !== q.w ? 'شکلات‌های کامل را دوباره بشمار! ' : ''}${sel.t !== q.t ? 'تکه‌های زرد را دوباره بشمار!' : ''}`);
+      }
+    });
+  },
+
+  ruler(q, stage) {
+    stage.innerHTML = `<div class="ruler-zone"><div class="ruler-inner">${rulerSVG(q)}</div></div>` + optsHTML(q.opts, 'سانتی‌متر');
+    wireOpts(stage, q,
+      `مداد ${numSpan(q.answer)} سانتی‌متر است: ${fa(q.w)} سانتی‌متر کامل و ${fa(q.t)} خط کوچک (میلی‌متر). هر ${fa(10)} خط کوچک = ${fa(1)} سانتی‌متر، پس هر خط = یک دهم!`,
+      `اول خط‌های بزرگ (سانتی‌مترهای کامل) را بشمار: ${fa(q.w)}. بعد خط‌های کوچک بعدش را: ${fa(q.t)} تا. می‌شود ${fa(q.w)} ممیز ${fa(q.t)}.`);
+  },
+
+  cmp(q, stage) {
+    const ops = ['>', '=', '<'];
+    stage.innerHTML = `
+      <div class="cmp-zone" style="direction:ltr">
+        <div class="cmp-card"><div class="val num">${fmt(q.a)}</div>${barsHTML(q.a)}</div>
+        <div class="croc">${ops.map(o => `<button data-op="${o}">${o}</button>`).join('')}</div>
+        <div class="cmp-card"><div class="val num">${fmt(q.b)}</div>${barsHTML(q.b)}</div>
+      </div>
+      <div class="croc-note">🐊 تمساح همیشه عدد بزرگ‌تر را می‌خورد! دهانش را به سمت عدد بزرگ‌تر باز کن.</div>`;
+    const answer = q.a > q.b + 1e-9 ? '>' : q.a < q.b - 1e-9 ? '<' : '=';
+    const explain = answer === '='
+      ? `${numSpan(q.a)} و ${numSpan(q.b)} برابرند؛ هر دو یک اندازه‌اند!`
+      : `${numSpan(Math.max(q.a, q.b))} بزرگ‌تر است. ${Math.floor(q.a) === Math.floor(q.b) ? 'بخش کاملشان برابر است، پس دهم‌های بیشتر یعنی عدد بزرگ‌تر!' : 'اول بخش کامل را مقایسه کن؛ بخش کاملِ بزرگ‌تر یعنی عدد بزرگ‌تر!'}`;
+    stage.querySelectorAll('.croc button').forEach(b => b.addEventListener('click', () => {
+      if (b.dataset.op === answer) {
+        b.classList.add('good'); stage.querySelectorAll('.croc button').forEach(x => x.disabled = true);
+        judge(true, explain);
+      } else {
+        b.classList.add('bad'); b.disabled = true;
+        if (!Q.retryMode) stage.querySelectorAll('.croc button').forEach(x => { x.disabled = true; if (x.dataset.op === answer) x.classList.add('good'); });
+        judge(false, explain, 'اول بخش کامل (سمت چپ ممیز) را مقایسه کن؛ اگر برابر بودند، دهم‌ها را بشمار. ستون‌های رنگی هم کمک می‌کنند!');
+      }
+    }));
+  },
+
+  add(q, stage) {
+    const term = (v, cls) => {
+      const w = Math.floor(v + 1e-9), t = Math.round((v - w) * 10);
+      let h = `<div class="term"><div class="val num">${fmt(v)}</div><div style="display:flex;gap:4px;align-items:center;justify-content:center">`;
+      for (let i = 0; i < w; i++) h += `<span style="width:20px;height:34px;background:var(--amber);border-radius:4px;display:inline-block"></span>`;
+      h += miniStrip(t, cls) + '</div></div>';
+      return h;
+    };
+    stage.innerHTML = `<div class="add-eq">${term(q.a, 'f')}<span class="op">+</span>${term(q.b, 'f2')}<span class="op">=</span><div class="term"><div class="val" style="color:var(--pink)">؟</div></div></div>` + optsHTML(q.opts);
+    const ta = Math.round(q.a * 10), tb = Math.round(q.b * 10);
+    wireOpts(stage, q,
+      `${numSpan(q.a)} + ${numSpan(q.b)} = ${numSpan(q.answer)}! دهم‌ها با هم جمع می‌شوند: ${fa(ta % 10)} دهم + ${fa(tb % 10)} دهم${ta + tb >= 10 && q.a < 1 && q.b < 1 ? ` = ${fa(ta + tb)} دهم؛ هر ${fa(10)} دهم یک کامل می‌شود، پس ${numSpan(q.answer)}` : ''}.`,
+      `دهم‌ها را جمع کن (${fa(ta % 10)} + ${fa(tb % 10)})، کامل‌ها را هم جمع کن. اگر دهم‌ها به ${fa(10)} رسیدند، یک کاملِ تازه بساز!`);
+  },
+};
+
+/* ---- number line & ruler SVG builders ---- */
+const pct = (v, max) => ((30 + v / max * 540) / 600 * 100) + '%';
+function nlWrap(max, clickable, frogAt) {
+  let ticks = '';
+  for (let i = 0; i <= max * 10; i++) {
+    const x = 30 + i / (max * 10) * 540;
+    const major = i % 10 === 0, mid = i % 5 === 0;
+    const h = major ? 20 : mid ? 13 : 8;
+    ticks += `<line x1="${x}" y1="95" x2="${x}" y2="${95 - h}" stroke="${major ? '#5B3FC4' : '#A79EC4'}" stroke-width="${major ? 3 : 1.6}"/>`;
+    if (major) ticks += `<text x="${x}" y="122" text-anchor="middle" font-size="17" font-weight="bold" fill="#33285C" font-family="inherit">${fa(i / 10)}</text>`;
+  }
+  let btns = '';
+  if (clickable) for (let i = 0; i <= max * 10; i++) {
+    const v = i / 10;
+    btns += `<button class="tickbtn" data-v="${v}" style="left:${pct(v, max)}" aria-label="نقطهٔ ${fmt(v)}">${fa(i)}</button>`;
+  }
+  return `<div class="nl-wrap"><div class="nl">
+    <span class="frog" style="left:${pct(frogAt, max)}">🐸</span>
+    <svg viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="20" y1="95" x2="580" y2="95" stroke="#5B3FC4" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M580 95 l-12 -7 v14 z" fill="#5B3FC4"/>
+      ${ticks}
+    </svg>${btns}</div></div>`;
+}
+function rulerSVG(q) {
+  const max = q.max, unit = 540 / max, x = cm => 30 + cm * unit;
+  let ticks = '';
+  for (let mm = 0; mm <= max * 10; mm++) {
+    const X = x(mm / 10), major = mm % 10 === 0, mid = mm % 5 === 0;
+    const h = major ? 24 : mid ? 15 : 9;
+    ticks += `<line x1="${X}" y1="78" x2="${X}" y2="${78 + h}" stroke="${major ? '#8A5B00' : '#C9A050'}" stroke-width="${major ? 2.6 : 1.3}"/>`;
+    if (major) ticks += `<text x="${X}" y="126" text-anchor="middle" font-size="16" font-weight="bold" fill="#6E4A00" font-family="inherit">${fa(mm / 10)}</text>`;
+  }
+  const L = x(q.answer) - x(0);
+  return `<svg class="ruler-svg" viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
+    <g>
+      <rect x="${x(0)}" y="24" width="${Math.max(0, L - 16)}" height="26" rx="4" fill="#FFB703"/>
+      <rect x="${x(0)}" y="24" width="10" height="26" rx="4" fill="#F45B9C"/>
+      <polygon points="${x(0) + L - 16},24 ${x(0) + L},37 ${x(0) + L - 16},50" fill="#F7D9A8"/>
+      <polygon points="${x(0) + L - 5},33 ${x(0) + L},37 ${x(0) + L - 5},41" fill="#5C4322"/>
+      <line x1="${x(0)}" y1="30" x2="${x(0) + L - 18}" y2="30" stroke="rgba(255,255,255,.45)" stroke-width="3"/>
+    </g>
+    <rect x="20" y="78" width="560" height="56" rx="10" fill="#FFEDC2" stroke="#E9C089" stroke-width="2"/>
+    ${ticks}
+    <text x="565" y="145" text-anchor="end" font-size="11" fill="#B08A40" font-family="inherit">سانتی‌متر</text>
+  </svg>`;
+}
+
+/* ================= question generators ================= */
+const GEN = {
+  s1() {
+    const ws = [0, 0, 1, rnd(1, 2), rnd(0, 2)];
+    return ws.map(w => {
+      const t = rnd(1, 9), answer = w + t / 10;
+      return {
+        type: 'choc', w, t, answer,
+        prompt: 'این شکل چه <b>عدد ممیزداری</b> را نشان می‌دهد؟ شکلات‌های کامل و تکه‌های زرد را بشمار!',
+        opts: makeOpts(answer, [w + clamp(t + 1, 0, 9) / 10, w + clamp(t - 1, 0, 9) / 10, t / 10, answer + 1]),
+      };
+    });
+  },
+  s2() {
+    const val = max => rnd(0, max - 1) + rnd(1, 9) / 10;
+    const mk = (type, max) => {
+      const v = val(max);
+      const q = { type, max, v, prompt: type === 'nl-place'
+        ? `قورباغه می‌خواهد روی ${numSpan(v)} بپرد! روی نقطهٔ درست بزن. 🐸`
+        : 'قورباغه روی کدام <b>عدد ممیزدار</b> نشسته؟ خوب نگاه کن!' };
+      if (type === 'nl-read') { q.answer = v; q.opts = makeOpts(v, [v + .1, v - .1, Math.floor(v) + (10 - Math.round(v * 10) % 10) / 10]); }
+      return q;
+    };
+    return [mk('nl-place', 1), mk('nl-place', 2), mk('nl-read', 2), mk('nl-place', 2), mk('nl-read', 3)];
+  },
+  s3() {
+    const ws = [0, 1, 2, rnd(1, 3), rnd(0, 3)];
+    return ws.map(w => {
+      const t = rnd(1, 9);
+      return { type: 'build', w, t, answer: w + t / 10, prompt: 'کارخانهٔ رقم‌ها روشن شده! با شکل‌ها کمک کن و <b>عدد ممیزدار</b> را بساز. 🏭' };
+    });
+  },
+  s4() {
+    return Array.from({ length: 5 }, () => {
+      const w = rnd(1, 8), t = rnd(1, 9), answer = w + t / 10;
+      return {
+        type: 'ruler', w, t, answer, max: Math.min(10, w + 2),
+        prompt: 'این مداد چند <b>سانتی‌متر</b> است؟ خط‌های کوچک را هم بشمار! 📏',
+        opts: makeOpts(answer, [answer + .1, answer - .1, t + w / 10, w]),
+      };
+    });
+  },
+  s5() {
+    const pairs = [];
+    const w0 = rnd(0, 2); let t1 = rnd(1, 9), t2 = rnd(1, 9); while (t2 === t1) t2 = rnd(1, 9);
+    pairs.push([w0 + t1 / 10, w0 + t2 / 10]);
+    const w1 = rnd(0, 1), w2 = w1 + rnd(1, 2);
+    pairs.push([w1 + rnd(1, 9) / 10, w2 + rnd(1, 9) / 10]);
+    const ve = rnd(0, 2) + rnd(1, 9) / 10; pairs.push([ve, ve]);
+    const wi = rnd(1, 2); pairs.push([wi, wi - 1 + .9]);
+    pairs.push([rnd(0, 2) + rnd(1, 9) / 10, rnd(0, 2) + rnd(1, 9) / 10]);
+    return pairs.map(([a, b]) => ({
+      type: 'cmp', a: Math.round(a * 10) / 10, b: Math.round(b * 10) / 10,
+      prompt: 'تمساح گرسنه است! علامت درست را انتخاب کن تا <b>عدد بزرگ‌تر</b> را بخورد. 🐊',
+    }));
+  },
+  s6() {
+    const qs = [];
+    const push = (a, b) => {
+      a = Math.round(a * 10) / 10; b = Math.round(b * 10) / 10;
+      const answer = Math.round((a + b) * 10) / 10;
+      qs.push({
+        type: 'add', a, b, answer,
+        prompt: 'دو لیوان آبمیوه را با هم قاطی کن! حاصل جمع چند <b>لیتر</b> می‌شود؟ 🧃',
+        opts: makeOpts(answer, [answer + .1, answer - .1, answer + 1, Math.round((a * 10 + b * 10)) / 100]),
+      });
+    };
+    const a1 = rnd(1, 4); push(a1 / 10, rnd(1, 9 - a1) / 10);
+    const a2 = rnd(1, 9); push(a2 / 10, (10 - a2) / 10);
+    const a3 = rnd(5, 9); push(a3 / 10, rnd(11 - a3, 9) / 10);
+    push(1 + rnd(1, 5) / 10, rnd(1, 4) / 10);
+    const a5 = rnd(5, 9); push(1 + a5 / 10, rnd(11 - a5, 9) / 10);
+    return qs;
+  },
+};
+
+/* ================= certificate ================= */
+function openCert() {
+  $('#certName').textContent = S.name;
+  $('#nameInput').value = S.name === 'ساره سادات' ? '' : S.name;
+  $('#certStars').innerHTML = `⭐ ${fa(totalStars())} ستاره از ${fa(21)} ⭐`;
+  try { $('#certDate').textContent = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'long' }).format(new Date()); }
+  catch { $('#certDate').textContent = ''; }
+  show('scr-cert'); confetti(100);
+}
+$('#nameSave').addEventListener('click', () => {
+  const v = $('#nameInput').value.trim();
+  S.name = v || 'ساره سادات'; save();
+  $('#certName').textContent = S.name; sfx.good();
+});
+$('#printBtn').addEventListener('click', () => window.print());
+$('#certBack').addEventListener('click', () => { sfx.click(); show('scr-map'); renderMap(); });
+
+/* ================= top bar & init ================= */
+function soundIcon() { $('#soundBtn').textContent = S.muted ? '🔇' : '🔊'; $('#soundBtn').setAttribute('aria-pressed', String(!S.muted)); }
+$('#soundBtn').addEventListener('click', () => { S.muted = !S.muted; save(); soundIcon(); if (!S.muted) sfx.good(); });
+$('#homeBtn').addEventListener('click', () => { sfx.click(); $('#overlay').classList.remove('on'); show('scr-map'); renderMap(); });
+$('#resetBtn').addEventListener('click', () => {
+  if (!confirm('همهٔ ستاره‌ها و گوهرها پاک می‌شوند و از اول شروع می‌کنی. مطمئنی؟')) return;
+  S = { stars: {}, lesson: false, examBest: 0, name: S.name, muted: S.muted };
+  save(); $('#overlay').classList.remove('on'); show('scr-map'); renderMap(); sfx.click();
+});
+soundIcon();
+renderMap();
+</script>
+</body>
+</html>

@@ -68,6 +68,18 @@ button{font-family:inherit; touch-action:manipulation; cursor:pointer; border:no
 .btn.warn{background:#ffe8d6}
 .btn.big{font-size:1.3rem; padding:16px 30px}
 
+.back-landing{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;white-space:nowrap;
+  background:linear-gradient(#ff9a6c,#ff7b54);color:#fff;
+  font-weight:700;font-size:.95rem;padding:10px 16px;border-radius:14px;
+  box-shadow:0 4px 0 rgba(0,0,0,.18);
+  transition:transform .12s, box-shadow .12s, filter .2s;
+}
+.back-landing:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.back-landing:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.back-landing .bi{font-size:1.1rem;line-height:1}
+@media (max-width:600px){.back-landing .bl{display:none}.back-landing{padding:10px 12px}}
+
 .card{background:var(--card); border-radius:24px; padding:20px; box-shadow:0 10px 24px rgba(60,90,120,.14); margin-bottom:16px}
 .center{text-align:center}
 .row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px}
@@ -250,6 +262,7 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= HOME ================= -->
 <section id="scr-home" class="screen active">
+  <div class="topbar"><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><div class="chip">🎓 پژوهش کلاسی</div></div>
   <div class="hero">
     <div class="hero-badge">🎓 پژوهش کلاسی • پایهٔ سوم دبستان</div>
     <h1 class="game-title">شهر اندازه‌گیری</h1>
@@ -298,7 +311,7 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= BALANCE ================= -->
 <section id="scr-balance" class="screen">
-  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🍎 ایستگاه بازار ترازو</h2><div class="chip">⭐ <span id="st-balance">۰</span></div></div>
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🍎 ایستگاه بازار ترازو</h2><div class="chip">⭐ <span id="st-balance">۰</span></div></div>
   <div class="bub center" id="bal-msg">وزنه‌ها را روی کفهٔ راست بگذار تا دو کفه برابر شوند! ⚖️</div>
   <div class="bal-stage" style="margin-top:14px">
     <svg id="bal-svg" viewBox="0 0 440 330">
@@ -337,7 +350,7 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= ESTIMATE ================= -->
 <section id="scr-estimate" class="screen">
-  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🤔 ایستگاه تخمین</h2><div class="chip">⭐ <span id="st-estimate">۰</span></div></div>
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🤔 ایستگاه تخمین</h2><div class="chip">⭐ <span id="st-estimate">۰</span></div></div>
   <div class="card center">
     <h3 id="est-q" style="font-size:1.3rem; margin-bottom:14px">کدام سنگین‌تر است؟</h3>
     <div class="est-grid" id="est-cards"></div>
@@ -350,7 +363,7 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= CONVERT ================= -->
 <section id="scr-convert" class="screen">
-  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🏭 کارخانهٔ تبدیل واحدها</h2><div class="chip">⭐ <span id="st-convert">۰</span></div></div>
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🏭 کارخانهٔ تبدیل واحدها</h2><div class="chip">⭐ <span id="st-convert">۰</span></div></div>
   <div class="machine">
     <div class="gears"><span>⚙️</span><span>⚙️</span></div>
     <div class="machine-label">جعبه‌ها را با جواب درست از کارخانه بیرون بفرست!</div>
@@ -363,7 +376,7 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= MAP ================= -->
 <section id="scr-map" class="screen">
-  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🗺️ ایستگاه نقشهٔ گنج</h2><div class="chip">⭐ <span id="st-map">۰</span></div></div>
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🗺️ ایستگاه نقشهٔ گنج</h2><div class="chip">⭐ <span id="st-map">۰</span></div></div>
   <div class="map-legend"><div class="chip big" id="map-scale">📐 مقیاس نقشه</div></div>
   <svg id="map-svg" viewBox="0 0 360 250"></svg>
   <p class="map-q" id="map-q"></p>
@@ -373,7 +386,7 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= TOOLS ================= -->
 <section id="scr-tools" class="screen">
-  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🧰 ایستگاه ابزار درست</h2><div class="chip">⭐ <span id="st-tools">۰</span></div></div>
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🧰 ایستگاه ابزار درست</h2><div class="chip">⭐ <span id="st-tools">۰</span></div></div>
   <div class="task-card"><span class="big-emo" id="tl-icon">🍉</span><h3 id="tl-task"></h3></div>
   <div class="tools-grid" id="tl-grid"></div>
   <div class="dots" id="tl-dots" style="margin-top:18px"></div>
@@ -381,13 +394,13 @@ footer.credit{text-align:center; margin-top:30px; font-size:.85rem; color:#4c617
 
 <!-- ================= QUIZ ================= -->
 <section id="scr-quiz" class="screen">
-  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><h2>🏆 آزمون قهرمانی</h2><div class="chip">⭐ <span id="st-quiz">۰</span></div></div>
+  <div class="topbar"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🏆 آزمون قهرمانی</h2><div class="chip">⭐ <span id="st-quiz">۰</span></div></div>
   <div class="qbox" id="qz-box"></div>
 </section>
 
 <!-- ================= CERT ================= -->
 <section id="scr-cert" class="screen">
-  <div class="topbar no-print"><button class="btn icon" onclick="leave()">🏠</button><h2>🎓 گواهی قهرمانی</h2><div class="chip">⭐ <span id="st-cert">۰</span></div></div>
+  <div class="topbar no-print"><button class="btn icon" onclick="leave()">🏠</button><a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a><h2>🎓 گواهی قهرمانی</h2><div class="chip">⭐ <span id="st-cert">۰</span></div></div>
   <div class="cert">
     <span class="badge-emo">🏅</span>
     <h2>گواهی قهرمان اندازه‌گیری</h2>

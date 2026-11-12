@@ -138,6 +138,19 @@ ul{padding-inline-start:1.2em}
 }
 .star-pill .n{font-variant-numeric:tabular-nums}
 
+.back-landing{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;white-space:nowrap;
+  background:linear-gradient(150deg,#F0684F,#D94A31);color:#fff;
+  font-weight:800;font-size:.85rem;padding:9px 15px;border-radius:999px;
+  box-shadow:0 3px 0 rgba(190,60,35,.35);
+  transition:transform .14s ease, box-shadow .14s ease, filter .2s;
+}
+.back-landing:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.back-landing:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(190,60,35,.35)}
+.back-landing .bi{font-size:1.05rem;line-height:1}
+.splash .back-landing{position:absolute;top:16px;inset-inline-start:16px;z-index:5}
+@media (max-width:600px){.back-landing .bl{display:none}.back-landing{padding:9px 11px}.topbar{gap:6px}.topbar .brand #brandName{display:none}.topbar .brand{padding-inline-end:0}}
+
 /* ---------- screens ---------- */
 .screen{display:none}
 .screen.is-active{display:block;animation:screenIn .42s cubic-bezier(.2,.7,.3,1) both}
@@ -880,6 +893,7 @@ html.reduce-motion *::after{
 
 <div class="app">
   <header class="topbar" id="topbar" hidden>
+    <a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a>
     <button class="icon-btn" id="btnHome" aria-label="بازگشت به منو" title="منو">🏠</button>
     <div class="brand"><span class="dot">⚖</span><span id="brandName">شهر اندازه‌گیری</span></div>
     <div class="spacer"></div>
@@ -892,6 +906,7 @@ html.reduce-motion *::after{
     <!-- ================= SPLASH ================= -->
     <section class="screen is-active" id="s-splash" aria-label="صفحهٔ شروع">
       <div class="splash">
+        <a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a>
         <span class="kicker">ماجراجویی اندازه‌گیری</span>
         <h1 class="game-title">ترازو، اندازه‌گیری<br><span class="hl">و مقیاس‌ها</span></h1>
         <div class="mascot-hero" id="splashMascot" aria-hidden="true"></div>

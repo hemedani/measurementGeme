@@ -1,15 +1,26 @@
 # شهر اندازه‌گیری — Measurement City
 
-Three self-contained measurement games for a third-grade class, plus a landing page and a
+Self-contained measurement & decimal games for a third-grade class, plus a landing page and a
 zero-dependency Node server to host them on a VPS.
 
 | Folder      | Game                             | Notes                                                  |
 | ----------- | -------------------------------- | ------------------------------------------------------ |
+| `decimals/` | سرزمین اعشار (Decimal Land)       | Story-driven decimal intro: interactive lesson + 6 mini-games (tenths, number line, place value, ruler, comparison, addition) + final exam + printable certificate. Fully offline. |
 | `deepseek/` | ترازو، اندازه‌گیری و مقیاس‌ها       | 6 stations, 30 levels, sound, badges, printable certificate. Fully offline. |
 | `qwen/`     | شهر اندازه‌گیری                   | 6 stations incl. a unit-conversion factory and final exam. |
 | `cluade/`   | بازارچهٔ اندازه‌گیری                | Sequential short levels, night mode, certificate.       |
 
-`index.html` at the root is the landing page that links all three.
+`index.html` at the root is the landing page that links all four.
+
+### About `decimals/` (سرزمین اعشار)
+
+Persian/RTL, built for Iranian third-graders as a bridge from fractions (کسر, grade 3) to the
+decimal notation formally taught in grade 4 (فصل عدد مخلوط و عدد اعشاری). Pedagogy follows the
+textbook sequence: equal sharing into tenths → fraction ↔ decimal with ممیز (٫) → place-value
+table → number line → measurement (cm/mm) → comparison → adding tenths. Stations unlock
+sequentially, mistakes cost hearts but never block progress, and the final exam (8 mixed
+questions, pass ≥ 6) awards a printable certificate with the child's name. Progress, stars and
+the mute setting persist in `localStorage`; no network calls, no external assets.
 
 > `ignoreAssets/` holds the original research material and is **git-ignored and never served** —
 > the server returns 404 for it even if the folder exists on disk.
