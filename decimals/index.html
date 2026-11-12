@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>سرزمین اعشار — بازی‌های عدد ممیزدار برای پایهٔ سوم</title>
-<meta name="description" content="هفت بازی داستانی فارسی برای یادگیری عددهای اعشاری (دهم): شکلات، محور، جدول ارزش مکانی، خط‌کش، مقایسه و جمع — ساخته‌شده برای دانش‌آموزان پایهٔ سوم دبستان.">
+<title>سرزمین کسر — بازی‌های عدد کسری برای پایهٔ سوم</title>
+<meta name="description" content="هفت بازی داستانی فارسی برای یادگیری کسرها (دهم): شکلات، محور، جدول ارزش مکانی، خط‌کش، مقایسه و جمع — ساخته‌شده برای دانش‌آموزان پایهٔ سوم دبستان.">
 <meta name="theme-color" content="#F3EEFF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='58' r='30' fill='%237C5CE6'/%3E%3Ccircle cx='40' cy='52' r='6' fill='%23fff'/%3E%3Ccircle cx='62' cy='52' r='6' fill='%23fff'/%3E%3C/svg%3E">
 <style>
@@ -247,6 +247,7 @@ button{font-family:inherit;cursor:pointer}
 .pvtable .cell.head{background:#EFE8FD;font-weight:900;font-size:.85rem;color:var(--purple-d)}
 .pvtable .cell.sep{min-width:44px;background:#FFF6DE;border-color:#F0D48A;font-size:1.6rem;font-weight:900;color:#B47B00}
 .pvtable .cell .v{font-size:1.7rem;font-weight:900}
+.pvtable .cell.head.sep{font-size:.66rem;line-height:1.5;padding:6px 8px;min-width:58px}
 
 /* ============ number line ============ */
 .nl-wrap{margin:20px 0 6px;padding-bottom:6px}
@@ -344,6 +345,26 @@ button{font-family:inherit;cursor:pointer}
 }
 .nameform input:focus{outline:none;border-color:var(--purple)}
 
+/* ============ word card (glossary) ============ */
+.wordcard{
+  background:linear-gradient(180deg,#FFFDF6,#FFF7E4);
+  border:2px solid #F0D48A;border-radius:20px;padding:16px 18px;margin:6px 0 4px;
+}
+.wordcard .wc-title{font-weight:900;font-size:1rem;color:#8A5B00;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.wordcard ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.wordcard li{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;font-weight:700;line-height:1.8}
+.wordcard li .tag{
+  flex:none;font-size:.7rem;font-weight:900;padding:3px 10px;border-radius:999px;
+  background:#EFE8FD;color:var(--purple-d);margin-top:4px;white-space:nowrap;
+}
+.wordcard li.main{background:#EAF8E7;border:2px solid #B7E2AE;border-radius:14px;padding:10px 12px}
+.wordcard li.main .tag{background:var(--green);color:#fff}
+.wordcard li.main b{color:#2E7D26}
+.wordcard .wc-note{
+  margin-top:12px;font-size:.8rem;font-weight:800;color:#8A5B00;
+  background:#FFF3D6;border-radius:12px;padding:9px 12px;line-height:1.85;
+}
+
 /* lesson steps */
 .lesson-actions{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
 .hintline{text-align:center;font-size:.85rem;font-weight:800;color:var(--teal-d);min-height:1.6em;margin-top:8px}
@@ -378,7 +399,7 @@ button{font-family:inherit;cursor:pointer}
   <div class="topbar no-print">
     <span class="brand">
       <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/></svg>
-      <span class="brand-t">سرزمین اعشار</span>
+      <span class="brand-t">سرزمین کسر</span>
     </span>
     <a class="back-landing" href="../index.html" title="بازگشت به صفحهٔ اصلی همهٔ بازی‌ها"><span class="bi" aria-hidden="true">🏘️</span><span class="bl">همهٔ بازی‌ها</span></a>
     <span class="sp"></span>
@@ -388,18 +409,18 @@ button{font-family:inherit;cursor:pointer}
   </div>
 
   <!-- ================= MAP ================= -->
-  <section class="screen on" id="scr-map" aria-label="نقشهٔ سرزمین اعشار">
+  <section class="screen on" id="scr-map" aria-label="نقشهٔ سرزمین کسر">
     <header class="hero">
-      <h1>به <span class="hl">سرزمین اعشار</span> خوش آمدی!</h1>
+      <h1>به <span class="hl">سرزمین کسر</span> خوش آمدی!</h1>
       <p class="lede">
-        پل رنگین‌کمانِ سرزمین شکسته و فقط با عددهای ممیزدار درست می‌شود!
-        با «ممیزک» همراه شو، از هر ایستگاه یک گوهر بگیر و پل را دوباره بساز.
+        پل رنگین‌کمانِ سرزمین شکسته و فقط با کسرها درست می‌شود!
+        با «کسرک» همراه شو، از هر ایستگاه یک گوهر بگیر و پل را دوباره بساز.
       </p>
     </header>
 
     <div class="mascot-row">
       <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/><path d="M50 22 v6" stroke="#FFB703" stroke-width="3"/></svg>
-      <div class="bubble" id="mapBubble">سلام! من <b>ممیزک</b> هستم. اول به <b>کلاس جادویی</b> بیا تا با عددهای ممیزدار آشنا بشیم، بعد ایستگاه‌ها رو یکی‌یکی فتح کن!</div>
+      <div class="bubble" id="mapBubble">سلام! من <b>کسرک</b> هستم. اول به <b>کلاس جادویی</b> بیا تا با کسرها آشنا بشیم، بعد ایستگاه‌ها رو یکی‌یکی فتح کن!</div>
     </div>
 
     <div class="gembar" id="gembar" aria-label="گوهرهای جمع‌شده">
@@ -417,7 +438,7 @@ button{font-family:inherit;cursor:pointer}
 
   <!-- ================= LESSON ================= -->
   <section class="screen" id="scr-lesson" aria-label="کلاس جادویی">
-    <div class="st-head"><h2>📖 کلاس جادویی ممیزک</h2><span class="lvl" id="lessonStepLab">قدم ۱ از ۵</span></div>
+    <div class="st-head"><h2>📖 کلاس جادویی کسرک</h2><span class="lvl" id="lessonStepLab">قدم ۱ از ۷</span></div>
     <div class="panel">
       <div class="mascot-row">
         <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="32" fill="#7C5CE6"/><circle cx="39" cy="50" r="7" fill="#fff"/><circle cx="61" cy="50" r="7" fill="#fff"/><circle cx="40.5" cy="51.5" r="3" fill="#33285C"/><circle cx="62.5" cy="51.5" r="3" fill="#33285C"/><path d="M40 68 q10 8 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="50" cy="16" r="6" fill="#FFB703"/></svg>
@@ -468,13 +489,13 @@ button{font-family:inherit;cursor:pointer}
   <section class="screen" id="scr-cert" aria-label="گواهی قهرمانی">
     <div class="cert" id="certBox">
       <div class="medal">🏅</div>
-      <h2>گواهی قهرمان سرزمین اعشار</h2>
+      <h2>گواهی قهرمان سرزمین کسر</h2>
       <p>این گواهی با افتخار تقدیم می‌شود به</p>
       <div class="cname" id="certName">ساره سادات</div>
-      <p>که با تلاش و هوش خود، عددهای ممیزدار را یاد گرفت،<br>هر شش ایستگاه را فتح کرد و پل رنگین‌کمان را دوباره ساخت!</p>
+      <p>که با تلاش و هوش خود، کسرها را یاد گرفت،<br>هر شش ایستگاه را فتح کرد و پل رنگین‌کمان را دوباره ساخت!</p>
       <div class="cstars" id="certStars"></div>
       <p id="certDate"></p>
-      <p style="font-size:.8rem">🌈 سرزمین اعشار · پایهٔ سوم دبستان</p>
+      <p style="font-size:.8rem">🌈 سرزمین کسر · پایهٔ سوم دبستان</p>
     </div>
     <div class="nameform no-print">
       <input id="nameInput" type="text" maxlength="40" placeholder="اسمت را بنویس…" aria-label="نام برای گواهی">
@@ -599,13 +620,13 @@ function show(id) {
 
 /* ================= stations config ================= */
 const STATIONS = [
-  { id: 'lesson', emo: '📖', name: 'کلاس جادویی', desc: 'اول اینجا! با دهم و ممیز آشنا شو', a: '#7C5CE6', tint: '#EFE8FD' },
-  { id: 's1', emo: '🍫', name: 'کارخانهٔ شکلات', desc: 'شکل‌ها را به عدد ممیزدار تبدیل کن', a: '#B4652F', tint: '#F7EBDD' },
-  { id: 's2', emo: '🐸', name: 'پرش قورباغه', desc: 'عددهای ممیزدار را روی محور پیدا کن', a: '#0FB5A6', tint: '#DFF7F4' },
-  { id: 's3', emo: '🏭', name: 'کارخانهٔ رقم‌ها', desc: 'با جدول ارزش مکانی عدد بساز', a: '#2E93C6', tint: '#E3F2FB' },
-  { id: 's4', emo: '📏', name: 'خط‌کش جادویی', desc: 'اندازه‌ها را با اعشار بخوان', a: '#E9A23B', tint: '#FFF3DC' },
+  { id: 'lesson', emo: '📖', name: 'کلاس جادویی', desc: 'اول اینجا! با دهم و کسر آشنا شو', a: '#7C5CE6', tint: '#EFE8FD' },
+  { id: 's1', emo: '🍫', name: 'کارخانهٔ شکلات', desc: 'شکل‌ها را به کسر تبدیل کن', a: '#B4652F', tint: '#F7EBDD' },
+  { id: 's2', emo: '🐸', name: 'پرش قورباغه', desc: 'کسرها را روی محور پیدا کن', a: '#0FB5A6', tint: '#DFF7F4' },
+  { id: 's3', emo: '🏭', name: 'کارخانهٔ رقم‌ها', desc: 'با جدول ارزش مکانی، کسر بساز', a: '#2E93C6', tint: '#E3F2FB' },
+  { id: 's4', emo: '📏', name: 'خط‌کش جادویی', desc: 'اندازه‌ها را با کسر بخوان', a: '#E9A23B', tint: '#FFF3DC' },
   { id: 's5', emo: '🐊', name: 'تمساح گرسنه', desc: 'کدام عدد بزرگ‌تر است؟ مقایسه کن', a: '#57B84C', tint: '#E8F6E5' },
-  { id: 's6', emo: '🧃', name: 'آبمیوه‌فروشی', desc: 'عددهای ممیزدار را جمع کن', a: '#F45B9C', tint: '#FDE7F1' },
+  { id: 's6', emo: '🧃', name: 'آبمیوه‌فروشی', desc: 'کسرها را جمع کن', a: '#F45B9C', tint: '#FDE7F1' },
   { id: 'exam', emo: '🏆', name: 'آزمون قهرمانی', desc: 'پل رنگین‌کمان را بساز و گواهی بگیر!', a: '#FFB703', tint: '#FFF6DE' },
 ];
 const GAME_IDS = ['s1', 's2', 's3', 's4', 's5', 's6'];
@@ -649,9 +670,9 @@ function renderMap() {
   });
   const done = GAME_IDS.filter(g => starsOf(g) > 0).length;
   $('#mapBubble').innerHTML = S.examBest
-    ? 'تو قهرمان سرزمین اعشاری! 🌈 پل رنگین‌کمان ساخته شد. هر وقت خواستی دوباره بازی کن و ستاره‌های بیشتری بگیر!'
+    ? 'تو قهرمان سرزمین کسرها هستی! 🌈 پل رنگین‌کمان ساخته شد. هر وقت خواستی دوباره بازی کن و ستاره‌های بیشتری بگیر!'
     : done === 0
-      ? 'سلام! من <b>ممیزک</b> هستم. اول به <b>کلاس جادویی</b> بیا تا با عددهای ممیزدار آشنا بشیم، بعد ایستگاه‌ها رو یکی‌یکی فتح کن!'
+      ? 'سلام! من <b>کسرک</b> هستم. اول به <b>کلاس جادویی</b> بیا تا با کسرها آشنا بشیم، بعد ایستگاه‌ها رو یکی‌یکی فتح کن!'
       : `آفرین! تا حالا <b>${fa(done)} گوهر</b> گرفتی. ${fa(6 - done)} ایستگاه دیگه مونده تا آزمون قهرمانی باز بشه! 💪`;
 }
 
@@ -675,7 +696,7 @@ function readoutHTML(w, t) {
 }
 function pvHTML(w, t) {
   return `<div class="pvtable">
-    <div class="cell head">یکان<br><small>(کامل)</small></div><div class="cell head sep">ممیز</div><div class="cell head">دهم<br><small>(تکه‌ها)</small></div>
+    <div class="cell head">یکان<br><small>(کامل)</small></div><div class="cell head sep">نقطهٔ کسر</div><div class="cell head">دهم<br><small>(تکه‌ها)</small></div>
   </div><div class="pvtable" style="margin-top:4px">
     <div class="cell"><span class="v num">${fa(w)}</span></div><div class="cell sep">٫</div><div class="cell"><span class="v num" style="color:var(--teal-d)">${fa(t)}</span></div>
   </div>`;
@@ -714,13 +735,26 @@ function optsHTML(opts, suffix = '') {
 }
 /* ================= lesson ================= */
 const LESSON = [
-  { bubble: 'این یک <b>شکلات کامل</b> است؛ یعنی <b>۱ واحد</b>. ولی من شکلاتم را با دوست‌هایم قسمت می‌کنم… بیا ببینیم چطور!', next: 'تقسیم کن! ✂️' },
-  { bubble: 'شکلات را به <b>۱۰ تکهٔ مساوی</b> تقسیم کردم. هر تکه می‌شود <b>یک دهم</b>؛ یعنی کسر <span class="num">۱/۱۰</span>. وقتی چیزی را به ده قسمت مساوی تقسیم کنیم، هر قسمت «یک دهم» است.', next: 'بعدی ⬅' },
-  { bubble: 'حالا نوبت توست! روی تکه‌ها بزن و <b>۳ تکه</b> را زرد کن. ببین عددش چطور عوض می‌شود!', target: 3, next: 'بعدی ⬅' },
-  { bubble: 'به این عدد جدید سلام کن: <b>عدد ممیزدار!</b> آن نقطهٔ کوچکِ وسط، «<b>ممیز</b>» نام دارد. سمت چپ ممیز، <b>بخش کامل</b> است و سمت راستش، <b>تکه‌های دهم</b>. پس <span class="num">۰٫۳</span> یعنی صفر کامل و سه دهم — همان «سه دهم»!', next: 'بعدی ⬅' },
-  { bubble: 'یک بار دیگر تمرین کن: این بار <b>۷ تکه</b> را زرد کن و عددش را بلند بخوان!', target: 7, next: 'بعدی ⬅' },
-  { bubble: 'حالا یک شکلات <b>کامل</b> داریم و <b>۴ تکه</b> از شکلات دوم. می‌شود <span class="num">۱٫۴</span> — «یک و چهار دهم». دیدی؟ عددهای ممیزدار از یک هم بزرگ‌تر می‌شوند! 🎓 حالا آماده‌ای گوهر اول را بگیری!', next: 'پایان کلاس 🎓' },
+  { kind: 'whole', bubble: 'این یک <b>شکلات کامل</b> است؛ یعنی <b>۱ واحد</b>. ولی من شکلاتم را با دوست‌هایم قسمت می‌کنم… بیا ببینیم چطور!', next: 'تقسیم کن! ✂️' },
+  { kind: 'tenth', bubble: 'شکلات را به <b>۱۰ تکهٔ مساوی</b> تقسیم کردم. هر تکه می‌شود <b>یک دهم</b>؛ یعنی کسر <span class="num">۱/۱۰</span>. وقتی چیزی را به ده قسمت مساوی تقسیم کنیم، هر قسمت «یک دهم» است.', next: 'بعدی ⬅' },
+  { kind: 'tap', target: 3, bubble: 'حالا نوبت توست! روی تکه‌ها بزن و <b>۳ تکه</b> را زرد کن. ببین عددش چطور عوض می‌شود!', next: 'بعدی ⬅' },
+  { kind: 'decimal', bubble: 'به این عدد جدید سلام کن: <b>کسر</b>! آن نقطهٔ کوچکِ وسط، «<b>نقطهٔ کسر</b>» است. سمت چپش <b>بخش کامل</b> است و سمت راستش <b>تکه‌های دهم</b>. پس <span class="num">۰٫۳</span> یعنی صفر کامل و سه دهم — همان «سه دهم»!', next: 'یک خبر مهم! 📚' },
+  { kind: 'words', bubble: 'در کلاس به این عددها می‌گوییم <b>کسر</b>. ولی در کتاب‌ها و جاهای دیگر اسم‌های دیگری هم برایشان می‌بینی. بیا یک‌بار برای همیشه با آن‌ها آشنا شو — همه‌شان یک چیزند!', next: 'بعدی ⬅' },
+  { kind: 'tap', target: 7, bubble: 'یک بار دیگر تمرین کن: این بار <b>۷ تکه</b> را زرد کن و عددش را بلند بخوان!', next: 'بعدی ⬅' },
+  { kind: 'mixed', bubble: 'حالا یک شکلات <b>کامل</b> داریم و <b>۴ تکه</b> از شکلات دوم. می‌شود <span class="num">۱٫۴</span> — «یک و چهار دهم». دیدی؟ کسرها از یک هم بزرگ‌تر می‌شوند! 🎓 حالا آماده‌ای گوهر اول را بگیری!', next: 'پایان کلاس 🎓' },
 ];
+function wordCardHTML() {
+  return `<div class="wordcard">
+    <div class="wc-title">📚 یک چیز، چند اسم</div>
+    <ul>
+      <li class="main"><span class="tag">همین را می‌گوییم</span><span><b>کسر</b> — این اسمی است که در کلاس یاد گرفتیم و از این به بعد همه‌جا همین را به کار می‌بریم.</span></li>
+      <li><span class="tag">اسم دیگر</span><span><b>عدد ممیزدار</b> — در بعضی کتاب‌ها به همین عددها می‌گویند.</span></li>
+      <li><span class="tag">اسم دیگر</span><span><b>اعشار</b> (یا عدد اعشاری) — این هم اسم دیگرِ همان کسرهاست.</span></li>
+      <li><span class="tag">اسم دیگر</span><span><b>ممیز</b> — اسم آن نقطهٔ کوچکِ وسطِ عدد است؛ مثل نقطهٔ وسط <span class="num">۰٫۳</span>. ما به آن می‌گوییم «نقطهٔ کسر».</span></li>
+    </ul>
+    <div class="wc-note">💡 پس هر وقت شنیدی «عدد ممیزدار» یا «اعشار»، بدان که همان <b>کسر</b> است؛ یک چیز با چند اسم! اسم من هم از همین خانواده است: <b>کسرک</b>.</div>
+  </div>`;
+}
 let L = { step: 0, k: 0 };
 function startLesson() { L = { step: 0, k: 0 }; show('scr-lesson'); renderLesson(); }
 function renderLesson() {
@@ -729,11 +763,13 @@ function renderLesson() {
   $('#lessonBubble').innerHTML = st.bubble;
   $('#lessonHint').textContent = '';
   const stage = $('#lessonStage');
-  if (L.step === 0) {
+  if (st.kind === 'whole') {
     stage.innerHTML = `<div class="choc-zone"><div><div class="choc fullbar">${'<span class="pc eaten"></span>'.repeat(10)}</div><div class="choc-cap">۱ شکلات کامل</div></div></div>`;
-  } else if (L.step === 1) {
+  } else if (st.kind === 'tenth') {
     stage.innerHTML = chocHTML(0, 1) + readoutHTML(0, 1);
-  } else if (st.target !== undefined) {
+  } else if (st.kind === 'words') {
+    stage.innerHTML = wordCardHTML();
+  } else if (st.kind === 'tap') {
     stage.innerHTML = chocHTML(0, L.k, true) + readoutHTML(0, L.k);
     stage.querySelectorAll('.pc.tappable').forEach(p => p.addEventListener('click', () => {
       const i = +p.dataset.i;
@@ -747,7 +783,7 @@ function renderLesson() {
       updateLessonBtns();
     }));
     $('#lessonHint').textContent = `روی تکه‌ها بزن تا ${fa(st.target)} تکه زرد شود`;
-  } else if (L.step === 3) {
+  } else if (st.kind === 'decimal') {
     stage.innerHTML = chocHTML(0, 3) + readoutHTML(0, 3) + pvHTML(0, 3);
   } else {
     stage.innerHTML = chocHTML(1, 4) + readoutHTML(1, 4) + pvHTML(1, 4);
@@ -874,7 +910,7 @@ function startExam() {
         confetti(220); sfx.win();
         showOverlay({
           emoji: '🌈', title: 'پل رنگین‌کمان ساخته شد!', stars,
-          text: `از ${fa(qs.length)} پرسش، ${fa(score)} تا درست! تو حالا قهرمان سرزمین اعشاری. گواهی‌ات آماده است!`,
+          text: `از ${fa(qs.length)} پرسش، ${fa(score)} تا درست! تو حالا قهرمان سرزمین کسرها هستی. گواهی‌ات آماده است!`,
           retryLabel: '🔁 آزمون دوباره', nextLabel: '🏅 گواهی من',
           onRetry: startExam, onNext: openCert,
         });
@@ -914,7 +950,7 @@ const RENDER = {
     stage.innerHTML = chocHTML(q.w, q.t) + optsHTML(q.opts);
     wireOpts(stage, q,
       `${numSpan(q.answer)} یعنی ${say(q.answer)}. ${q.w ? fa(q.w) + ' کامل و ' : ''}${fa(q.t)} تکه از ${fa(10)} = ${sayTenth(q.t)}.`,
-      `اول شکلات‌های کامل را بشمار (${fa(q.w)})، بعد تکه‌های زرد را (${fa(q.t)}). می‌شود ${fa(q.w)} ممیز ${fa(q.t)}.`);
+      `اول شکلات‌های کامل را بشمار (${fa(q.w)})، بعد تکه‌های زرد را (${fa(q.t)}). می‌شود ${fa(q.w)} کامل و ${fa(q.t)} دهم.`);
   },
 
   'nl-place'(q, stage) {
@@ -992,7 +1028,7 @@ const RENDER = {
     stage.innerHTML = `<div class="ruler-zone"><div class="ruler-inner">${rulerSVG(q)}</div></div>` + optsHTML(q.opts, 'سانتی‌متر');
     wireOpts(stage, q,
       `مداد ${numSpan(q.answer)} سانتی‌متر است: ${fa(q.w)} سانتی‌متر کامل و ${fa(q.t)} خط کوچک (میلی‌متر). هر ${fa(10)} خط کوچک = ${fa(1)} سانتی‌متر، پس هر خط = یک دهم!`,
-      `اول خط‌های بزرگ (سانتی‌مترهای کامل) را بشمار: ${fa(q.w)}. بعد خط‌های کوچک بعدش را: ${fa(q.t)} تا. می‌شود ${fa(q.w)} ممیز ${fa(q.t)}.`);
+      `اول خط‌های بزرگ (سانتی‌مترهای کامل) را بشمار: ${fa(q.w)}. بعد خط‌های کوچک بعدش را: ${fa(q.t)} تا. می‌شود ${fa(q.w)} کامل و ${fa(q.t)} دهم.`);
   },
 
   cmp(q, stage) {
@@ -1015,7 +1051,7 @@ const RENDER = {
       } else {
         b.classList.add('bad'); b.disabled = true;
         if (!Q.retryMode) stage.querySelectorAll('.croc button').forEach(x => { x.disabled = true; if (x.dataset.op === answer) x.classList.add('good'); });
-        judge(false, explain, 'اول بخش کامل (سمت چپ ممیز) را مقایسه کن؛ اگر برابر بودند، دهم‌ها را بشمار. ستون‌های رنگی هم کمک می‌کنند!');
+        judge(false, explain, 'اول بخش کامل (سمت چپ نقطهٔ کسر) را مقایسه کن؛ اگر برابر بودند، دهم‌ها را بشمار. ستون‌های رنگی هم کمک می‌کنند!');
       }
     }));
   },
@@ -1092,7 +1128,7 @@ const GEN = {
       const t = rnd(1, 9), answer = w + t / 10;
       return {
         type: 'choc', w, t, answer,
-        prompt: 'این شکل چه <b>عدد ممیزداری</b> را نشان می‌دهد؟ شکلات‌های کامل و تکه‌های زرد را بشمار!',
+        prompt: 'این شکل چه <b>کسری</b> را نشان می‌دهد؟ شکلات‌های کامل و تکه‌های زرد را بشمار!',
         opts: makeOpts(answer, [w + clamp(t + 1, 0, 9) / 10, w + clamp(t - 1, 0, 9) / 10, t / 10, answer + 1]),
       };
     });
@@ -1103,7 +1139,7 @@ const GEN = {
       const v = val(max);
       const q = { type, max, v, prompt: type === 'nl-place'
         ? `قورباغه می‌خواهد روی ${numSpan(v)} بپرد! روی نقطهٔ درست بزن. 🐸`
-        : 'قورباغه روی کدام <b>عدد ممیزدار</b> نشسته؟ خوب نگاه کن!' };
+        : 'قورباغه روی کدام <b>کسر</b> نشسته؟ خوب نگاه کن!' };
       if (type === 'nl-read') { q.answer = v; q.opts = makeOpts(v, [v + .1, v - .1, Math.floor(v) + (10 - Math.round(v * 10) % 10) / 10]); }
       return q;
     };
@@ -1113,7 +1149,7 @@ const GEN = {
     const ws = [0, 1, 2, rnd(1, 3), rnd(0, 3)];
     return ws.map(w => {
       const t = rnd(1, 9);
-      return { type: 'build', w, t, answer: w + t / 10, prompt: 'کارخانهٔ رقم‌ها روشن شده! با شکل‌ها کمک کن و <b>عدد ممیزدار</b> را بساز. 🏭' };
+      return { type: 'build', w, t, answer: w + t / 10, prompt: 'کارخانهٔ رقم‌ها روشن شده! با شکل‌ها کمک کن و <b>کسر</b> را بساز. 🏭' };
     });
   },
   s4() {
